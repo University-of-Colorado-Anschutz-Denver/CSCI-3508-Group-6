@@ -1,0 +1,25 @@
+PROJECT: [ENTER PROJECT NAME]
+VERSION OR COMMIT: [ENTER FINAL VERSION OR COMMIT ID]
+GENERATED/UPDATED: [YYYY-MM-DD]
+
+INSTRUCTIONS:
+Replace this instructional content with the complete plain-text contents of every
+application and test source file.
+Repeat the separator below for each file. Keep each relative path intact so the
+grader can connect appendix code to the runnable files in code/ and tests/.
+
+===============================================================================
+FILE: code/[relative/path/to/file.ext]
+LANGUAGE: [language]
+PURPOSE: [one-sentence purpose]
+===============================================================================
+
+[PASTE THE COMPLETE PLAIN-TEXT CONTENT OF THIS SOURCE FILE HERE]
+
+===============================================================================
+FILE: tests/[relative/path/to/test-file.ext]
+LANGUAGE: [language]
+PURPOSE: [one-sentence purpose]
+===============================================================================
+
+[PASTE THE COMPLETE PLAIN-TEXT CONTENT OF THE TEST SOURCE FILE HERE]

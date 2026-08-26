@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Create a new repository from a template</title>
+  <desc id="desc">Illustration of GitHub's create repository form with the team owner, team-07-project name, visibility, and Create repository from template button highlighted.</desc>
+  <rect width="1200" height="675" fill="#0d1117"/>
+  <rect width="1200" height="64" fill="#010409"/>
+  <circle cx="38" cy="32" r="17" fill="#f0f6fc"/>
+  <text x="70" y="39" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="22" font-weight="600">GitHub</text>
+  <text x="170" y="112" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="28" font-weight="600">Create a new repository</text>
+  <text x="170" y="143" fill="#8b949e" font-family="Segoe UI, Arial" font-size="14">A repository contains all project files, including revision history.</text>
+  <line x1="170" y1="170" x2="1030" y2="170" stroke="#30363d"/>
+  <text x="170" y="205" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="14" font-weight="600">Owner *</text>
+  <text x="462" y="205" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="14" font-weight="600">Repository name *</text>
+  <rect x="170" y="218" width="260" height="38" rx="6" fill="#0d1117" stroke="#8c959f"/>
+  <text x="187" y="243" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="14">COURSE-ORG</text>
+  <path d="M405 233 l5 6 l5 -6" fill="none" stroke="#8b949e" stroke-width="2"/>
+  <text x="444" y="245" fill="#8b949e" font-family="Segoe UI, Arial" font-size="24">/</text>
+  <rect x="462" y="218" width="370" height="38" rx="6" fill="#0d1117" stroke="#1f6feb" stroke-width="2"/>
+  <text x="478" y="243" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="14">team-07-project</text>
+  <text x="170" y="300" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="14" font-weight="600">Description</text>
+  <rect x="170" y="313" width="662" height="38" rx="6" fill="#0d1117" stroke="#8c959f"/>
+  <text x="186" y="338" fill="#8b949e" font-family="Segoe UI, Arial" font-size="14">Intro to Software Engineering - Team 07</text>
+  <line x1="170" y1="384" x2="1030" y2="384" stroke="#30363d"/>
+  <circle cx="187" cy="427" r="9" fill="none" stroke="#8c959f" stroke-width="2"/>
+  <text x="211" y="424" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="14" font-weight="600">Public</text>
+  <text x="211" y="444" fill="#8b949e" font-family="Segoe UI, Arial" font-size="12">Anyone on the internet can see this repository.</text>
+  <circle cx="187" cy="487" r="9" fill="none" stroke="#1f6feb" stroke-width="2"/>
+  <circle cx="187" cy="487" r="4" fill="#1f6feb"/>
+  <text x="211" y="484" fill="#f0f6fc" font-family="Segoe UI, Arial" font-size="14" font-weight="600">Private</text>
+  <text x="211" y="504" fill="#8b949e" font-family="Segoe UI, Arial" font-size="12">You choose who can see and commit to this repository.</text>
+  <rect x="170" y="548" width="235" height="38" rx="6" fill="#238636" stroke="#2ea043"/>
+  <text x="188" y="573" fill="#ffffff" font-family="Segoe UI, Arial" font-size="14" font-weight="600">Create repository from template</text>
+  <rect x="153" y="190" width="700" height="416" rx="10" fill="none" stroke="#f2cc60" stroke-width="4"/>
+  <circle cx="891" cy="232" r="24" fill="#f2cc60"/>
+  <text x="884" y="240" fill="#0d1117" font-family="Segoe UI, Arial" font-size="22" font-weight="700">2</text>
+  <text x="170" y="640" fill="#c9d1d9" font-family="Segoe UI, Arial" font-size="15">Use the owner, name, and visibility required by your instructor.</text>
+</svg>
