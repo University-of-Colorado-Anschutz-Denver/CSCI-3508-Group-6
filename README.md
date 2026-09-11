@@ -17,8 +17,6 @@ Replace every bracketed placeholder in this repository with information about yo
 
 ## Team Members
 
-This project must be completed by a group of four students. The group leader is the main point of contact and is responsible for coordinating work, not doing all of it.
-
 | Name | Role | Primary responsibilities | Contact |
 | --- | --- | --- | --- |
 | Harrison Julius | Group Leader | [Enter responsibilities] | juliuszharrison@gmail.com |
@@ -34,11 +32,7 @@ This project must be completed by a group of four students. The group leader is 
 
 **Target users:** Media editors (film, sound design, photographs, etc); people with large collections of images, music, video stored on their devices
 
-**Course relevance:** The project 
-develop new skills: c++, JS, metadata knowledge/understanding, new code libraries, GUI dev
-process framworks: can iterate on features, have additional features to add once basic features are added
-implementing changes through the SE pipeline, using GitHub, hacknplan, testing, real user feedback, iteration, etc
-allows us to develop a professional software that can be downloaded by users as a profession project (devops)
+**Course relevance:** The project will allow us to develop our computer science skills, including the usage of C++, JavaScript, new code libraries, GUI development, and our understanding of file metadata. We will also be able to use the process frameworks and DevOps strategies discussed in class to iterate on features, add new features based on changing requirements, implementing changes, using version control software, and getting real user feedback from stakeholders.
 
 ## Repository Structure
 
@@ -61,7 +55,7 @@ Follow the illustrated, step-by-step guide in [`documentation/00-clone-and-setup
 
 ## Start Here
 
-1. Have the group leader create the team-owned repository and give the other students access; then have every student clone it by following the guide above.
+~~1. Have the group leader create the team-owned repository and give the other students access; then have every student clone it by following the guide above.~~
 2. Fill in the project and team information above.
 3. Complete `documentation/01-project-proposal.md` and obtain subject approval before development.
 4. Assign responsibilities and record them in `documentation/06-team-collaboration-log.md`.
