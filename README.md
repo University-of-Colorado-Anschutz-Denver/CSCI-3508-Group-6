@@ -8,12 +8,12 @@ Replace every bracketed placeholder in this repository with information about yo
 
 | Field | Enter your information |
 | --- | --- |
-| Course | [Enter course number and section] |
-| Instructor | [Enter instructor name] |
-| Semester | [Enter semester and year] |
-| Project subject | [Enter the proposed subject] |
+| Course | CSCI 3508 |
+| Instructor | Dr. Salah Boukhris |
+| Semester | FA2026 |
+| Project subject | Metadata Editing and Organization Application |
 | Approval status | [Pending / Approved on YYYY-MM-DD] |
-| Repository URL | [Enter repository URL] |
+| Repository URL | https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6 |
 
 ## Team Members
 
@@ -21,20 +21,24 @@ This project must be completed by a group of four students. The group leader is 
 
 | Name | Role | Primary responsibilities | Contact |
 | --- | --- | --- | --- |
-| [Student 1] | Group Leader | [Enter responsibilities] | [Enter email] |
-| [Student 2] | Team Member | [Enter responsibilities] | [Enter email] |
-| [Student 3] | Team Member | [Enter responsibilities] | [Enter email] |
-| [Student 4] | Team Member | [Enter responsibilities] | [Enter email] |
+| Harrison Julius | Group Leader | [Enter responsibilities] | juliuszharrison@gmail.com |
+| Teja Kandimalla | Team Member | [Enter responsibilities] | tejakandimalla20@gmail.com |
+| Emelie Kronquist | Team Member | [Enter responsibilities] | emelie.kronquist@gmail.com |
+| Yannick Kuete | Team Member | [Enter responsibilities] | yankuete@gmail.com |
 
 ## Project Summary
 
-**Problem:** [What problem does this project solve?]
+**Problem:** It is difficult to view and edit common metadata fields for media files, such as title, authors, and more, directly from a file explorer. There are also many hidden metadata fields for different types of media files. These hidden fields can be used to sort and tag files, but as-is there is to way to access them.
 
-**Proposed solution:** [Summarize the system and its main features in 2-4 sentences.]
+**Proposed solution:** Program to view metadata for media files (pngs, mp4s, wavs, etc), and edit common metadata fields like title, author, and comments. Will run as a .exe on a user's desktop/laptop and act as a more focused file explorer that allows users to see all metadata files natively. Allows users to create metadata tags for files and search by tags through specific directories on their machine. As a secondary goal, we aim to create a website to allow users to download the application, provide user guides, and allow users to provide feedback on the program.
 
-**Target users:** [Who will use the system?]
+**Target users:** Media editors (film, sound design, photographs, etc); people with large collections of images, music, video stored on their devices
 
-**Course relevance:** [Explain how the subject relates to software engineering.]
+**Course relevance:** The project 
+develop new skills: c++, JS, metadata knowledge/understanding, new code libraries, GUI dev
+process framworks: can iterate on features, have additional features to add once basic features are added
+implementing changes through the SE pipeline, using GitHub, hacknplan, testing, real user feedback, iteration, etc
+allows us to develop a professional software that can be downloaded by users as a profession project (devops)
 
 ## Repository Structure
 
