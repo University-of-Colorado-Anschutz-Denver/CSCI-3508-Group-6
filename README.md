@@ -6,23 +6,23 @@ Replace every bracketed placeholder in this repository with information about yo
 
 ## Project Information
 
-| Field | Enter your information |
-| --- | --- |
-| Course | CSCI 3508 |
-| Instructor | Dr. Salah Boukhris |
-| Semester | FA2026 |
-| Project subject | Metadata Editing and Organization Application |
-| Approval status | [Pending / Approved on YYYY-MM-DD] |
-| Repository URL | https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6 |
+| Field           | Enter your information                                                      |
+| --------------- | --------------------------------------------------------------------------- |
+| Course          | CSCI 3508                                                                   |
+| Instructor      | Dr. Salah Boukhris                                                          |
+| Semester        | FA2026                                                                      |
+| Project subject | Metadata Editing and Organization Application                               |
+| Approval status | [Pending / Approved on YYYY-MM-DD]                                          |
+| Repository URL  | https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6 |
 
 ## Team Members
 
-| Name | Role | Primary responsibilities | Contact |
-| --- | --- | --- | --- |
-| Harrison Julius | Group Leader | [Enter responsibilities] | juliuszharrison@gmail.com |
-| Teja Kandimalla | Team Member | [Enter responsibilities] | tejakandimalla20@gmail.com |
-| Emelie Kronquist | Team Member | [Enter responsibilities] | emelie.kronquist@gmail.com |
-| Yannick Kuete | Team Member | [Enter responsibilities] | yankuete@gmail.com |
+| Name             | Role         | Primary responsibilities   | Contact                    |
+| ---------------- | ------------ | -------------------------- | -------------------------- |
+| Harrison Julius  | Group Leader | Project Management, (More) | juliuszharrison@gmail.com  |
+| Teja Kandimalla  | Team Member  | [Enter responsibilities]   | tejakandimalla20@gmail.com |
+| Emelie Kronquist | Team Member  | [Enter responsibilities]   | emelie.kronquist@gmail.com |
+| Yannick Kuete    | Team Member  | [Enter responsibilities]   | yankuete@gmail.com         |
 
 ## Project Summary
 
@@ -164,25 +164,25 @@ For cloning, authentication, command explanations, and troubleshooting, see [`do
 
 ## Grading Roadmap (200 Points)
 
-| Category | Points | Required evidence in this repository |
-| --- | ---: | --- |
-| Requirements Gathering | 20 | `documentation/02-requirements-specification.md` |
-| System Design | 30 | UML diagrams, architecture, and schema in `documentation/03-system-design.md` |
-| Implementation | 60 | Working, readable source code in `code/` with setup instructions |
-| Testing | 40 | Test strategy and results in `documentation/04-testing-report.md`; test cases and evidence in `tests/` |
-| Final Report & Documentation | 20 | Completed report based on `documentation/05-final-report-template.md`, exported as PDF |
-| Presentation and Teamwork | 30 | Presentation based on `documentation/07-presentation-outline.md` and contribution evidence in `documentation/06-team-collaboration-log.md` |
-| **Total** | **200** | Complete every row in `documentation/08-rubric-checklist.md` |
+| Category                     |  Points | Required evidence in this repository                                                                                                       |
+| ---------------------------- | ------: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Requirements Gathering       |      20 | `documentation/02-requirements-specification.md`                                                                                           |
+| System Design                |      30 | UML diagrams, architecture, and schema in `documentation/03-system-design.md`                                                              |
+| Implementation               |      60 | Working, readable source code in `code/` with setup instructions                                                                           |
+| Testing                      |      40 | Test strategy and results in `documentation/04-testing-report.md`; test cases and evidence in `tests/`                                     |
+| Final Report & Documentation |      20 | Completed report based on `documentation/05-final-report-template.md`, exported as PDF                                                     |
+| Presentation and Teamwork    |      30 | Presentation based on `documentation/07-presentation-outline.md` and contribution evidence in `documentation/06-team-collaboration-log.md` |
+| **Total**                    | **200** | Complete every row in `documentation/08-rubric-checklist.md`                                                                               |
 
 ## Required Final Deliverables
 
 Use these final submission paths unless your instructor specifies otherwise. Keep the PDF and PowerPoint in `documentation/deliverables/` and the plain-text source appendix in `documentation/appendix/`.
 
-| Deliverable | Required format | Expected path |
-| --- | --- | --- |
-| Comprehensive project report | PDF | `documentation/deliverables/final-report.pdf` |
-| Project presentation | PowerPoint (`.pptx`) | `documentation/deliverables/project-presentation.pptx` |
-| Application and test source code appendix | Plain text (`.txt`) | `documentation/appendix/source-code-appendix.txt` or clearly numbered `.txt` files |
+| Deliverable                               | Required format      | Expected path                                                                      |
+| ----------------------------------------- | -------------------- | ---------------------------------------------------------------------------------- |
+| Comprehensive project report              | PDF                  | `documentation/deliverables/final-report.pdf`                                      |
+| Project presentation                      | PowerPoint (`.pptx`) | `documentation/deliverables/project-presentation.pptx`                             |
+| Application and test source code appendix | Plain text (`.txt`)  | `documentation/appendix/source-code-appendix.txt` or clearly numbered `.txt` files |
 
 The original, runnable files must also remain in `code/` and `tests/`. The plain-text appendix is an additional submission requirement, not a replacement for the runnable files.
 
