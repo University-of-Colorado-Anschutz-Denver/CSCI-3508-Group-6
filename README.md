@@ -55,7 +55,7 @@ Follow the illustrated, step-by-step guide in [`documentation/00-clone-and-setup
 
 ## Start Here
 
-~~1. Have the group leader create the team-owned repository and give the other students access; then have every student clone it by following the guide above.~~
+1. ~~Have the group leader create the team-owned repository and give the other students access; then have every student clone it by following the guide above.~~
 2. Fill in the project and team information above.
 3. Complete `documentation/01-project-proposal.md` and obtain subject approval before development.
 4. Assign responsibilities and record them in `documentation/06-team-collaboration-log.md`.
