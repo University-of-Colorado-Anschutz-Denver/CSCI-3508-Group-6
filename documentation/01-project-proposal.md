@@ -7,25 +7,31 @@ Complete this proposal and submit it for approval before beginning the full proj
 | Field | Response |
 | --- | --- |
 | Proposed project title | [Enter title] |
-| Group leader | [Enter name] |
-| Team members | [Enter all four names] |
+| Group leader | Harrison Julius |
+| Team members | Harrison Julius, Teja Kandimalla, Em Kronquist, Yannick Kuete |
 | Date submitted | [YYYY-MM-DD] |
 | Instructor decision | [Pending / Approved / Revisions requested] |
 | Approval date | [YYYY-MM-DD or N/A] |
 
 ## Proposed Subject
 
-[Describe the proposed software engineering subject in one concise paragraph.]
+
 
 ## Problem and Motivation
 
-[What problem will the team investigate or solve? Why is it useful or important?]
+It is difficult to view and edit common metadata fields for media files, such as title, authors, and more, directly from a file explorer. There are also many hidden metadata fields for different types of media files. These hidden fields can be used to sort and tag files, but as-is there is to way to access them.
 
 ## Proposed Software System
 
-[Describe the planned system, its intended users, and its main capabilities.]
+Program:  View metadata for media files (pngs, mp4s, wavs, etc), and edit common metadata fields like title, author, and comments. Will run as a .exe on a user's desktop/laptop and act as a more focused file explorer that allows users to see all metadata files natively. Allows users to create metadata tags for files and search by tags through specific directories on their machine.
+
+Targeted Users: Media editors (film, sound design, photographs, etc); people with large collections of images, music, video stored on their devices
+
+As a secondary goal, we aim to create a website to allow users to download the application, provide user guides, and allow users to provide feedback on the program.
 
 ## Connection to Course Objectives
+
+This Project Demonstrates most, if not all software engineering concepts. 
 
 [Explain which software engineering concepts the project will demonstrate, such as requirements gathering, design, implementation, testing, version control, project management, or teamwork.]
 
