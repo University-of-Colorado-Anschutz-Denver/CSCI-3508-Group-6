@@ -37,24 +37,24 @@ This Project Demonstrates most, if not all software engineering concepts. We mus
 
 ### In Scope
 
-- [Major feature or activity]
-- [Major feature or activity]
-- [Major feature or activity]
+- GUI Metadata Manager for editing media metadata files
+- File Manager that allows for sorting via metadata
+- Website to host the application installer, and possibly user guides/feedback system
 
 ### Out of Scope
 
-- [Feature or activity the project will not include]
-- [Feature or activity the project will not include]
+- Possibly Out of Scope: Allowing adding Tag metadata to files that don't traditionally support meta data: .txts for example.
+- Shared File Systems across devices - Requires a lot of server space that we do not have access to.
 
 ## Expected Technology
 
 | Area | Proposed choice | Reason |
 | --- | --- | --- |
 | Programming language(s) | C++, JS | Primarily C++ for executable, Primarily Javascript for website |
-| Framework(s) | [Enter choice] | [Explain] |
-| Data storage | [Enter choice or N/A] | [Explain] |
-| Testing tools | [Enter choice] | [Explain] |
-| Collaboration tools | [Enter choice] | [Explain] |
+| Framework(s) | React and Node.js | React Framework and Node.js for the website portion |
+| Data storage | N/A | Since this is not a service and it uses the users files and file system, no need for a database. (If We do the Feedback portion of the website, that will need a database, likely SQL_Lite3 for ease of use |
+| Testing tools | GitHub | Use Git/Github tools to test the code upon each push/pull request |
+| Collaboration tools | Hacknplan, Github, Discord | Hacknplan as the Kanban (could change, just using it for familiarity), GitHub for code collaboration, and Discord as the hub for communication and meetings |
 
 ## Feasibility and Risks
 
