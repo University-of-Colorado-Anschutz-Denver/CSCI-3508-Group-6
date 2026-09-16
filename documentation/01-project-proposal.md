@@ -15,7 +15,7 @@ Complete this proposal and submit it for approval before beginning the full proj
 
 ## Proposed Subject
 
-
+An executable that allows all CRUD (Create, Read, Update, Delete) on metadata values on viable file types. Has a file explorer that can sort by metadata and custom tag metadata in files. Also has a public website where users can download the executable (likely an installer) for their specific Operating System. Website may also include user guides and feedback section.
 
 ## Problem and Motivation
 
@@ -31,9 +31,7 @@ As a secondary goal, we aim to create a website to allow users to download the a
 
 ## Connection to Course Objectives
 
-This Project Demonstrates most, if not all software engineering concepts. 
-
-[Explain which software engineering concepts the project will demonstrate, such as requirements gathering, design, implementation, testing, version control, project management, or teamwork.]
+This Project Demonstrates most, if not all software engineering concepts. We must find the requirement for the product for exactly what users want. We must design the architecture we will go forth with. We will need to implement it in code. We will need to test it for bugs or feature requirements. Testing may also include stakeholder testing. GitHub is being used for version control. Harrison Julius will be the primary source for project management. We will likely need to change the functionality and scope as the project continues and we will know based on user testing.
 
 ## Initial Scope
 
@@ -52,7 +50,7 @@ This Project Demonstrates most, if not all software engineering concepts.
 
 | Area | Proposed choice | Reason |
 | --- | --- | --- |
-| Programming language(s) | [Enter choice] | [Explain] |
+| Programming language(s) | C++, JS | Primarily C++ for executable, Primarily Javascript for website |
 | Framework(s) | [Enter choice] | [Explain] |
 | Data storage | [Enter choice or N/A] | [Explain] |
 | Testing tools | [Enter choice] | [Explain] |
