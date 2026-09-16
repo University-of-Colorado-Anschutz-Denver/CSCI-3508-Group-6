@@ -60,7 +60,8 @@ This Project Demonstrates most, if not all software engineering concepts. We mus
 
 | Risk | Likelihood | Impact | Initial response |
 | --- | --- | --- | --- |
-| [Enter risk] | [Low/Medium/High] | [Low/Medium/High] | [How will the team reduce it?] |
+| GUI Experience | Medium | High | Learning to make GUIs as none of us have made executable GUIs |
+| Usability | Medium | High | User Testing to make the application feel smooth and usable |
 
 ## Instructor Feedback and Approval
 
