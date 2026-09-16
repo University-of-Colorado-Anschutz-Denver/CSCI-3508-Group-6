@@ -6,7 +6,7 @@ Complete this proposal and submit it for approval before beginning the full proj
 
 | Field | Response |
 | --- | --- |
-| Proposed project title | [Enter title] |
+| Proposed project title | MultiMedia Metadata Manager or MMMM/QuadM for short |
 | Group leader | Harrison Julius |
 | Team members | Harrison Julius, Teja Kandimalla, Em Kronquist, Yannick Kuete |
 | Date submitted | [YYYY-MM-DD] |
