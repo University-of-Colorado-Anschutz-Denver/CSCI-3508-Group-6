@@ -33,6 +33,8 @@ As a secondary goal, we aim to create a website to allow users to download the a
 
 This Project Demonstrates most, if not all software engineering concepts. We must find the requirement for the product for exactly what users want. We must design the architecture we will go forth with. We will need to implement it in code. We will need to test it for bugs or feature requirements. Testing may also include stakeholder testing. GitHub is being used for version control. Harrison Julius will be the primary source for project management. We will likely need to change the functionality and scope as the project continues and we will know based on user testing.
 
+The project will also allow us to develop our computer science skills, including the usage of C++, JavaScript, new code libraries, GUI development, and our understanding of file metadata. We will also be able to use the process frameworks and DevOps strategies discussed in class to iterate on features, add new features based on changing requirements, implementing changes, using version control software, and getting real user feedback from stakeholders.
+
 ## Initial Scope
 
 ### In Scope
