@@ -4,13 +4,13 @@ Use this document throughout the project to demonstrate effective communication,
 
 ## Team Charter
 
-**Project:** [Enter project name]
+**Project:** MultiMedia Metadata Manager (QuadM)
 
-**Group leader:** [Enter name]
+**Group leader:** Harrison Julius
 
-**Communication channel(s):** [Enter tools and expected use]
+**Communication channel(s):** Discord Server for general communication and planning, project meeting platform
 
-**Regular meeting schedule:** [Enter day, time, location/link]
+**Regular meeting schedule:** Team meeting every Friday at 3pm (Discord), TA meeting Saturdays at 10am
 
 **Expected response time:** [Enter expectation]
 
@@ -24,9 +24,9 @@ Use this document throughout the project to demonstrate effective communication,
 
 | Practice | Team agreement |
 | --- | --- |
-| Branch strategy | [When to create branches and how to name them] |
-| Review rule | [Who reviews changes and what approval is required] |
-| Merge rule | [When and how changes may be merged] |
+| Branch strategy | Create branches named `[branch-type]/[change-info]`. Branch types are feature, bugfix, and doc. Example branch name: `feature/xml-integration` |
+| Review rule | One review required per PR by any team member |
+| Merge rule | Merge `feature` and `bugfix` first onto `testing` to test with other features, then onto `main` once issues are resolved and reviewed. `doc` branches can be merged directly onto `main` after review |
 | Commit attribution | [How each member will make or co-author their own contributions] |
 | Merge conflict process | [How conflicts will be resolved and verified] |
 
@@ -34,10 +34,10 @@ Use this document throughout the project to demonstrate effective communication,
 
 | Member | Role(s) | Planned responsibilities | Backup responsibility |
 | --- | --- | --- | --- |
-| [Student 1] | Group Leader / [technical role] | [Responsibilities] | [Backup area] |
-| [Student 2] | [Role] | [Responsibilities] | [Backup area] |
-| [Student 3] | [Role] | [Responsibilities] | [Backup area] |
-| [Student 4] | [Role] | [Responsibilities] | [Backup area] |
+| Harrison Julius | Group Leader / [technical role] | Team management, GitHub management | [Backup area] |
+| Teja Kandimalla | [Role] | [Responsibilities] | [Backup area] |
+| Em Kronquist | [Role] | Main contact for clients/testers | [Backup area] |
+| Yannick Kuete | [Role] | [Responsibilities] | [Backup area] |
 
 Explain how the assignments are fair and how all members will participate in research, development, testing, writing, and presenting: [Enter explanation.]
 
@@ -54,31 +54,27 @@ Explain how the assignments are fair and how all members will participate in res
 
 ## Meeting Log
 
-Copy the row for every substantive meeting.
-
 | Date | Attendees | Topics and decisions | Assigned actions and owners | Due date |
 | --- | --- | --- | --- | --- |
-| [YYYY-MM-DD] | [Names] | [Discussion and decisions] | [Action - owner] | [YYYY-MM-DD] |
+| 2026-09-11 | All | Project selection, proposal and presentation preparation | <ul><li>EK - Research on metadata tools</li><li>TK - Presentation slides</li><li>HJ - Project proposal documentation</li><li>YK - UML drafts</li></ul> | <ul><li>2026-09-17</li><li>2026-09-17</li><li>2026-09-17</li><li>2026-09-17</li></ul> |
 
 ## Task and Contribution Log
 
-Record specific, verifiable contributions. Git commits can support this log but may not capture research, design, meetings, reviews, or presentation work.
-
 | Date | Member | Contribution | Evidence/link | Reviewer | Status |
 | --- | --- | --- | --- | --- | --- |
-| [YYYY-MM-DD] | [Name] | [Specific work completed] | [File, issue, commit, or artifact] | [Name] | [In review/Accepted] |
+| 2026-09-11 | EK | Research on metadata types/standards; existing tools to edit metadata; libraries for metadata manipulation; basic materials for team to understand metadata | List of resources available in Discord | HJ | Accepted |
 
 ## Decision Log
 
 | Date | Decision | Options considered | Reason | Participants |
 | --- | --- | --- | --- | --- |
-| [YYYY-MM-DD] | [Decision] | [Alternatives] | [Rationale] | [Names] |
+| 2026-09-09, 2026-09-11 | Project selection (media metadata editor and search program, website for distribution and documentation) | <ul><li>Financial assistant and analyzer with chatbot integration</li><li>Family budget planner allowing multiple users and one year of budget planning | Selected project had interested clients already, EK is familiar with the project domain, general team interest in subject matter | All |
 
 ## Feedback and Communication Issues
 
 | Date | Issue or feedback | Effect on project | Resolution and follow-up |
 | --- | --- | --- | --- |
-| [YYYY-MM-DD] | [Enter issue/feedback] | [Impact] | [Action taken] |
+| 2026-09-09 | Misunderstanding of project domain | Slow start on developing project proposal and uncertain scope, as EK's explanation of problem to be solved was unclear | Problem was demonstrated in meeting on 2026-09-11 and made clear to team members, goals for development and scope adjusted to better reflect the solution desired |
 
 ## Final Contribution Summary
 
@@ -86,9 +82,9 @@ Complete this section before submission.
 
 | Member | Research/requirements | Design | Code | Testing | Report/presentation | Overall contribution summary |
 | --- | --- | --- | --- | --- | --- | --- |
-| [Student 1] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
-| [Student 2] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
-| [Student 3] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
-| [Student 4] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
+| Harrison Julius | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
+| Teja Kandimalla | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
+| Em Kronquist | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
+| Yannick Kuete | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
 
 **Team confirmation:** [State that all members reviewed this summary, or document unresolved disagreements factually.]
