@@ -1,7 +1,4 @@
-# [Enter Project Name Here]
-
-> Intro to Software Engineering group project template
-
+# MultiMedia Metadata Manager (QuadM)
 Replace every bracketed placeholder in this repository with information about your project. Delete instructional text that does not belong in your final submission.
 
 ## Project Information
