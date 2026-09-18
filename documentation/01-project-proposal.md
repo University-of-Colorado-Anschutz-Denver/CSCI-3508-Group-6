@@ -6,57 +6,72 @@ Complete this proposal and submit it for approval before beginning the full proj
 
 | Field | Response |
 | --- | --- |
-| Proposed project title | [Enter title] |
-| Group leader | [Enter name] |
-| Team members | [Enter all four names] |
+| Proposed project title | MultiMedia Metadata Manager or MMMM/QuadM for short |
+| Group leader | Harrison Julius |
+| Team members | Harrison Julius, Teja Kandimalla, Em Kronquist, Yannick Kuete |
 | Date submitted | [YYYY-MM-DD] |
 | Instructor decision | [Pending / Approved / Revisions requested] |
 | Approval date | [YYYY-MM-DD or N/A] |
 
 ## Proposed Subject
 
-[Describe the proposed software engineering subject in one concise paragraph.]
+An executable that allows all CRUD (Create, Read, Update, Delete) on metadata values on viable file types. Has a file explorer that can sort by metadata and custom tag metadata in files. Also has a public website where users can download the executable (likely an installer) for their specific Operating System. Website may also include user guides and feedback section.
 
 ## Problem and Motivation
 
-[What problem will the team investigate or solve? Why is it useful or important?]
+It is difficult to view and edit common metadata fields for media files, such as title, authors, and more, directly from a file explorer. There are also many hidden metadata fields for different types of media files. These hidden fields can be used to sort and tag files, but as-is there is to way to access them.
+
+**Motivations**: 
+- Em Kronquist works with sound/media files and would like an easy way to change media metadata. Many of her coworkers would also like an easy to use metadata manager (who are our primary stake holders).
+- Harrison Julius would like to learn more about Executable GUI's and how they work. He Also likes to do systems/architectural software engineering.
+- Yannick Kuete is learning how to do desktop applications and learn more about web applications.
+- Teja Kandimalla would like to learn how to manage metadata and learning how executables function within different Operating Systems
 
 ## Proposed Software System
 
-[Describe the planned system, its intended users, and its main capabilities.]
+Program:  View metadata for media files (pngs, mp4s, wavs, etc), and edit common metadata fields like title, author, and comments. Will run as a .exe on a user's desktop/laptop and act as a more focused file explorer that allows users to see all metadata files natively. Allows users to create metadata tags for files and search by tags through specific directories on their machine.
+
+Targeted Users: Media editors (film, sound design, photographs, etc); people with large collections of images, music, video stored on their devices
+
+As a secondary goal, we aim to create a website to allow users to download the application, provide user guides, and allow users to provide feedback on the program.
 
 ## Connection to Course Objectives
 
-[Explain which software engineering concepts the project will demonstrate, such as requirements gathering, design, implementation, testing, version control, project management, or teamwork.]
+This Project demonstrates most, if not all software engineering concepts. We must find the requirement for the product for exactly what users want. We must design the architecture we will go forth with. We will need to implement it in code. We will need to test it for bugs or feature requirements. Testing may also include stakeholder testing. GitHub is being used for version control. Harrison Julius will be the primary source for project management. We will likely need to change the functionality and scope as the project continues and we will know based on user testing.
+
+The project will also allow us to develop our computer science skills, including the usage of C++, JavaScript, new code libraries, GUI development, and our understanding of file metadata. We will also be able to use the process frameworks and DevOps strategies discussed in class to iterate on features, add new features based on changing requirements, implementing changes, using version control software, and getting real user feedback from stakeholders.
 
 ## Initial Scope
 
 ### In Scope
 
-- [Major feature or activity]
-- [Major feature or activity]
-- [Major feature or activity]
+- GUI Metadata Manager for editing media metadata files
+- File Manager that allows for sorting via metadata
+- Website to host the application installer, and possibly user guides/feedback system
 
 ### Out of Scope
 
-- [Feature or activity the project will not include]
-- [Feature or activity the project will not include]
+- Possibly Out of Scope: Allowing adding Tag metadata to files that don't traditionally support meta data: .txts for example.
+- Shared file storage systems across devices - Requires a lot of server space that we do not have access to.
 
 ## Expected Technology
 
 | Area | Proposed choice | Reason |
 | --- | --- | --- |
-| Programming language(s) | [Enter choice] | [Explain] |
-| Framework(s) | [Enter choice] | [Explain] |
-| Data storage | [Enter choice or N/A] | [Explain] |
-| Testing tools | [Enter choice] | [Explain] |
-| Collaboration tools | [Enter choice] | [Explain] |
+| Programming language(s) | C++, JS | C++ for executable, Primarily JavaScript for website |
+| Framework(s) | React and Node.js | React Framework and Node.js for the website portion |
+| Data storage | N/A | Since this is not a service and it uses the user's local files and file system, no need for a database. (If We do the Feedback portion of the website, that will need a database, likely SQL_Lite3 for ease of use) |
+| Testing tools | GitHub | Use Git/GitHub tools to test the code upon each push/pull request |
+| Collaboration tools | HacknPlan, GitHub, Discord | HacknPlan as the Kanban board, GitHub for code collaboration, and Discord as the hub for communication and meetings |
 
 ## Feasibility and Risks
 
 | Risk | Likelihood | Impact | Initial response |
 | --- | --- | --- | --- |
-| [Enter risk] | [Low/Medium/High] | [Low/Medium/High] | [How will the team reduce it?] |
+| GUI Experience | Medium | Medium | Learning to make GUIs as none of us have made executable GUIs |
+| Usability | Medium | High | User testing to make the application feel smooth and usable |
+| Metadata differs between file types | High | High | Carefully Control scope by adding only a few file types at a time, starting with one or two |
+| Competition | Low | Low | There are existing metadata editing tools, but they are command-line only tools. We are adding a GUI and file system sorting by metadata which addresses this risk |
 
 ## Instructor Feedback and Approval
 
