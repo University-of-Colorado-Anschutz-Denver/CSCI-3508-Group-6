@@ -21,6 +21,12 @@ An executable that allows all CRUD (Create, Read, Update, Delete) on metadata va
 
 It is difficult to view and edit common metadata fields for media files, such as title, authors, and more, directly from a file explorer. There are also many hidden metadata fields for different types of media files. These hidden fields can be used to sort and tag files, but as-is there is to way to access them.
 
+**Motivations**: 
+- Em Kronquist works with sound/media files and would like an easy way to change media metadata. Many of her coworkers would also like an easy to use metadata manager (who are our primary stake holders).
+- Harrison Julius would like to learn more about Executable GUI's and how they work. He Also likes to do systems/architectural software engineering.
+- Yannick Kuete is learning how to do desktop applications and learn more about web applications.
+- Teja Kandimalla would like to learn how to manage metadata and learning how executables function within different Operating Systems
+
 ## Proposed Software System
 
 Program:  View metadata for media files (pngs, mp4s, wavs, etc), and edit common metadata fields like title, author, and comments. Will run as a .exe on a user's desktop/laptop and act as a more focused file explorer that allows users to see all metadata files natively. Allows users to create metadata tags for files and search by tags through specific directories on their machine.
