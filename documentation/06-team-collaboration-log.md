@@ -27,8 +27,8 @@ Use this document throughout the project to demonstrate effective communication,
 | Branch strategy | Create branches named `[branch-type]/[change-info]`. Branch types are feature, bugfix, and doc. Example branch name: `feature/xml-integration` |
 | Review rule | One review required per PR by any team member |
 | Merge rule | Merge `feature` and `bugfix` first onto `testing` to test with other features, then onto `main` once issues are resolved and reviewed. `doc` branches can be merged directly onto `main` after review |
-| Commit attribution | [How each member will make or co-author their own contributions] |
-| Merge conflict process | [How conflicts will be resolved and verified] |
+| Commit attribution | Committing should occur when any major isolated portion of a feature/bugfix is completed. Commit Messages should be detailed enough to understand what it was at a glance, but not too long because we can just look at the code |
+| Merge conflict process | Merge Conflicts will tend to be uncommon due to each person working on separate features/bugfixes; however, if one does occur both developers will need to communicate to get both dev's functionality implemented |
 
 ## Roles and Work Distribution
 
