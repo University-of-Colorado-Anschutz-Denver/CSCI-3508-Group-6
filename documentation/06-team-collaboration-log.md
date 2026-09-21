@@ -27,14 +27,14 @@ Use this document throughout the project to demonstrate effective communication,
 | Branch strategy | Create branches named `[branch-type]/[change-info]`. Branch types are feature, bugfix, and doc. Example branch name: `feature/xml-integration` |
 | Review rule | One review required per PR by any team member |
 | Merge rule | Merge `feature` and `bugfix` first onto `testing` to test with other features, then onto `main` once issues are resolved and reviewed. `doc` branches can be merged directly onto `main` after review |
-| Commit attribution | Committing should occur when any major isolated portion of a feature/bugfix is completed. Commit Messages should be detailed enough to understand what it was at a glance, but not too long because we can just look at the code |
-| Merge conflict process | Merge Conflicts will tend to be uncommon due to each person working on separate features/bugfixes; however, if one does occur both developers will need to communicate to get both dev's functionality implemented |
+| Commit attribution | Committing should occur when any major isolated portion of a feature/bugfix is completed. Commit messages should be detailed enough to understand what it was at a glance, but not too long because we can just look at the code |
+| Merge conflict process | Merge conflicts should be uncommon due to each person working on separate features/bugfixes; however, if one does occur involved devs should to communicate to get all functionality implemented before requesting review from another team member |
 
 ## Roles and Work Distribution
 
 | Member | Role(s) | Planned responsibilities | Backup responsibility |
 | --- | --- | --- | --- |
-| Harrison Julius | Group Leader / [technical role] | Team management, GitHub management | [Backup area] |
+| Harrison Julius | Group Leader / Code Architect | Team management, GitHub management | [Backup area] |
 | Teja Kandimalla | [Role] | [Responsibilities] | [Backup area] |
 | Em Kronquist | [Role] | Main contact for clients/testers | [Backup area] |
 | Yannick Kuete | [Role] | [Responsibilities] | [Backup area] |
@@ -57,6 +57,7 @@ Explain how the assignments are fair and how all members will participate in res
 | Date | Attendees | Topics and decisions | Assigned actions and owners | Due date |
 | --- | --- | --- | --- | --- |
 | 2026-09-11 | All | Project selection, proposal and presentation preparation | <ul><li>EK - Research on metadata tools</li><li>TK - Presentation slides</li><li>HJ - Project proposal documentation</li><li>YK - UML drafts</li></ul> | <ul><li>2026-09-17</li><li>2026-09-17</li><li>2026-09-17</li><li>2026-09-17</li></ul> |
+| 2026-09-18 | HJ, TK, YK | Project proposal and presentation | <ul><li>All - Prepare selected presentation slides</li></ul> | <ul><li>2026-09-20</li></ul> |
 
 ## Task and Contribution Log
 
@@ -68,7 +69,7 @@ Explain how the assignments are fair and how all members will participate in res
 
 | Date | Decision | Options considered | Reason | Participants |
 | --- | --- | --- | --- | --- |
-| 2026-09-09, 2026-09-11 | Project selection (media metadata editor and search program, website for distribution and documentation) | <ul><li>Financial assistant and analyzer with chatbot integration</li><li>Family budget planner allowing multiple users and one year of budget planning | Selected project had interested clients already, EK is familiar with the project domain, general team interest in subject matter | All |
+| 2026-09-09, 2026-09-11 | Project selection (media metadata editor and search program, website for distribution and documentation) | <ul><li>Financial assistant and analyzer with chatbot integration</li><li>Family budget planner allowing multiple users and one year of budget planning</li><li>Metadata manager for media files</li></ul> | Selected project had interested clients already, EK is familiar with the project domain, general team interest in subject matter | All |
 
 ## Feedback and Communication Issues
 
