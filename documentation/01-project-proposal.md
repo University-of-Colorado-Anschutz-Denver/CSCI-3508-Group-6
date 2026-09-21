@@ -68,10 +68,10 @@ The project will also allow us to develop our computer science skills, including
 
 | Risk | Likelihood | Impact | Initial response |
 | --- | --- | --- | --- |
-| GUI Experience | Medium | Medium | Learning to make GUIs as none of us have made executable GUIs |
-| Usability | Medium | High | User testing to make the application feel smooth and usable |
-| Metadata differs between file types | High | High | Carefully Control scope by adding only a few file types at a time, starting with one or two |
-| Competition | Low | Low | There are existing metadata editing tools, but they are command-line only tools. We are adding a GUI and file system sorting by metadata which addresses this risk |
+| GUI Experience Likelihood | Medium | Medium Impact | Learning to make GUIs as none of us have made executable GUIs |
+| Usability | Medium Likelihood | High Impact | User testing to make the application feel smooth and usable |
+| Metadata differs between file types | High Likelihood | High Impact | Carefully Control scope by adding only a few file types at a time, starting with one or two |
+| Competition | Medium Likelihood | Low Impact | There are existing metadata editing tools, but they are command-line only tools. We are adding a GUI and file system sorting by metadata which addresses this risk |
 
 ## Instructor Feedback and Approval
 
