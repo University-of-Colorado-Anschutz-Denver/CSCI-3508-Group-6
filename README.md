@@ -16,10 +16,10 @@ Replace every bracketed placeholder in this repository with information about yo
 
 | Name             | Role         | Primary responsibilities   | Contact                    |
 | ---------------- | ------------ | -------------------------- | -------------------------- |
-| Harrison Julius  | Group Leader | Project Management, (More) | juliuszharrison@gmail.com  |
-| Teja Kandimalla  | Team Member  | [Enter responsibilities]   | tejakandimalla20@gmail.com |
-| Emelie Kronquist | Team Member  | [Enter responsibilities]   | emelie.kronquist@gmail.com |
-| Yannick Kuete    | Team Member  | [Enter responsibilities]   | yankuete@gmail.com         |
+| Harrison Julius  | Group Leader | <ul><li>Project Management</li><li>Code Architect</li></ul> | juliuszharrison@gmail.com  |
+| Teja Kandimalla  | Team Member  | <ul><li>GUI Designer</li><li>WebDev</li></ul>   | tejakandimalla20@gmail.com |
+| Emelie Kronquist | Team Member  | <ul><li>Research and Communication</li><li>Client Outreach</li><li>Documentation Manager</li></ul>   | emelie.kronquist@gmail.com |
+| Yannick Kuete    | Team Member  | <ul><li>DevOps Management</li><li>WebDev</li></ul>   | yankuete@gmail.com         |
 
 ## Project Summary
 
