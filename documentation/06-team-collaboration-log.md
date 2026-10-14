@@ -58,12 +58,16 @@ Explain how the assignments are fair and how all members will participate in res
 | --- | --- | --- | --- | --- |
 | 2026-09-11 | All | Project selection, proposal and presentation preparation | <ul><li>EK - Research on metadata tools</li><li>TK - Presentation slides</li><li>HJ - Project proposal documentation</li><li>YK - UML drafts</li></ul> | <ul><li>2026-09-17</li><li>2026-09-17</li><li>2026-09-17</li><li>2026-09-17</li></ul> |
 | 2026-09-18 | HJ, TK, YK | Project proposal and presentation | <ul><li>All - Prepare selected presentation slides</li></ul> | <ul><li>2026-09-20</li></ul> |
+| 2026-09-25 | All | Diagramming discussion | <ul><li>All - Prepare preliminary UML diagrams</li></ul> | <ul><li>2026-10-02</li></ul> |
+| 2026-10-02 | All | Diagramming overview | <ul><li>HJ - Prepare finalized use-case and class diagrams based on preliminary versions</li></ul> | <ul><li>2026-10-03</li></ul> |
+| 2026-10-09 | HJ, EK, TK | HacknPlan tasks review, tag format planning, GUI framework | <ul><li>TK - GUI research</li><li>All - Basic file explorer creation</li></ul> | <ul><li>2026-10-16</li><li>2026-10-16</li></ul> |
 
 ## Task and Contribution Log
 
 | Date | Member | Contribution | Evidence/link | Reviewer | Status |
 | --- | --- | --- | --- | --- | --- |
 | 2026-09-11 | EK | Research on metadata types/standards; existing tools to edit metadata; libraries for metadata manipulation; basic materials for team to understand metadata | List of resources available in Discord | HJ | Accepted |
+| 2026-09-14 - 2026-09-20 | All | Presentation slides prep and research | Presentation and 01-project-proposal.md submitted in Canvas | All | Accepted |
 
 ## Decision Log
 
