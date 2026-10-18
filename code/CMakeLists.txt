@@ -18,7 +18,6 @@ file(GLOB_RECURSE QUADM_SOURCES CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.qrc"
 )
 
-# Exclude generated files from nested build directories
 list(FILTER QUADM_SOURCES EXCLUDE REGEX "/build/")
 
 add_executable(QuadM ${QUADM_SOURCES})

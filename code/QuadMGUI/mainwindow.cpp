@@ -108,12 +108,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     loadData();
 
-    // Click a root directory to display its contents.
+    // populate contents after loading the data
     connect(ui->rootListWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem *item) {
         loadDirectory(item->data(Qt::UserRole).toString());
     });
 
-    // Double-click a folder to navigate into it.
+    // double-click a folder to navigate into it.
     connect(ui->contentsListWidget, &QListWidget::itemDoubleClicked, this, [this](QListWidgetItem *item) {
         QString name = item->text();
 
