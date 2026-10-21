@@ -1,20 +1,25 @@
+
 {
   "version": 3,
-  "cmakeMinimumRequired": { "major": 3, "minor": 21, "patch": 0 },
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
   "configurePresets": [
     {
       "name": "default",
-      "displayName": "Qt 6.12 MinGW (Ninja)",
+      "displayName": "Qt 6 macOS (Ninja)",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "CMAKE_PREFIX_PATH": "C:/Qt/6.12.0/mingw_64",
-        "CMAKE_CXX_COMPILER": "C:/Qt/Tools/mingw1310_64/bin/g++.exe"
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+        "CMAKE_PREFIX_PATH": "$env{QT_PREFIX}"
       },
       "environment": {
-        "PATH": "C:/Qt/Tools/mingw1310_64/bin;C:/Qt/Tools/Ninja;C:/Qt/6.12.0/mingw_64/bin;$penv{PATH}"
+        "PATH": "/opt/homebrew/opt/qt/bin:/opt/homebrew/bin:$penv{PATH}"
       }
     }
   ],

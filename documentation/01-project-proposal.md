@@ -21,6 +21,12 @@ An executable that allows all CRUD (Create, Read, Update, Delete) on metadata va
 
 It is difficult to view and edit common metadata fields for media files, such as title, authors, and more, directly from a file explorer. There are also many hidden metadata fields for different types of media files. These hidden fields can be used to sort and tag files, but as-is there is to way to access them.
 
+**Motivations**: 
+- Em Kronquist works with sound/media files and would like an easy way to change media metadata. Many of her coworkers would also like an easy to use metadata manager (who are our primary stake holders).
+- Harrison Julius would like to learn more about Executable GUI's and how they work. He Also likes to do systems/architectural software engineering.
+- Yannick Kuete is learning how to do desktop applications and learn more about web applications.
+- Teja Kandimalla would like to learn how to manage metadata and learning how executables function within different Operating Systems
+
 ## Proposed Software System
 
 Program:  View metadata for media files (pngs, mp4s, wavs, etc), and edit common metadata fields like title, author, and comments. Will run as a .exe on a user's desktop/laptop and act as a more focused file explorer that allows users to see all metadata files natively. Allows users to create metadata tags for files and search by tags through specific directories on their machine.
@@ -31,7 +37,7 @@ As a secondary goal, we aim to create a website to allow users to download the a
 
 ## Connection to Course Objectives
 
-This Project Demonstrates most, if not all software engineering concepts. We must find the requirement for the product for exactly what users want. We must design the architecture we will go forth with. We will need to implement it in code. We will need to test it for bugs or feature requirements. Testing may also include stakeholder testing. GitHub is being used for version control. Harrison Julius will be the primary source for project management. We will likely need to change the functionality and scope as the project continues and we will know based on user testing.
+This Project demonstrates most, if not all software engineering concepts. We must find the requirement for the product for exactly what users want. We must design the architecture we will go forth with. We will need to implement it in code. We will need to test it for bugs or feature requirements. Testing may also include stakeholder testing. GitHub is being used for version control. Harrison Julius will be the primary source for project management. We will likely need to change the functionality and scope as the project continues and we will know based on user testing.
 
 The project will also allow us to develop our computer science skills, including the usage of C++, JavaScript, new code libraries, GUI development, and our understanding of file metadata. We will also be able to use the process frameworks and DevOps strategies discussed in class to iterate on features, add new features based on changing requirements, implementing changes, using version control software, and getting real user feedback from stakeholders.
 
@@ -46,24 +52,26 @@ The project will also allow us to develop our computer science skills, including
 ### Out of Scope
 
 - Possibly Out of Scope: Allowing adding Tag metadata to files that don't traditionally support meta data: .txts for example.
-- Shared File Systems across devices - Requires a lot of server space that we do not have access to.
+- Shared file storage systems across devices - Requires a lot of server space that we do not have access to.
 
 ## Expected Technology
 
 | Area | Proposed choice | Reason |
 | --- | --- | --- |
-| Programming language(s) | C++, JS | Primarily C++ for executable, Primarily Javascript for website |
+| Programming language(s) | C++, JS | C++ for executable, Primarily JavaScript for website |
 | Framework(s) | React and Node.js | React Framework and Node.js for the website portion |
-| Data storage | N/A | Since this is not a service and it uses the users files and file system, no need for a database. (If We do the Feedback portion of the website, that will need a database, likely SQL_Lite3 for ease of use |
-| Testing tools | GitHub | Use Git/Github tools to test the code upon each push/pull request |
-| Collaboration tools | Hacknplan, Github, Discord | Hacknplan as the Kanban (could change, just using it for familiarity), GitHub for code collaboration, and Discord as the hub for communication and meetings |
+| Data storage | N/A | Since this is not a service and it uses the user's local files and file system, no need for a database. (If We do the Feedback portion of the website, that will need a database, likely SQL_Lite3 for ease of use) |
+| Testing tools | GitHub | Use Git/GitHub tools to test the code upon each push/pull request |
+| Collaboration tools | HacknPlan, GitHub, Discord | HacknPlan as the Kanban board, GitHub for code collaboration, and Discord as the hub for communication and meetings |
 
 ## Feasibility and Risks
 
 | Risk | Likelihood | Impact | Initial response |
 | --- | --- | --- | --- |
-| GUI Experience | Medium | High | Learning to make GUIs as none of us have made executable GUIs |
-| Usability | Medium | High | User Testing to make the application feel smooth and usable |
+| GUI Experience Likelihood | Medium | Medium Impact | Learning to make GUIs as none of us have made executable GUIs |
+| Usability | Medium Likelihood | High Impact | User testing to make the application feel smooth and usable |
+| Metadata differs between file types | High Likelihood | High Impact | Carefully Control scope by adding only a few file types at a time, starting with one or two |
+| Competition | Medium Likelihood | Low Impact | There are existing metadata editing tools, but they are command-line only tools. We are adding a GUI and file system sorting by metadata which addresses this risk |
 
 ## Instructor Feedback and Approval
 

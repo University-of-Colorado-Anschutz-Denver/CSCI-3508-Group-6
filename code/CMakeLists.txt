@@ -13,10 +13,12 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 # Pick up every .cpp/.h under src/ and include/; CONFIGURE_DEPENDS re-checks on each build
 file(GLOB_RECURSE QUADM_SOURCES CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.qrc"
 )
+
+list(FILTER QUADM_SOURCES EXCLUDE REGEX "/build/")
 
 add_executable(QuadM ${QUADM_SOURCES})
 target_precompile_headers(QuadM PRIVATE <QtWidgets>)

@@ -1,0 +1,44 @@
+/* Define shared colors and switch the palette to match the visitor's system theme. */
+:root{--bg:#fff;--fg:#1c1e21;--muted:#5f6670;--accent:#0d7a6e;--accent-fg:#fff;--card:#f4f6f8;--line:#dde1e6}
+@media (prefers-color-scheme:dark){:root{--bg:#14161a;--fg:#e8eaed;--muted:#9aa1ab;--card:#1d2026;--line:#2c3037;--accent:#2bb8a6;}}
+/* Use predictable sizing and apply the global page typography and colors. */
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--fg)}
+/* Center content and provide standard and narrow page widths. */
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.narrow{max-width:760px}
+a{color:var(--accent)}
+/* Style the shared header, brand, and responsive navigation layout. */
+.site-header{border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.brand{font-weight:700;text-decoration:none;color:var(--fg)}
+nav a{margin-left:16px;text-decoration:none;color:var(--muted)}
+nav a[aria-current],nav a:hover{color:var(--fg)}
+/* Emphasize the home-page introduction and primary actions. */
+.hero{padding:56px 0 32px;background:var(--card)}
+h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.2;margin:.2em 0}
+.lead{font-size:1.15rem;color:var(--muted)}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}
+.btn{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:8px;text-decoration:none;color:var(--fg);font-weight:600}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+/* Display the app preview at full width while preserving its proportions. */
+.shot{display:block;width:100%;height:auto;margin-top:24px;min-height:280px;border:2px dashed var(--line);border-radius:12px;display:grid;place-items:center;color:var(--muted)}
+/* Arrange feature cards in a grid that adapts to the available screen width. */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:16px 0}
+.cards .card{margin:0}
+/* Format supported media types and secondary text. */
+.formats span{display:inline-block;margin:0 8px 8px 0;padding:4px 12px;border:1px solid var(--line);border-radius:999px;font-weight:600}
+.muted{color:var(--muted)}
+/* Style the guide's in-page links, reference tables, and expandable FAQ items. */
+.toc a{margin-right:14px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+code{background:var(--card);padding:1px 5px;border-radius:4px}
+details{border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:8px 0}
+/* Keep form fields consistent and hide the anti-spam honeypot from visitors. */
+form label{display:block;margin:14px 0;font-weight:600}
+input,select,textarea{display:block;width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg);color:var(--fg)}
+.hp{position:absolute;left:-9999px}
+/* Separate the footer and present its text as secondary information. */
+.site-footer{margin-top:64px;border-top:1px solid var(--line);padding:20px 0;color:var(--muted)}
