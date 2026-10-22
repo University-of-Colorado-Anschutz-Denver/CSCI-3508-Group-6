@@ -5,7 +5,7 @@ The app reads metadata by running [ExifTool](https://exiftool.org) with `QProces
 ## Windows
 
 1. Download the **Windows Executable** zip (`exiftool-XX.XX_64.zip`) from https://exiftool.org (the download link goes to SourceForge).
-2. Unzip it. You get `exiftool(-k).exe` and an `exiftool_files` folder.
+2. Unzip it. Inside its `exiftool-XX.XX_64` folder you get `exiftool(-k).exe` and an `exiftool_files` folder.
 3. Copy **both** into this folder.
 4. Rename `exiftool(-k).exe` to `exiftool.exe`. (The `(-k)` name makes it wait for a keypress, which hangs under `QProcess`.)
 
@@ -23,7 +23,7 @@ Check it from the `code` folder:
 .\third_party\exiftool\exiftool.exe -ver
 ```
 
-## macOS
+## macOS / Linux
 
 1. Download **Image-ExifTool-XX.XX.tar.gz** (the "Full Distribution") from https://exiftool.org.
 2. Extract it and copy the **contents** of the extracted `Image-ExifTool-XX.XX` folder (at least the `exiftool` script and the `lib` folder) into this folder.
@@ -42,27 +42,36 @@ Check it from the `code` folder:
 ./third_party/exiftool/exiftool -ver
 ```
 
-macOS includes Perl, so nothing else is needed. If you get `Permission denied`, run `chmod +x third_party/exiftool/exiftool`.
+macOS and most Linux distros include Perl, so nothing else is needed. If you get `Permission denied`, run `chmod +x third_party/exiftool/exiftool`.
 
-## Using it from Qt
+## How the app finds it
 
-CMake defines `EXIFTOOL_DIR` as the absolute path to this folder, so the code doesn't depend on where the app is run from:
+The build copies this folder to `build/exiftool/`, next to the app. The installer must ship the same layout, so the app finds ExifTool the same way when installed:
 
-```cpp
-#ifdef Q_OS_WIN
-const QString exiftool = QStringLiteral(EXIFTOOL_DIR "/exiftool.exe");
-#else
-const QString exiftool = QStringLiteral(EXIFTOOL_DIR "/exiftool");
-#endif
-
-QProcess p;
-p.start(exiftool, {"-json", "-G", filePath});
-if (!p.waitForFinished() || p.exitCode() != 0) {
-    // ExifTool missing or failed: show p.errorString() / p.readAllStandardError()
-}
-QJsonDocument doc = QJsonDocument::fromJson(p.readAllStandardOutput());
+```text
+Windows / Linux:  <install folder>/QuadM.exe  and  <install folder>/exiftool/exiftool.exe (+ exiftool_files/)
+macOS .app:       QuadM.app/Contents/Resources/exiftool/exiftool (+ lib/)
 ```
 
-- Pass arguments as a list, never as one shell string.
-- `-json` output is easy to parse with `QJsonDocument`. `-G` includes the tag group name.
-- On Windows, `exiftool_files` must stay in the same folder as `exiftool.exe`.
+Don't hardcode a path. Use [src/exiftool.h](../../src/exiftool.h), which looks relative to the running app:
+
+```cpp
+#include "exiftool.h"
+
+QJsonObject tags;
+QString error;
+if (ExifTool::readMetadata(filePath, tags, error)) {
+    QString make = tags.value("EXIF:Make").toString();   // keys look like "Group:Tag"
+} else {
+    // show `error` to the user
+}
+```
+
+To run ExifTool with other arguments, get the executable from `ExifTool::executablePath()` and pass the arguments to `QProcess` as a list, never as one shell string.
+
+## Installer checklist
+
+- Include the whole `exiftool` folder (the `exiftool_files` or `lib` folder too), placed as shown above.
+- Keep the executable bit on `exiftool` for macOS and Linux.
+- On Linux packages, declare `perl` as a dependency.
+- Install into the program folder (`Program Files`, `/opt`, the `.app` bundle), not AppData or ProgramData.

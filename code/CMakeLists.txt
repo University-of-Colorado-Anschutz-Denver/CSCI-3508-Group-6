@@ -23,8 +23,18 @@ file(GLOB_RECURSE QUADM_SOURCES CONFIGURE_DEPENDS
 add_executable(QuadM ${QUADM_SOURCES})
 target_precompile_headers(QuadM PRIVATE <QtWidgets>)
 target_include_directories(QuadM PRIVATE include src)
-# Folder where each teammate puts ExifTool (see third_party/exiftool/README.md)
-target_compile_definitions(QuadM PRIVATE EXIFTOOL_DIR="${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool")
+
+# Copy ExifTool next to the exe (build/exiftool/) so dev and installed builds use the same layout.
+# See third_party/exiftool/README.md for how to download it.
+add_custom_target(copy_exiftool ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool" "${CMAKE_BINARY_DIR}/exiftool"
+)
+add_dependencies(QuadM copy_exiftool)
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool/exiftool.exe"
+   AND NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool/exiftool")
+    message(WARNING "ExifTool not found in third_party/exiftool - see third_party/exiftool/README.md")
+endif()
 target_link_libraries(QuadM PRIVATE Qt6::Widgets)
 
 # Copy the Qt DLLs next to the exe so it runs without Qt on PATH
