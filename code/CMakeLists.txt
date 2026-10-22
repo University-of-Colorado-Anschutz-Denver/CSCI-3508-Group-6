@@ -11,18 +11,20 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-# Pick up every .cpp/.h under src/ and include/; CONFIGURE_DEPENDS re-checks on each build
+# Pick up every .cpp/.h/.ui/.qrc under src/ and include/; CONFIGURE_DEPENDS re-checks on each build
 file(GLOB_RECURSE QUADM_SOURCES CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.qrc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.ui"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.qrc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
 )
-
-list(FILTER QUADM_SOURCES EXCLUDE REGEX "/build/")
 
 add_executable(QuadM ${QUADM_SOURCES})
 target_precompile_headers(QuadM PRIVATE <QtWidgets>)
 target_include_directories(QuadM PRIVATE include src)
+# Folder where each teammate puts ExifTool (see third_party/exiftool/README.md)
+target_compile_definitions(QuadM PRIVATE EXIFTOOL_DIR="${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool")
 target_link_libraries(QuadM PRIVATE Qt6::Widgets)
 
 # Copy the Qt DLLs next to the exe so it runs without Qt on PATH
