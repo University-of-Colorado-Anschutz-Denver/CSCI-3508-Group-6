@@ -1,9 +1,23 @@
-#include <QApplication>
-#include <QPushButton>
+#include "QuadMGUI/mainwindow.h"
 
-int main(int argc, char* argv[]) {
-    QApplication app(argc, argv);
-    QPushButton button("Hello, Qt!");
-    button.show();
-    return app.exec();   // runs the event loop until the window closes
+#include <QApplication>
+#include <QLocale>
+#include <QTranslator>
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+
+    QTranslator translator;
+    const QStringList uiLanguages = QLocale::system().uiLanguages();
+    for (const QString &locale : uiLanguages) {
+        const QString baseName = "QuadMGUI_" + QLocale(locale).name();
+        if (translator.load(":/i18n/" + baseName)) {
+            a.installTranslator(&translator);
+            break;
+        }
+    }
+    MainWindow w;
+    w.show();
+    return QApplication::exec();
 }

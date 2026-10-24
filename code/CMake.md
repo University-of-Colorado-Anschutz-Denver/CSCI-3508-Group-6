@@ -1,4 +1,6 @@
-# Setup and Build Guide
+# Setup and Build Guide For Windows
+
+On macOS, see [CMake-macOS.md](CMake-macOS.md) instead.
 
 ## 1. Install CMake
 
@@ -13,6 +15,8 @@ cmake --version
 ```
 
 ## 2. Install Qt
+
+Select the community version of the installer.
 
 Download the Qt online installer from https://www.qt.io/download-open-source and install it to the default location, `C:\Qt`.
 

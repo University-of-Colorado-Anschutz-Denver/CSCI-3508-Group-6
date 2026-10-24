@@ -11,18 +11,30 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-# Pick up every .cpp/.h under src/ and include/; CONFIGURE_DEPENDS re-checks on each build
+# Pick up every .cpp/.h/.ui/.qrc under src/ and include/; CONFIGURE_DEPENDS re-checks on each build
 file(GLOB_RECURSE QUADM_SOURCES CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.qrc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.ui"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.qrc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
 )
-
-list(FILTER QUADM_SOURCES EXCLUDE REGEX "/build/")
 
 add_executable(QuadM ${QUADM_SOURCES})
 target_precompile_headers(QuadM PRIVATE <QtWidgets>)
 target_include_directories(QuadM PRIVATE include src)
+
+# Copy ExifTool next to the exe (build/exiftool/) so dev and installed builds use the same layout.
+# See third_party/exiftool/README.md for how to download it.
+add_custom_target(copy_exiftool ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool" "${CMAKE_BINARY_DIR}/exiftool"
+)
+add_dependencies(QuadM copy_exiftool)
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool/exiftool.exe"
+   AND NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool/exiftool")
+    message(WARNING "ExifTool not found in third_party/exiftool - see third_party/exiftool/README.md")
+endif()
 target_link_libraries(QuadM PRIVATE Qt6::Widgets)
 
 # Copy the Qt DLLs next to the exe so it runs without Qt on PATH
