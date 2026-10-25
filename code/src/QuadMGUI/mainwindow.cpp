@@ -1,146 +1,295 @@
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "exiftool.h"
+#include "file.h"
 
-#include <QMovie> // placeholder gif include
-
-
-#include <QFile>
-#include <QTextStream>
+#include <QDir>
+#include <QFileInfo>
+#include <QFileIconProvider>
 #include <QListWidgetItem>
-#include <QStyle>
-#include <QDebug>
 #include <QPushButton>
+#include <QDebug>
+#include <QMovie>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QByteArray>
 
 
-
-void MainWindow::loadData() {
-    // clear entries to ensure that there is no previous enties stored
-
-    Entries.clear();
-
-    // open file as read only 
-
-    QFile file(":/icons/testdata.txt"); // have the file hardcoded as I don't expect it to change
-
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Failed to open file!";
-        return;
-    }
-    // read file data
-    QTextStream data(&file);
-
-    // add stuff to the Entry vector
-
-    while (!data.atEnd()) {
-        //_______________________NEEDS REFACTORING IF THE .txt FORMAT CHANGES_________________
-        QStringList parts = data.readLine().split('|');
-        if (parts.size() != 3)
-            continue;
-
-        Entry entry;
-        entry.directory = (parts[0] == "DIR");
-        entry.root = parts[1];
-        entry.name = parts[2];
-        Entries.append(entry);
-        //_________________________________________________________________________________
-    }
-
-    file.close();
-
-    // for each entry populate the files/ folders on the top level
-
+void MainWindow::loadRootFolders()
+{
     ui->rootListWidget->clear();
 
-    for (int i = 0; i < Entries.size(); i++){
-        Entry entry = Entries[i];
-        if (entry.directory && entry.root == "/") {
-            auto *item = new QListWidgetItem(style()->standardIcon(QStyle::SP_DirIcon), entry.name);
-        
-            item->setData(Qt::UserRole, "/" + entry.name);
-            ui->rootListWidget->addItem(item);
-        }
+    // Use your home directory as the test root.
+    QDir home(QDir::homePath());
 
+    QFileIconProvider iconProvider;
+
+    // List folders inside the home directory.
+    QFileInfoList folders = home.entryInfoList(
+        QDir::Dirs | QDir::NoDotAndDotDot,
+        QDir::Name
+    );
+
+    for (const QFileInfo &folder : folders) {
+        auto *item = new QListWidgetItem(
+            iconProvider.icon(folder),
+            folder.fileName()
+        );
+
+        // Store the actual directory path.
+        item->setData(Qt::UserRole, folder.absoluteFilePath());
+
+        ui->rootListWidget->addItem(item);
     }
-    currentPath.clear();
-    pathHistory.clear();
-    loadDirectory("/");
-
 }
 
-void MainWindow::loadDirectory(const QString &path) {
 
-    currentPath = path;
+void MainWindow::loadDirectory(const QString &path)
+{
+    QDir dir(path);
+
+    if (!dir.exists()) {
+        qDebug() << "Directory does not exist:" << path;
+        return;
+    }
+
+    QString absolutePath = dir.absolutePath();
+
+    // Save the current directory for Back navigation.
+    if (!currentPath.isEmpty() && currentPath != absolutePath) {
+        pathHistory.append(currentPath);
+    }
+
+    currentPath = absolutePath;
+
+    const bool atHome =
+        QDir::cleanPath(currentPath) ==
+        QDir::cleanPath(QDir::homePath());
 
     ui->contentsListWidget->clear();
-    ui->currentPathLabel->setText(path);
+    ui->currentPathLabel->setText(currentPath);
 
-    for (int i = 0; i < Entries.size(); i++){
-        const Entry &entry = Entries[i];
+    ui->contentsListWidget->show();
+    ui->currentPathLabel->show();
+    ui->backButton->setVisible(!atHome);
 
-        if (entry.root != path)
+    QFileIconProvider iconProvider;
+
+    // Show folders first, then supported media files.
+    QFileInfoList entries = dir.entryInfoList(
+        QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot,
+        QDir::DirsFirst | QDir::Name
+    );
+
+    for (const QFileInfo &entry : entries) {
+
+        // Always allow folders so users can navigate through them.
+        // Only display files accepted by FileManager.
+        if (entry.isFile() &&
+            !FileManager::isSupportedFile(entry.absoluteFilePath())) {
             continue;
+        }
 
-        auto *item = new QListWidgetItem(style()->standardIcon(entry.directory? QStyle::SP_DirIcon: QStyle::SP_FileIcon),entry.name);
+        auto *item = new QListWidgetItem(
+            iconProvider.icon(entry),
+            entry.fileName()
+        );
 
-        QString fullPath = (path == "/")
-            ? "/" + entry.name
-            : path + "/" + entry.name;
+        // Keep the full path attached to the list item.
+        item->setData(Qt::UserRole, entry.absoluteFilePath());
 
-        item->setData(Qt::UserRole, fullPath);
         ui->contentsListWidget->addItem(item);
     }
 
-    qDebug() << "path:" << path<< "| Entries:" << ui->contentsListWidget->count();
-
-
+    qDebug() << "Loaded directory:" << currentPath
+             << "| Displayed items:" << ui->contentsListWidget->count();
 }
+
+
+void MainWindow::metadataPopulate(const QString &filePath)
+{
+    QFileInfo fileInfo(filePath);
+
+    // placeholder if nothing is being displayed
+    QMovie *catMovie = ui->metadataPlaceholderLabel->movie();
+
+    if (catMovie) {
+        catMovie->stop();
+        ui->metadataPlaceholderLabel->setMovie(nullptr);
+    }
+
+    ui->metadataPlaceholderLabel->setWordWrap(true);
+    ui->metadataPlaceholderLabel->setAlignment(
+        Qt::AlignLeft | Qt::AlignTop
+    );
+    ui->metadataPlaceholderLabel->setTextInteractionFlags(
+        Qt::TextSelectableByMouse
+    );
+
+    if (!fileInfo.exists() || !fileInfo.isFile()) {
+        ui->metadataPlaceholderLabel->setText("File not found.");
+        return;
+    }
+
+    // Wrong file type
+    if (!FileManager::isSupportedFile(filePath)) {
+        ui->metadataPlaceholderLabel->setText(
+            "This file format is not supported."
+        );
+        return;
+    }
+
+    QString metadataText;
+
+    // Display basic file information.
+    metadataText += "FILE INFORMATION\n\n";
+    metadataText += "Name: " + fileInfo.fileName() + "\n";
+    metadataText += "Type: " + fileInfo.suffix().toUpper() + "\n";
+    metadataText += "Size: " + QString::number(fileInfo.size() / 1024.0, 'f', 2) +" KB\n";
+    metadataText += "Modified: " +fileInfo.lastModified().toString("yyyy-MM-dd hh:mm:ss") +"\n\n";
+
+    metadataText += "FILE PATH\n\n";
+    metadataText += fileInfo.absoluteFilePath() + "\n\n";
+
+    // Read the actual media metadata using ExifTool.
+    QJsonObject metadata;
+    QString error;
+
+    const bool success = ExifTool::readMetadata(fileInfo.absoluteFilePath(),metadata,error);
+
+    metadataText += "MEDIA METADATA\n\n";
+
+    if (success) {
+
+        if (metadata.isEmpty()) {
+            metadataText += "No metadata was returned for this file.";
+        } 
+        else 
+        {
+            // Format the metadata as readable, indented JSON.
+            for (auto it = metadata.constBegin(); it != metadata.constEnd(); ++it) {
+                metadataText += it.key() + ": " + it.value().toVariant().toString() + "\n";
+            }
+        }
+
+    } else {
+        metadataText += "Could not extract metadata.\n\n";
+        metadataText += error;
+
+        qDebug() << "ExifTool metadata error:" << error;
+    }
+
+    ui->metadataPlaceholderLabel->setText(metadataText);
+
+    qDebug() << "Metadata displayed for:"
+             << fileInfo.absoluteFilePath();
+}
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // back button debug statements
+    // qDebug() << ui->backButton;
+    // qDebug() << ui->backButton->isEnabled();
+    // qDebug() << ui->backButton->isVisible();
+    // qDebug() << ui->backButton->geometry();
+
+    // Scroll logic
+    QLabel *metadataLabel = ui->metadataPlaceholderLabel;
+    QWidget *metadataParent = metadataLabel->parentWidget();
+
+    QScrollArea *metadataScrollArea = new QScrollArea(metadataParent);
+    metadataScrollArea->setWidgetResizable(true);
+    metadataScrollArea->setFrameShape(QFrame::NoFrame);
+    metadataScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    metadataScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+    if (metadataParent->layout()) {
+        metadataParent->layout()->replaceWidget(
+            metadataLabel,
+            metadataScrollArea
+        );
+    } else {
+        metadataScrollArea->setGeometry(metadataLabel->geometry());
+    }
+
+    metadataScrollArea->setWidget(metadataLabel);
+
+    metadataLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    metadataLabel->setWordWrap(true);
+    //________________________________________________________________________________
+
     QMovie *catMovie = new QMovie(":/icons/oiia_cat.gif", QByteArray(), this);
 
     ui->metadataPlaceholderLabel->setMovie(catMovie);
     catMovie->start();
 
-    loadData();
+    // Remove the Add button; users browse the filesystem directly.
 
-    // populate contents after loading the data
+    // Populate the Root panel and load the initial directory.
+    loadRootFolders();
+    //loadDirectory(QDir::homePath());
+
+    ui->contentsListWidget->hide();
+    ui->currentPathLabel->hide();
+    ui->backButton->hide();
+
+    // Clicking a root folder loads its contents.
     connect(ui->rootListWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem *item) {
         loadDirectory(item->data(Qt::UserRole).toString());
     });
 
-    // double-click a folder to navigate into it.
+    // Single-click a supported file to display its metadata.
+    connect(ui->contentsListWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem *item) {
+        QString path = item->data(Qt::UserRole).toString();
+        QFileInfo info(path);
+
+        if (info.isFile() && FileManager::isSupportedFile(path)) {
+            filePath = info.absoluteFilePath();
+
+            qDebug() << "File path:" << filePath;
+
+            // Read metadata when the user selects a supported file.
+            metadataPopulate(filePath);
+        }
+    });
+
+    // Folder logic. Double click to display its content
     connect(ui->contentsListWidget, &QListWidget::itemDoubleClicked, this, [this](QListWidgetItem *item) {
-        QString name = item->text();
+        QString path = item->data(Qt::UserRole).toString();
+        QFileInfo info(path);
 
-        for (int i = 0; i < Entries.size(); i++) {
-            const Entry &entry = Entries[i];
+        if (info.isDir()) {
+            loadDirectory(path);
+        }
+    });
 
-            if (entry.root == currentPath && entry.name == name && entry.directory) {
-                pathHistory.append(currentPath);
-                loadDirectory(item->data(Qt::UserRole).toString());
-                return;
-            }
+    //Navigate backward
+    connect(ui->backButton, &QPushButton::clicked, this, [this]() {
+        if (pathHistory.isEmpty()) {
+            return;
         }
 
-        qDebug() << "Selected dummy file:" << name;
+        QString previousPath = pathHistory.takeLast();
+
+        // Avoid recording the current path again.
+        currentPath.clear();
+
+        loadDirectory(previousPath);
     });
 
-    // Navigate backward.
-    connect(ui->backButton, &QPushButton::clicked, this, [this]() {
-        if (!pathHistory.isEmpty())
-            loadDirectory(pathHistory.takeLast());
-    });
-
-    
+    // connect(ui->backButton, &QPushButton::clicked, this, []() {
+    //     qDebug() << "click";
+    // });
 }
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-

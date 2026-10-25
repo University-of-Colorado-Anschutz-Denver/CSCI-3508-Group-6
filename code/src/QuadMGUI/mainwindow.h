@@ -34,14 +34,17 @@ private:
         QString root;
         QString name;
         bool directory; // a simple yes or no
+        QString actualPath;
     };
 
     QVector<Entry> Entries;
     QString currentPath;
     QStringList pathHistory;
+    QString filePath;
 
-    void loadData();
+    void loadRootFolders();
     void loadDirectory(const QString &path);
+    void metadataPopulate(const QString &filePath);
 
     
 };

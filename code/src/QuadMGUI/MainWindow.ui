@@ -57,43 +57,7 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item>
-       <!-- Add new folder button-->
-        <widget class="QPushButton" name="newButton">
-         <property name="minimumSize">
-          <size>
-           <width>120</width>
-           <height>36</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>New folder</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="rootPathLabel">
-         <property name="text">
-          <string>No folder selected</string>
-         </property>
-         <property name="textInteractionFlags">
-          <set>Qt::TextSelectableByMouse</set>
-         </property>
-        </widget>
-        <!--New file button-->
-        <!-- This is what the user clicks to browse their files to add a new file-->
-        <widget class="QPushButton" name="addButton">
-         <property name="minimumSize">
-          <size>
-           <width>120</width>
-           <height>36</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Add</string>
-         </property>
-        </widget>
-       </item>
+
        <item>
         <spacer name="toolbarSpacer">
          <property name="orientation">
@@ -122,7 +86,6 @@
         </widget>
        </item> -->
       </layout>
-      
      </widget>
     </item>
     <!-- END OF THE TOP HALF-->
@@ -192,6 +155,7 @@
          </layout>
         </widget>
        </item>
+
        <!--Second panel. Generally hidden, becomes visible when a folder from root is opened to display contents-->
        <!--This panel will be reused to open folders inside folders-->
        <item>
@@ -205,7 +169,7 @@
                <string>Back</string>
               </property>
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -244,6 +208,7 @@
          </layout>
         </widget>
        </item>
+
        <!-- Preview panel-->
        <item>
         <widget class="QWidget" name="previewPanel" native="true">
@@ -284,7 +249,7 @@
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
             </property>
-          </widget>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="previewNameLabel">
@@ -322,6 +287,7 @@
          </layout>
         </widget>
        </item>
+
        <!-- MetaData panel-->
        <item>
         <widget class="QWidget" name="metadataPanel" native="true">
@@ -345,32 +311,105 @@
           <item>
            <widget class="QFrame" name="metadataFrame">
             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+             <enum>QFrame::StyledPanel</enum>
             </property>
             <property name="frameShadow">
-              <enum>QFrame::Plain</enum>
+             <enum>QFrame::Plain</enum>
             </property>
             <layout class="QVBoxLayout" name="metadataLayout">
-              <item>
-              <widget class="QLabel" name="metadataPlaceholderLabel">
-                <property name="minimumSize">
-                <size>
-                  <width>150</width>
-                  <height>180</height>
-                </size>
+             <property name="leftMargin">
+              <number>4</number>
+             </property>
+             <property name="topMargin">
+              <number>4</number>
+             </property>
+             <property name="rightMargin">
+              <number>4</number>
+             </property>
+             <property name="bottomMargin">
+              <number>4</number>
+             </property>
+             <item>
+              <!-- Scroll area keeps long metadata inside the metadata panel. -->
+              <widget class="QScrollArea" name="metadataScrollArea">
+               <property name="widgetResizable">
+                <bool>true</bool>
+               </property>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarAsNeeded</enum>
+               </property>
+               <property name="verticalScrollBarPolicy">
+                <enum>Qt::ScrollBarAsNeeded</enum>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <widget class="QWidget" name="metadataScrollContents">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>300</width>
+                  <height>500</height>
+                 </rect>
                 </property>
-                <property name="alignment">
-                <set>Qt::AlignCenter</set>
-                </property>
-                <property name="text">
-                <string>OIIA cat loading...</string>
-                </property>
+                <layout class="QVBoxLayout" name="metadataScrollContentsLayout">
+                 <property name="leftMargin">
+                  <number>8</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>8</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>8</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>8</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="metadataPlaceholderLabel">
+                   <property name="minimumSize">
+                    <size>
+                     <width>150</width>
+                     <height>180</height>
+                    </size>
+                   </property>
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeft|Qt::AlignTop</set>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                   <property name="text">
+                    <string>OIIA cat loading...</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="metadataContentSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </widget>
               </widget>
-              </item>
+             </item>
             </layout>
-          </widget>
-             
-              
+           </widget>
           </item>
           <item>
            <spacer name="metadataBottomSpacer">
