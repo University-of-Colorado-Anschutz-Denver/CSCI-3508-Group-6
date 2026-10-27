@@ -1,0 +1,29 @@
+name: Website checks
+
+on:
+  push:
+    branches: [testing]
+    paths: ["code/website/**", ".github/workflows/website.yml"]
+  pull_request:
+    paths: ["code/website/**", ".github/workflows/website.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  website:
+    name: Lint and test website
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: code/website
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Lint HTML
+        run: npm run lint:html
+      - name: Run tests
+        run: npm test
