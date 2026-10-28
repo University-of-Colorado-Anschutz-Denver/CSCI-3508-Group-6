@@ -6,7 +6,7 @@ on:
   # Trigger on pushes to the testing branch.
   push:
     # Branches included in the push trigger.
-    branches: [testing]
+    branches: [main, testing, website_skeleton]
     # Run only when website files or this workflow file change.
     paths: ["code/website/**", ".github/workflows/website.yml"]
   # Trigger on pull requests that modify matching paths.
@@ -68,7 +68,7 @@ jobs:
       packages: write # push to ghcr.io with the built-in token
     # Publish only from the main branch; other runs build and test without pushing.
     env:
-      PUBLISH: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+      PUBLISH: ${{ github.event_name != 'pull_request' && contains(fromJSON('["main","website_skeleton","testing"]'), github.ref_name) }}
     steps:
       # Check out the source needed to build the website image.
       - uses: actions/checkout@v4
@@ -94,6 +94,7 @@ jobs:
           images: ${{ steps.name.outputs.image }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=branch
             type=sha,format=short
             type=ref,event=pr
 
