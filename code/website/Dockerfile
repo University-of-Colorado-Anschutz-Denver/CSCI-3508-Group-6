@@ -6,6 +6,7 @@ FROM nginxinc/nginx-unprivileged:1.27-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY security-headers.inc /etc/nginx/conf.d/security-headers.inc
 COPY --chown=nginx:nginx . /usr/share/nginx/html
+RUN rm -f /usr/share/nginx/html/nginx.conf /usr/share/nginx/html/security-headers.inc
 
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \

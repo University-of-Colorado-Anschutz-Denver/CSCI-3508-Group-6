@@ -118,7 +118,7 @@ jobs:
             echo "$p -> $code"; [ "$code" = 200 ] || { docker logs site; exit 1; }
           done
           # test and build files must not be served
-          for p in /package.json /tests/site.test.js /Dockerfile; do
+          for p in /package.json /tests/site.test.js /Dockerfile /nginx.conf /security-headers.inc; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
             echo "$p -> $code"; [ "$code" = 404 ] || { echo "::error::$p is served by the image"; exit 1; }
           done

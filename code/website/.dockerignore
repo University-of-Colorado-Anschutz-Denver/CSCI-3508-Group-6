@@ -7,7 +7,5 @@ package-lock.json
 .htmlhintrc
 .dockerignore
 Dockerfile
-nginx.conf
-security-headers.inc
 README.md
 *.test.js
