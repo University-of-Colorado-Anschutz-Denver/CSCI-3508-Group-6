@@ -1,0 +1,168 @@
+# Display name in the GitHub Actions interface.
+name: Website checks
+
+# Events that trigger this workflow.
+on:
+  # Trigger on pushes to the testing branch.
+  push:
+    # Branches included in the push trigger.
+    branches: [main, testing, website_skeleton]
+    # Run only when website files or this workflow file change.
+    paths: ["code/website/**", ".github/workflows/website.yml"]
+  # Trigger on pull requests that modify matching paths.
+  pull_request:
+    # Files included in the pull-request trigger.
+    paths: ["code/website/**", ".github/workflows/website.yml"]
+  # Enable manual runs from the GitHub Actions interface.
+  workflow_dispatch:
+
+# Permissions granted to the workflow's GitHub token.
+permissions:
+  # Permit read-only access to repository files.
+  contents: read
+
+concurrency:
+  group: website-${{ github.ref }}
+  cancel-in-progress: true
+
+
+# Jobs executed by this workflow.
+jobs:
+  # Job identifier.
+  test:
+    # Display name in the workflow run.
+    name: Lint and test website
+    # Runner environment for this job.
+    runs-on: ubuntu-latest
+    # Default settings for shell commands in this job.
+    defaults:
+      # Settings applied to run steps.
+      run:
+        # Execute commands from the website project directory.
+        working-directory: code/website
+    # Steps executed sequentially by the job.
+    steps:
+      # Check out the repository contents.
+      - uses: actions/checkout@v4
+      # Set up Node.js for subsequent commands.
+      - uses: actions/setup-node@v4
+        # Configuration for the Node.js setup action.
+        with:
+          # Node.js version used by the job.
+          node-version: 20
+      # Validate HTML files.
+      - name: Lint HTML
+        # Invoke the HTML lint script from package.json.
+        run: npm run lint:html
+      # Execute the website test suite.
+      - name: Run tests
+        # Invoke the test script from package.json.
+        run: npm test
+
+  image:
+    name: Build, smoke-test and publish image
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # push to ghcr.io with the built-in token
+    # Publish only from the main branch; other runs build and test without pushing.
+    env:
+      PUBLISH: ${{ github.event_name != 'pull_request' && contains(fromJSON('["main","website_skeleton","testing"]'), github.ref_name) }}
+    steps:
+      # Check out the source needed to build the website image.
+      - uses: actions/checkout@v4
+
+      # Set up Node.js for any Node-based Docker build steps.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Create a lowercase GHCR image name from the repository owner.
+      - name: Name the image (registry names must be lowercase)
+        id: name
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quadm-website" >> "$GITHUB_OUTPUT"
+
+      # Enable BuildKit features used by the Docker build actions.
+      - uses: docker/setup-buildx-action@v3
+
+      # Generate consistent image tags and OCI metadata labels.
+      - name: Image tags and labels
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.name.outputs.image }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=branch
+            type=sha,format=short
+            type=ref,event=pr
+
+      # Build and load the image locally, using the GitHub Actions cache.
+      - name: Build image (local only)
+        uses: docker/build-push-action@v6
+        with:
+          context: code/website
+          load: true
+          tags: quadm-website:ci
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Start the image and verify expected pages/assets work and build files stay private.
+      - name: Smoke-test the container
+        run: |
+          docker run -d --name site -p 8080:8080 quadm-website:ci
+          for i in $(seq 1 30); do curl -fs http://localhost:8080/healthz >/dev/null && break; sleep 1; done
+          for p in / /download.html /guide.html /feedback.html /about.html /css/style.css /js/main.js; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
+            echo "$p -> $code"; [ "$code" = 200 ] || { docker logs site; exit 1; }
+          done
+          # test and build files must not be served
+          for p in /package.json /tests/site.test.js /Dockerfile /nginx.conf /security-headers.inc; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
+            echo "$p -> $code"; [ "$code" = 404 ] || { echo "::error::$p is served by the image"; exit 1; }
+          done
+          docker rm -f site
+
+      # Authenticate to GHCR only when this run is allowed to publish.
+      - name: Log in to GitHub Container Registry
+        if: env.PUBLISH == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Push the image using the generated tags and labels on publishable runs.
+      - name: Push image
+        if: env.PUBLISH == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: code/website
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+
+      # Record whether the image was published and show a command to run it.
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Website image"
+            echo "Trigger: ${{ github.event_name }} ${{ github.event.inputs.reason }}"
+            if [ "$PUBLISH" = true ]; then
+              echo ""
+              echo "Published: \`${{ steps.name.outputs.image }}:latest\`"
+              echo ""
+              echo '```'
+              echo "docker run --rm -p 8080:8080 ${{ steps.name.outputs.image }}:latest"
+              echo '```'
+            else
+              echo "Built and tested only (not published from this ref)."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      
+    

@@ -1,0 +1,11 @@
+# Only the site itself belongs in the image.
+node_modules
+tests
+scripts
+package.json
+package-lock.json
+.htmlhintrc
+.dockerignore
+Dockerfile
+README.md
+*.test.js
