@@ -1,29 +1,55 @@
+# Display name in the GitHub Actions interface.
 name: Website checks
 
+# Events that trigger this workflow.
 on:
+  # Trigger on pushes to the testing branch.
   push:
+    # Branches included in the push trigger.
     branches: [testing]
+    # Run only when website files or this workflow file change.
     paths: ["code/website/**", ".github/workflows/website.yml"]
+  # Trigger on pull requests that modify matching paths.
   pull_request:
+    # Files included in the pull-request trigger.
     paths: ["code/website/**", ".github/workflows/website.yml"]
+  # Enable manual runs from the GitHub Actions interface.
   workflow_dispatch:
 
+# Permissions granted to the workflow's GitHub token.
 permissions:
+  # Permit read-only access to repository files.
   contents: read
 
+# Jobs executed by this workflow.
 jobs:
+  # Job identifier.
   website:
+    # Display name in the workflow run.
     name: Lint and test website
+    # Runner environment for this job.
     runs-on: ubuntu-latest
+    # Default settings for shell commands in this job.
     defaults:
+      # Settings applied to run steps.
       run:
+        # Execute commands from the website project directory.
         working-directory: code/website
+    # Steps executed sequentially by the job.
     steps:
+      # Check out the repository contents.
       - uses: actions/checkout@v4
+      # Set up Node.js for subsequent commands.
       - uses: actions/setup-node@v4
+        # Configuration for the Node.js setup action.
         with:
+          # Node.js version used by the job.
           node-version: 20
+      # Validate HTML files.
       - name: Lint HTML
+        # Invoke the HTML lint script from package.json.
         run: npm run lint:html
+      # Execute the website test suite.
       - name: Run tests
+        # Invoke the test script from package.json.
         run: npm test
