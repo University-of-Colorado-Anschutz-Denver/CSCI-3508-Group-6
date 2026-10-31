@@ -117,12 +117,11 @@ void MainWindow::loadDirectory(const QString &path)
              << "| Displayed items:" << ui->contentsListWidget->count();
 }
 
-
 void MainWindow::metadataPopulate(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
 
-    // placeholder if nothing is being displayed
+    // Stop the OIIA placeholder animation
     QMovie *catMovie = ui->metadataPlaceholderLabel->movie();
 
     if (catMovie) {
@@ -130,22 +129,11 @@ void MainWindow::metadataPopulate(const QString &filePath)
         ui->metadataPlaceholderLabel->setMovie(nullptr);
     }
 
-    ui->metadataPlaceholderLabel->setWordWrap(true);
-    ui->metadataPlaceholderLabel->setAlignment(
-        Qt::AlignLeft | Qt::AlignTop
-    );
-    ui->metadataPlaceholderLabel->setTextInteractionFlags(
-        Qt::TextSelectableByMouse
-    );
-
     if (!fileInfo.exists() || !fileInfo.isFile()) {
         ui->metadataPlaceholderLabel->setText("File not found.");
         return;
     }
 
-
-
-    // Wrong file type
     if (!FileManager::isSupportedFile(filePath)) {
         ui->metadataPlaceholderLabel->setText(
             "This file format is not supported."
@@ -153,58 +141,105 @@ void MainWindow::metadataPopulate(const QString &filePath)
         return;
     }
 
-    QString metadataText;
+    QString html;
 
-    // Display basic file information.
-    metadataText += "FILE INFORMATION\n\n";
-    metadataText += "Name: " + fileInfo.fileName() + "\n";
-    metadataText += "Type: " + fileInfo.suffix().toUpper() + "\n";
-    metadataText += "Size: " + QString::number(fileInfo.size() / 1024.0, 'f', 2) +" KB\n";
-    metadataText += "Modified: " +fileInfo.lastModified().toString("yyyy-MM-dd hh:mm:ss") +"\n\n";
+    // Basic file information
+    html += "<h3>File Information</h3>";
 
-    metadataText += "FILE PATH\n\n";
-    metadataText += fileInfo.absoluteFilePath() + "\n\n";
+    html += "<b>Name:</b> " + fileInfo.fileName().toHtmlEscaped() + "<br>";
+    html += "<b>Type:</b> " + fileInfo.suffix().toUpper() + "<br>";
+    html += "<b>Size:</b> " +
+            QString::number(fileInfo.size() / 1024.0, 'f', 2) + " KB<br>";
 
-    // Read the actual media metadata using ExifTool.
+    html += "<b>Modified:</b> " +
+            fileInfo.lastModified().toString("yyyy-MM-dd hh:mm:ss") + "<br>";
+
+    html += "<hr>";
+
+    // File path
+    html += "<h3>File Path</h3>";
+    html += fileInfo.absoluteFilePath().toHtmlEscaped();
+
+    html += "<hr>";
+
+    // Extract media metadata
     QJsonObject metadata;
     QString error;
 
-    const bool success = ExifTool::readMetadata(fileInfo.absoluteFilePath(),metadata,error);
+    bool success = ExifTool::readMetadata(
+        fileInfo.absoluteFilePath(), metadata, error
+    );
 
-    metadataText += "MEDIA METADATA\n\n";
+    QMap<QString, QMap<QString, QString>> groupedMetadata; //map to hold the categories and their fields
 
-    if (success) {
+    html += "<h3>Media Metadata</h3>";
 
-        if (metadata.isEmpty()) {
-            metadataText += "No metadata was returned for this file.";
-        } 
-        else 
-        {
-            // Format the metadata as readable, indented JSON.
-            for (auto it = metadata.constBegin(); it != metadata.constEnd(); ++it) {
-                metadataText += it.key() + ": " + it.value().toVariant().toString() + "\n";
+    if (success && !metadata.isEmpty()) {
+
+        for (auto it = metadata.constBegin();it != metadata.constEnd(); ++it) {
+            QStringList parts = it.key().split(':'); // split category
+            if (parts.size() > 1) {
+                groupedMetadata[parts[0]][parts[1]] = it.value().toVariant().toString().toHtmlEscaped(); // add the key value pair with category
+                qDebug() << groupedMetadata[parts[0]]<< " "<<groupedMetadata[parts[0]][parts[1]];
+            }
+            else {
+                QString key = it.key().toHtmlEscaped();
+                QString value = it.value().toVariant().toString().toHtmlEscaped();
+                html += "<b>" + key + ":</b> " + value + "<br>";
             }
         }
 
-    } else {
-        metadataText += "Could not extract metadata.\n\n";
-        metadataText += error;
+        for (auto ctg = groupedMetadata.constBegin(); ctg != groupedMetadata.constEnd(); ++ctg) {
+            html += "<h4>" + ctg.key().toHtmlEscaped() + "</h4>";
+
+            for (auto p0 = ctg.value().constBegin(); p0 != ctg.value().constEnd(); ++p0){
+                html += "<b>" + p0.key().toHtmlEscaped() + ":</b> "+ p0.value().toHtmlEscaped() + "<br>";
+            }
+        }
+
+    }
+    else if (success) {
+        html += "No metadata found.";
+    }
+    else {
+        html += "Could not extract metadata.<br>";
+        html += error.toHtmlEscaped();
 
         qDebug() << "ExifTool metadata error:" << error;
     }
 
-    ui->metadataPlaceholderLabel->setText(metadataText);
+    ui->metadataPlaceholderLabel->setText(html);
+    ui->metadataPlaceholderLabel->setTextFormat(Qt::RichText);
+    ui->metadataPlaceholderLabel->setWordWrap(true);
+    ui->metadataPlaceholderLabel->setTextInteractionFlags(
+        Qt::TextSelectableByMouse
+    );
 
-    qDebug() << "Metadata displayed for:"
-             << fileInfo.absoluteFilePath();
+    qDebug() << "Metadata displayed for:" << filePath;
 }
 
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    ui->contentLayout->setStretch(0, 25);
+    ui->contentLayout->setStretch(1, 30);
+    ui->contentLayout->setStretch(2, 45);
+
+    ui->metadataScrollArea->setWidgetResizable(true);
+
+    ui->metadataFrame->setSizePolicy(
+        QSizePolicy::Expanding,
+        QSizePolicy::Expanding
+    );
+    
+    ui->metadataScrollArea->setSizePolicy(
+        QSizePolicy::Expanding,
+        QSizePolicy::Expanding
+    );
+
+    ui->metadataPanelLayout->setStretch(1, 1);
 
     // back button debug statements
     // qDebug() << ui->backButton;
@@ -216,33 +251,32 @@ MainWindow::MainWindow(QWidget *parent)
     QLabel *metadataLabel = ui->metadataPlaceholderLabel;
     QWidget *metadataParent = metadataLabel->parentWidget();
 
-    QScrollArea *metadataScrollArea = new QScrollArea(metadataParent);
-    metadataScrollArea->setWidgetResizable(true);
-    metadataScrollArea->setFrameShape(QFrame::NoFrame);
-    metadataScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    metadataScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    // QScrollArea *metadataScrollArea = new QScrollArea(metadataParent);
+    // metadataScrollArea->setWidgetResizable(true);
+    // metadataScrollArea->setFrameShape(QFrame::NoFrame);
+    // metadataScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    // metadataScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    if (metadataParent->layout()) {
-        metadataParent->layout()->replaceWidget(
-            metadataLabel,
-            metadataScrollArea
-        );
-    } else {
-        metadataScrollArea->setGeometry(metadataLabel->geometry());
-    }
+    // if (metadataParent->layout()) {
+    //     metadataParent->layout()->replaceWidget(
+    //         metadataLabel,
+    //         metadataScrollArea
+    //     );
+    // } else {
+    //     metadataScrollArea->setGeometry(metadataLabel->geometry());
+    // }
 
-    metadataScrollArea->setWidget(metadataLabel);
+    // metadataScrollArea->setWidget(metadataLabel);
 
-    metadataLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    metadataLabel->setWordWrap(true);
-    //________________________________________________________________________________
+    // metadataLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    // metadataLabel->setWordWrap(true);
+    // //________________________________________________________________________________
 
     QMovie *catMovie = new QMovie(":/icons/oiia_cat.gif", QByteArray(), this);
 
     ui->metadataPlaceholderLabel->setMovie(catMovie);
     catMovie->start();
 
-    // Remove the Add button; users browse the filesystem directly.
     getDrives();
     // Populate the Root panel and load the initial directory.
     loadRootFolders();

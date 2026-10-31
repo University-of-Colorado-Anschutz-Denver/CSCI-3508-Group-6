@@ -46,6 +46,7 @@ private:
     void loadDirectory(const QString &path);
     void metadataPopulate(const QString &filePath);
     void getDrives();
+    
 
     
 };
