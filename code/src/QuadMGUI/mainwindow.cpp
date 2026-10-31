@@ -14,28 +14,39 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QByteArray>
+#include <QDir>
+#include <QFileInfoList>
+#include <QComboBox>
+#include <QStorageInfo>
 
+
+void MainWindow::getDrives() {
+
+    for (const QStorageInfo &drive : QStorageInfo::mountedVolumes()) {
+        if (drive.isReady()) {
+            ui->driveComboBox->addItem(drive.displayName(),drive.rootPath());
+        }
+    }
+}
 
 void MainWindow::loadRootFolders()
 {
     ui->rootListWidget->clear();
 
-    // Use your home directory as the test root.
-    QDir home(QDir::homePath());
+    QString path = ui->driveComboBox->currentData().toString(); //drive path
 
+    // Use your home directory as the test root.
+    QDir dir(path); // picks up drive path
     QFileIconProvider iconProvider;
 
     // List folders inside the home directory.
-    QFileInfoList folders = home.entryInfoList(
+    QFileInfoList folders = dir.entryInfoList(
         QDir::Dirs | QDir::NoDotAndDotDot,
         QDir::Name
     );
 
     for (const QFileInfo &folder : folders) {
-        auto *item = new QListWidgetItem(
-            iconProvider.icon(folder),
-            folder.fileName()
-        );
+        auto *item = new QListWidgetItem( iconProvider.icon(folder),folder.fileName());
 
         // Store the actual directory path.
         item->setData(Qt::UserRole, folder.absoluteFilePath());
@@ -131,6 +142,8 @@ void MainWindow::metadataPopulate(const QString &filePath)
         ui->metadataPlaceholderLabel->setText("File not found.");
         return;
     }
+
+
 
     // Wrong file type
     if (!FileManager::isSupportedFile(filePath)) {
@@ -230,9 +243,13 @@ MainWindow::MainWindow(QWidget *parent)
     catMovie->start();
 
     // Remove the Add button; users browse the filesystem directly.
-
+    getDrives();
     // Populate the Root panel and load the initial directory.
     loadRootFolders();
+
+    connect(ui->driveComboBox, &QComboBox::currentIndexChanged,this, [this]() {
+            loadRootFolders();
+        });
     //loadDirectory(QDir::homePath());
 
     ui->contentsListWidget->hide();

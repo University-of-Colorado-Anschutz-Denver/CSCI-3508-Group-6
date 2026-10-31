@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- Design and styling implementation for QuadM-->
 <ui version="4.0">
-
-<!-- MAIN WINDOW-->
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
@@ -14,17 +10,10 @@
     <height>700</height>
    </rect>
   </property>
-
-  <!-- Title-->
   <property name="windowTitle">
    <string>QuadM Media Metadata Viewer</string>
   </property>
-
-  <!-- Content area. Basically the canvas itself-->
   <widget class="QWidget" name="centralwidget">
-
-   <!-- Vertical layouting--> 
-   <!-- Splits the canvas into two rows. the top one for needed buttons and stuff, the bottom to display files/folders/path/metadata and stuff-->
    <layout class="QVBoxLayout" name="mainVerticalLayout">
     <property name="spacing">
      <number>10</number>
@@ -41,58 +30,6 @@
     <property name="bottomMargin">
      <number>12</number>
     </property>
-    <!-- Top row, this is gonna be significantly narrower than the bottom row-->
-    <item>
-     <widget class="QWidget" name="toolbarWidget" native="true">
-      <layout class="QHBoxLayout" name="toolbarLayout">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-
-       <item>
-        <spacer name="toolbarSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <!-- <item>
-       AI suggestion, commented out as didn't see immediate purpose
-         <widget class="QPushButton" name="refreshButton">
-         <property name="minimumSize">
-          <size>
-           <width>90</width>
-           <height>36</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Rescan</string>
-         </property>
-        </widget>
-       </item> -->
-      </layout>
-     </widget>
-    </item>
-    <!-- END OF THE TOP HALF-->
-
-    <!-- The main file viewer and metadata viewer (Huge inspo from Em's and Yannick's images)-->
-    <!--Has four columns, the leftmost and right most are static (as in they would never be hidden).--> 
-    <!-- The middle two are dynamic-->
     <item>
      <widget class="QWidget" name="contentWidget" native="true">
       <layout class="QHBoxLayout" name="contentLayout">
@@ -111,9 +48,9 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item>
 
-        <!--The left most widget. This where people see the files/ folders listed-->
+       <!-- ROOT DIRECTORY PANEL -->
+       <item>
         <widget class="QWidget" name="rootPanel" native="true">
          <property name="minimumSize">
           <size>
@@ -124,19 +61,34 @@
          <layout class="QVBoxLayout" name="rootPanelLayout">
           <item>
            <widget class="QLabel" name="rootHeadingLabel">
-            <property name="text">
-             <string>QuadM Root Directory</string>
-            </property>
             <property name="styleSheet">
              <string notr="true">font-weight: bold; font-size: 14px;</string>
             </property>
+            <property name="text">
+             <string>QuadM Root Directory</string>
+            </property>
            </widget>
           </item>
-          <!--File listing for root-->
+
+          <!-- DRIVE SELECTION -->
+          <item>
+           <widget class="QComboBox" name="driveComboBox"/>
+          </item>
+
+          <item>
+           <widget class="QWidget" name="widget" native="true"/>
+          </item>
+
           <item>
            <widget class="QListWidget" name="rootListWidget">
-            <property name="viewMode">
-             <enum>QListView::ListMode</enum>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>537</height>
+             </size>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
             </property>
             <property name="iconSize">
              <size>
@@ -144,11 +96,11 @@
               <height>32</height>
              </size>
             </property>
+            <property name="viewMode">
+             <enum>QListView::ViewMode::ListMode</enum>
+            </property>
             <property name="uniformItemSizes">
              <bool>true</bool>
-            </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SingleSelection</enum>
             </property>
            </widget>
           </item>
@@ -156,8 +108,7 @@
         </widget>
        </item>
 
-       <!--Second panel. Generally hidden, becomes visible when a folder from root is opened to display contents-->
-       <!--This panel will be reused to open folders inside folders-->
+       <!-- CONTENTS PANEL -->
        <item>
         <widget class="QWidget" name="contentsPanel" native="true">
          <layout class="QVBoxLayout" name="contentsPanelLayout">
@@ -165,11 +116,11 @@
            <layout class="QHBoxLayout" name="contentsHeaderLayout">
             <item>
              <widget class="QPushButton" name="backButton">
-              <property name="text">
-               <string>Back</string>
-              </property>
               <property name="enabled">
                <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>Back</string>
               </property>
              </widget>
             </item>
@@ -185,11 +136,10 @@
             </item>
            </layout>
           </item>
-          <!-- Dynamic file loading, reused-->
           <item>
            <widget class="QListWidget" name="contentsListWidget">
-            <property name="viewMode">
-             <enum>QListView::ListMode</enum>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
             </property>
             <property name="iconSize">
              <size>
@@ -197,11 +147,11 @@
               <height>32</height>
              </size>
             </property>
+            <property name="viewMode">
+             <enum>QListView::ViewMode::ListMode</enum>
+            </property>
             <property name="uniformItemSizes">
              <bool>true</bool>
-            </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SingleSelection</enum>
             </property>
            </widget>
           </item>
@@ -209,7 +159,7 @@
         </widget>
        </item>
 
-       <!-- Preview panel-->
+       <!-- PREVIEW PANEL -->
        <item>
         <widget class="QWidget" name="previewPanel" native="true">
          <property name="minimumSize">
@@ -221,11 +171,21 @@
          <layout class="QVBoxLayout" name="previewPanelLayout">
           <item>
            <widget class="QLabel" name="previewHeadingLabel">
+            <property name="styleSheet">
+             <string notr="true">font-weight: bold; font-size: 14px;</string>
+            </property>
             <property name="text">
              <string>Preview</string>
             </property>
-            <property name="styleSheet">
-             <string notr="true">font-weight: bold; font-size: 14px;</string>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="previewNameLabel">
+            <property name="text">
+             <string>No file selected</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -237,24 +197,14 @@
               <height>180</height>
              </size>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
             </property>
             <property name="text">
              <string>Select a file to preview</string>
             </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="previewNameLabel">
-            <property name="text">
-             <string>No file selected</string>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -274,7 +224,7 @@
           <item>
            <spacer name="previewBottomSpacer">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -288,7 +238,7 @@
         </widget>
        </item>
 
-       <!-- MetaData panel-->
+       <!-- METADATA PANEL -->
        <item>
         <widget class="QWidget" name="metadataPanel" native="true">
          <property name="minimumSize">
@@ -300,21 +250,21 @@
          <layout class="QVBoxLayout" name="metadataPanelLayout">
           <item>
            <widget class="QLabel" name="metadataHeadingLabel">
-            <property name="text">
-             <string>Metadata</string>
-            </property>
             <property name="styleSheet">
              <string notr="true">font-weight: bold; font-size: 14px;</string>
+            </property>
+            <property name="text">
+             <string>Metadata</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QFrame" name="metadataFrame">
             <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
+             <enum>QFrame::Shape::StyledPanel</enum>
             </property>
             <property name="frameShadow">
-             <enum>QFrame::Plain</enum>
+             <enum>QFrame::Shadow::Plain</enum>
             </property>
             <layout class="QVBoxLayout" name="metadataLayout">
              <property name="leftMargin">
@@ -330,27 +280,26 @@
               <number>4</number>
              </property>
              <item>
-              <!-- Scroll area keeps long metadata inside the metadata panel. -->
               <widget class="QScrollArea" name="metadataScrollArea">
-               <property name="widgetResizable">
-                <bool>true</bool>
-               </property>
-               <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAsNeeded</enum>
+               <property name="frameShape">
+                <enum>QFrame::Shape::NoFrame</enum>
                </property>
                <property name="verticalScrollBarPolicy">
-                <enum>Qt::ScrollBarAsNeeded</enum>
+                <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
                </property>
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
+               <property name="horizontalScrollBarPolicy">
+                <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+               </property>
+               <property name="widgetResizable">
+                <bool>true</bool>
                </property>
                <widget class="QWidget" name="metadataScrollContents">
                 <property name="geometry">
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>300</width>
-                  <height>500</height>
+                  <width>280</width>
+                  <height>247</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="metadataScrollContentsLayout">
@@ -368,33 +317,33 @@
                  </property>
                  <item>
                   <widget class="QLabel" name="metadataPlaceholderLabel">
-                   <property name="minimumSize">
-                    <size>
-                     <width>150</width>
-                     <height>180</height>
-                    </size>
-                   </property>
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
-                   <property name="alignment">
-                    <set>Qt::AlignLeft|Qt::AlignTop</set>
-                   </property>
-                   <property name="wordWrap">
-                    <bool>true</bool>
+                   <property name="minimumSize">
+                    <size>
+                     <width>150</width>
+                     <height>180</height>
+                    </size>
                    </property>
                    <property name="text">
                     <string>OIIA cat loading...</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </item>
                  <item>
                   <spacer name="metadataContentSpacer">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -414,7 +363,7 @@
           <item>
            <spacer name="metadataBottomSpacer">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -438,7 +387,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>24</height>
+     <height>33</height>
     </rect>
    </property>
   </widget>
