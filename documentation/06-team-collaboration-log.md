@@ -41,8 +41,8 @@ Use this document throughout the project to demonstrate effective communication,
 | --- | --- | --- | --- |
 | Harrison Julius | Project Lead / Code Architect | <ul><li>Team management</li><li>GitHub management</li><li>Software engineering</li> | <ul><li>Research</li></ul> |
 | Teja Kandimalla | GUI Designer | <ul><li>Design and implement user interface</li><li>Final say on GUI-related decisions</li><li>Software engineering</li> | <ul><li>WebDev Support</li></ul> |
-| Em Kronquist | Research & Communication Head | <ul><li>Main contact for clients/testers</li><li>Documentation/research lead and final say</li><li>Software engineering</li></ul> | <ul><li>Code architecture</li><li>Testing</li></ul> |
-| Yannick Kuete | WebDev Lead | <ul></li>Website creation and management</li><li>Testing and automation</li><li>Software engineering</li></ul> | <ul><li>DevOps Management</li><li>Back-end engineering</li></ul> |
+| Em Kronquist | Research & Communication Head | <ul><li>Main contact for clients/testers</li><li>Documentation/research lead and final say</li><li>Software engineering</li></ul> | <ul><li>Programming/design support</li><li>User testing</li></ul> |
+| Yannick Kuete | WebDev Lead | <ul><li>Website creation and management</li><li>Testing and automation</li><li>Software engineering</li></ul> | <ul><li>DevOps Management</li><li>Back-end engineering</li></ul> |
 
 Explain how the assignments are fair and how all members will participate in research, development, testing, writing, and presenting: Each member is the "head" of a specific department and will be responsible for managing the rest of the team's contributions to their field. Each member will contribute to each area (for example, Em research metadata formats and Teja researched GUI development for C++ applications, or Yannick created the website visuals and Harrison implemented the download function), and those contributions will be collated by the department head for the final project release.
 
@@ -52,9 +52,9 @@ Explain how the assignments are fair and how all members will participate in res
 | --- | --- | --- | --- | --- |
 | Subject approval | All | 2026-09-21 | Approval recorded | DONE |
 | Requirements baseline | All (EK Lead) | 2026-10-02 | Requirements reviewed | DONE |
-| Design baseline | All | 2026-10-25 (HJ Lead) | Diagrams and schema reviewed | IN PROGRESS |
+| Design baseline | All (HJ Lead) | 2026-10-25 | Diagrams and schema reviewed | DONE |
 | Implementation complete | All (HJ Lead) | 2026-11-15 | Required features work | IN PROGRESS |
-| Testing complete | All (YK Lead) | 2026-11-22 | Exit criteria met | NOT STARTED |
+| Testing complete | All (YK Lead) | 2026-11-22 | Exit criteria met | IN PROGRESS |
 | Report and presentation | All | 2026-12-02 | Final files reviewed | NOT STARTED |
 
 ## Meeting Log
@@ -65,7 +65,11 @@ Explain how the assignments are fair and how all members will participate in res
 | 2026-09-18 | HJ, TK, YK | Project proposal and presentation | <ul><li>All - Prepare selected presentation slides</li></ul> | <ul><li>2026-09-20</li></ul> |
 | 2026-09-25 | All | Diagramming discussion | <ul><li>All - Prepare preliminary UML diagrams</li></ul> | <ul><li>2026-10-02</li></ul> |
 | 2026-10-02 | All | Diagramming overview | <ul><li>HJ - Prepare finalized use-case and class diagrams based on preliminary versions</li></ul> | <ul><li>2026-10-03</li></ul> |
-| 2026-10-09 | HJ, EK, TK | HacknPlan tasks review, tag format planning, GUI framework | <ul><li>TK - GUI research</li><li>All - Basic file explorer creation</li><li>YK - Website baseline creation</li></ul> | <ul><li>2026-10-16</li><li>2026-10-16</li><li>2026-10-23</li></ul> |
+| 2026-10-09 | HJ, EK, TK | HacknPlan tasks review, tag format planning, GUI framework | <ul><li>TK - GUI research</li><li>EK - Research/test ExifTool integrations</li><li>All - Basic file explorer creation</li><li>YK - Website baseline creation</li></ul> | <ul><li>2026-10-16</li><li>2026-10-16</li><li>2026-10-16</li><li>2026-10-23</li></ul> |
+| 2026-10-16 | HJ, EK, YK | ExifTool implementation management (provided interface vs calling directly) | <ul><li>HJ/EK - ExifTool metadata handlers implementation</li><li>TK - Frontend read metadata display</li></ul> | <ul><li>2026-10-23</li><li>2026-10-23</li></ul> |
+| 2026-10-23 | HJ, TK, YK | Progress presentation prep | <ul><li>All - Presentation and submission prep</li></ul> | <ul><li>2026-10-25</li></ul> |
+| 2026-10-24 | HJ, EK | TA Meeting #1 (Proposal feedback, UML discussions) | <ul><li>N/A</li></ul> | <ul><li>N/A</li></ul> |
+| 2026-10-30 | HJ, EK, YK | V0.3.0 planning | <ul><li>EK - User testing for file explorer GUI</li><li>EK - Write user guides</li><li>HJ - Installers</li><li>TK - Frontend edit metadata display</li><li>YK - Website installer page prep</li></ul> | <ul><li>2026-11-06</li><li>2026-11-13</li><li>2026-11-06</li><li>2026-11-06</li><li>2026-11-06</li></li></ul> |
 
 ## Task and Contribution Log
 
@@ -74,7 +78,9 @@ Explain how the assignments are fair and how all members will participate in res
 | 2026-09-11 | EK | Research on metadata types/standards; existing tools to edit metadata; libraries for metadata manipulation; basic materials for team to understand metadata | List of resources available in Discord | HJ | Accepted |
 | 2026-09-14 - 2026-09-20 | All | Presentation slides prep and research | Presentation and 01-project-proposal.md submitted in Canvas | All | Accepted |
 | 2026-09-14 - 2026-09-20 | All | Diagramming prototypes | Initial prototypes shared in Discord server, discussed in 2026-10-02 meeting, and finalized in submitted diagrams | All | Accepted |
-| 2026-09-25 - 2026-10-02 | YK | CI/CD pipeline structuring | Implemented through GitHub Action | HJ | IN PROGRESS |
+| 2026-09-25 - 2026-10-02 | YK | CI/CD pipeline structuring | Implemented through GitHub Action | HJ | Accepted |
+| 2026-10-16 | EK | Test implementation for ExifTool using ExifTool C++ Interface | Example files discussed in meeting (Interface not used in final version for various reasons, will be using custom implementation instead) | HJ | Accepted |
+| 2026-10-23 - 2026-10-25 | All | Progress presentation prep | Materials submitted in Canvas | EK | Accepted |
 
 *Programming contributions are not listed here for brevity, as they are easily viewed in Git commits*
 
@@ -82,8 +88,9 @@ Explain how the assignments are fair and how all members will participate in res
 
 | Date | Decision | Options considered | Reason | Participants |
 | --- | --- | --- | --- | --- |
-| 2026-09-09, 2026-09-11 | Project selection (media metadata editor and search program, website for distribution and documentation) | <ul><li>Financial assistant and analyzer with chatbot integration</li><li>Family budget planner allowing multiple users and one year of budget planning</li><li>Metadata manager for media files</li></ul> | Selected project had interested clients already, EK is familiar with the project domain, general team interest in subject matter | All |
-| 2026-10-09 | GUI development toolkit | <ul><li>QT</li></ul> | FILL LATER | TK |
+| 2026-09-09, 2026-09-11 | Project selection (media metadata editor and search program, website for distribution and documentation) | <ul><li>Financial assistant and analyzer with chatbot integration</li><li>Family budget planner allowing multiple users and one year of budget planning</li><li>Metadata manager for media files [SELECTED]</li></ul> | Selected project had interested clients already; EK is familiar with the project domain; general team interest in subject matter | All |
+| 2026-10-09 | GUI development toolkit | <ul><li>Qt [SELECTED]</li><li>FLTK</li><li>Dear ImGUI</li></ul> | Qt has it's own design studio and looks very polished, plus had easy to follow documentation and tutorials available | TK |
+| 2026-10-17 | ExifTool implementation | <ul><li>Custom calls to Perl implementation [SELECTED]</li><li>ExifTool C++ Interface</li></ul> | Interface required Windows users to install and run through Cygwin; creating custom implementation with Qt calls wasn't complicated and allowed more control | HJ, EK |
 
 ## Feedback and Communication Issues
 
