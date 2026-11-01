@@ -4,11 +4,13 @@
 
 | Field | Value |
 | --- | --- |
-| Project | [Enter project name] |
-| Version | [Enter version] |
-| Authors | [Enter names] |
-| Last updated | [YYYY-MM-DD] |
-| Status | [Draft / Reviewed / Approved] |
+| Project | QuadM (MultiMedia Metadata Manager) |
+| Version | v0.3.0 |
+| Project Lead | Harrison Julius |
+| Developers | Harrison Julius, Teja Kandimalla, Emelie Kronquist, Yannick Kuete |
+| Document Authors | Emelie Kronquist |
+| Last updated | 2026-11-01 |
+| Status | DRAFT |
 
 ## 2. Purpose and Scope
 
@@ -26,7 +28,10 @@
 
 **Methods used:** [Describe interviews, surveys, brainstorming, document analysis, prototypes, or other methods.]
 
-**Participants and dates:** [Identify who participated and when.]
+**Participants and dates:**
+| Participant | Role | Date |
+| --- | --- | --- |
+| Helen Gover | Music supervisor; what metadata information would be useful | 2026-09-07 |
 
 **Key findings:**
 
