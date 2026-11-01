@@ -25,7 +25,6 @@ void MainWindow::getDrives() {
 
     for (const QStorageInfo &drive : QStorageInfo::mountedVolumes()) {
         QString driveInfo;
-        QString driveInfo;
         if (drive.isReady()) {
             if (drive.displayName().isEmpty() || drive.displayName() == "Local Disk" || drive.displayName() == drive.rootPath()) {
                 driveInfo = QString("%1").arg(drive.rootPath());
