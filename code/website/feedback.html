@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="View and edit hidden metadata, tag files, and search by tag across your media folders.">
+<!-- Apply the shared site styles. -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- Shared navigation provides access to the other project pages. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html">MultiMedia&nbsp;Metadata&nbsp;Manager&nbsp;(QuadM)</a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html" aria-current="page">Feedback</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+<!-- The feedback form collects reports and suggestions from visitors. -->
+<main>
+<section class="wrap narrow">
+  <h1>Feedback</h1>
+  <p class="lead">Found a bug or have an idea? Tell us.</p>
+  <!-- JavaScript validates the message and submits it when a feedback endpoint is configured. -->
+  <form id="feedback-form" novalidate>
+    <!-- Capture the feedback category, optional contact, message, and app version. -->
+    <label>Type
+      <select name="type"><option>Bug</option><option>Feature request</option><option>Question</option><option>Other</option></select>
+    </label>
+    <label>Your email (optional)
+      <input type="email" name="email" autocomplete="email">
+    </label>
+    <label>Message
+      <textarea name="message" rows="6" required maxlength="2000"></textarea>
+    </label>
+    <label>App version (optional)
+      <input type="text" name="version" placeholder="e.g. 0.1.0">
+    </label>
+    <!-- Hidden honeypot field helps filter automated spam submissions. -->
+    <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn primary" type="submit">Send feedback</button>
+    <!-- JavaScript writes validation, success, or error messages here. -->
+    <p id="form-status" role="status" aria-live="polite"></p>
+  </form>
+</section>
+</main>
+<!-- Shared footer links back to the project source. -->
+<footer class="site-footer">
+  <div class="wrap">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
+  </div>
+</footer>
+<!-- Shared script handles form submission and other page-specific behavior. -->
+<script src="js/main.js"></script>
+
+</body>
+</html>

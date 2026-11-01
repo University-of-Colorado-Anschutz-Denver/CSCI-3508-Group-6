@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>User guide · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="View and edit hidden metadata, tag files, and search by tag across your media folders.">
+<!-- Apply the shared styles used throughout the site. -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- Shared navigation connects the guide to the other project pages. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html">MultiMedia&nbsp;Metadata&nbsp;Manager&nbsp;(QuadM)</a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="download.html">Download</a>
+      <a href="guide.html" aria-current="page">User guide</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+<!-- Step-by-step instructions for the app's main workflows. -->
+<main>
+<section class="wrap narrow">
+  <h1>User guide</h1>
+  <!-- Jump links navigate to each topic on this page. -->
+  <nav class="toc" aria-label="On this page">
+    <a href="#open">Open a folder</a> <a href="#edit">Edit metadata</a> <a href="#tags">Tag files</a> <a href="#search">Search by tag</a> <a href="#formats">Where tags are stored</a> <a href="#faq">FAQ</a>
+  </nav>
+
+  <!-- Explain how to select a folder for scanning. -->
+  <h2 id="open">1. Open a folder</h2>
+  <p>Click <em>Open folder</em>. The app scans the folder and subfolders and lists supported files. <!-- TODO: screenshot --></p>
+
+  <!-- Describe editing and saving supported metadata fields. -->
+  <h2 id="edit">2. Edit metadata</h2>
+  <p>Select a file. Edit Title, Author or Comments, then press <em>Save</em>. Use the <em>All fields</em> tab to see hidden fields (read-only).</p>
+
+  <!-- Describe adding and removing tags before saving. -->
+  <h2 id="tags">3. Tag files</h2>
+  <p>In the Tags box, type a tag and press Enter. Remove a tag with its &times;. Tags are written when you Save.</p>
+
+  <!-- Explain how to search tags within a chosen folder scope. -->
+  <h2 id="search">4. Search by tag</h2>
+  <p>Type a tag in the search bar, choose the folder scope, and press <em>Search</em>.</p>
+
+  <!-- Show where tags are stored for each supported media format. -->
+  <h2 id="formats">Where tags are stored</h2>
+  <table>
+    <thead><tr><th>Format</th><th>Tag storage</th></tr></thead>
+    <tbody>
+      <tr><td>PNG, JPG</td><td>Embedded XMP in the file</td></tr>
+      <tr><td>MP4, WAV, MP3</td><td>Sidecar file, e.g. <code>clip.mp4.xmp</code></td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Keep the .xmp sidecar next to the media file when you move or copy it.</p>
+
+  <!-- Answer common questions about file changes, indexing, and support. -->
+  <h2 id="faq">FAQ</h2>
+  <details><summary>Does the app change my original files?</summary><p>Only when you press Save.</p></details>
+  <details><summary>Do I need to create a database?</summary><p>No. Tags live in your files; the app rebuilds its search index by scanning.</p></details>
+  <details><summary>Something is wrong. Where do I report it?</summary><p>Use the <a href="feedback.html">feedback form</a>.</p></details>
+</section>
+</main>
+<!-- Shared footer provides a link to the project source. -->
+<footer class="site-footer">
+  <div class="wrap">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
+  </div>
+</footer>
+<!-- Load shared JavaScript for features used by site pages. -->
+<script src="js/main.js"></script>
+
+</body>
+</html>

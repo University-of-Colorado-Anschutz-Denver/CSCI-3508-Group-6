@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="View and edit hidden metadata, tag files, and search by tag across your media folders.">
+<!-- Apply the shared styles used throughout the project website. -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- Shared navigation connects to the site's other pages. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html">MultiMedia&nbsp;Metadata&nbsp;Manager&nbsp;(QuadM)</a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="download.html" aria-current="page">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+<!-- Show release information, platform downloads, and setup instructions. -->
+<main>
+<section class="wrap narrow">
+  <h1>Download</h1>
+  <!-- JavaScript fills in the latest release version when GitHub responds. -->
+  <p class="lead">Latest version: <strong id="version">loading…</strong></p>
+  <!-- TODO: Add the downloadable files after the first release is published. -->
+  <!-- Download buttons link to matching files attached to a GitHub release. -->
+  <div class="card">
+    <h3>Windows (installer)</h3>
+    <p>Windows 10 or later, 64-bit.</p>
+    <p><a class="btn primary" id="dl-win" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download .exe</a></p>
+    <p class="muted">Installers are built automatically by our CI pipeline and published on GitHub Releases.</p>
+  </div>
+  <div class="card">
+    <h3>Linux (AppImage)</h3>
+    <p><a class="btn" id="dl-linux" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download AppImage</a></p>
+  </div>
+  <!-- Outline the basic steps for installing and opening the app. -->
+  <h2>Install steps</h2>
+  <ol>
+    <li>Download the installer.</li>
+    <li>Run it. If Windows SmartScreen warns about an unknown publisher, choose <em>More info → Run anyway</em> (the app is not code-signed yet).</li>
+    <li>Open <em>MultiMedia Metadata Manager (QuadM)</em> and choose a folder.</li>
+  </ol>
+</section>
+</main>
+<!-- Shared footer links visitors to the project source code. -->
+<footer class="site-footer">
+  <div class="wrap">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
+  </div>
+</footer>
+<!-- Shared script loads release details and updates available download links. -->
+<script src="js/main.js"></script>
+
+</body>
+</html>
