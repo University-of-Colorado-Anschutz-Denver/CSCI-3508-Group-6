@@ -14,17 +14,19 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QByteArray>
-#include <QDir>
 #include <QFileInfoList>
 #include <QComboBox>
 #include <QStorageInfo>
+
+#include "metadataeditor.h"
 
 
 void MainWindow::getDrives() {
 
     for (const QStorageInfo &drive : QStorageInfo::mountedVolumes()) {
         if (drive.isReady()) {
-            ui->driveComboBox->addItem(drive.displayName(),drive.rootPath());
+            QString driveInfo = QString("%1 (%2)").arg(drive.displayName()).arg(drive.rootPath());
+            ui->driveComboBox->addItem(driveInfo, drive.rootPath());
         }
     }
 }
@@ -180,7 +182,7 @@ void MainWindow::metadataPopulate(const QString &filePath)
             QStringList parts = it.key().split(':'); // split category
             if (parts.size() > 1) {
                 groupedMetadata[parts[0]][parts[1]] = it.value().toVariant().toString().toHtmlEscaped(); // add the key value pair with category
-                qDebug() << groupedMetadata[parts[0]]<< " "<<groupedMetadata[parts[0]][parts[1]];
+                //qDebug() << groupedMetadata[parts[0]]<< " "<<groupedMetadata[parts[0]][parts[1]];
             }
             else {
                 QString key = it.key().toHtmlEscaped();
@@ -218,6 +220,24 @@ void MainWindow::metadataPopulate(const QString &filePath)
     qDebug() << "Metadata displayed for:" << filePath;
 }
 
+
+void MainWindow::openMetadataEditor(const QString &filePath)
+{
+    if (!metadataEditor) {
+        metadataEditor = new MetadataEditor(filePath, this);
+
+        connect(metadataEditor, &MetadataEditor::metadataSaved, this, [this](const QString &savedPath) {
+            qDebug() << "Metadata saved:" << savedPath;
+            metadataPopulate(savedPath);
+        });
+    } else {
+        metadataEditor->setPath(filePath);
+    }
+
+    metadataEditor->show();
+    metadataEditor->raise();
+    metadataEditor->activateWindow();
+}
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -319,6 +339,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
             loadDirectory(path);
         }
     });
+
+    connect(ui->expandMetadataButton, &QPushButton::clicked,this, [this]() {
+            if (!filePath.isEmpty()) {
+                openMetadataEditor(filePath);
+            }
+        });
 
     //Navigate backward
     connect(ui->backButton, &QPushButton::clicked, this, [this]() {
