@@ -24,8 +24,14 @@
 void MainWindow::getDrives() {
 
     for (const QStorageInfo &drive : QStorageInfo::mountedVolumes()) {
+        QString driveInfo;
         if (drive.isReady()) {
-            QString driveInfo = QString("%1 (%2)").arg(drive.displayName()).arg(drive.rootPath());
+            if (drive.displayName().isEmpty() || drive.displayName() == "Local Disk" || drive.displayName() == drive.rootPath()) {
+                driveInfo = QString("%1").arg(drive.rootPath());
+            }
+            else {
+                driveInfo = QString("%1 (%2)").arg(drive.displayName()).arg(drive.rootPath());
+            }
             ui->driveComboBox->addItem(driveInfo, drive.rootPath());
         }
     }
