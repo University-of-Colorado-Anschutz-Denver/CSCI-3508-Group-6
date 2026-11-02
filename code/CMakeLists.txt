@@ -35,7 +35,31 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool/exiftool.exe"
    AND NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/exiftool/exiftool")
     message(WARNING "ExifTool not found in third_party/exiftool - see third_party/exiftool/README.md")
 endif()
-target_link_libraries(QuadM PRIVATE Qt6::Widgets)
+
+# TagLib reads/writes MP3 and WAV tags (ExifTool can't write those). It is downloaded and built
+# as part of the project (static), so nothing needs to be installed. Needs git and internet on the first configure.
+include(FetchContent)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_BINDINGS OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(taglib
+    GIT_REPOSITORY https://github.com/taglib/taglib.git
+    GIT_TAG v2.0.2
+    GIT_SUBMODULES_RECURSE ON # TagLib 2 needs its utfcpp submodule
+)
+FetchContent_MakeAvailable(taglib)
+
+# When built as a subproject TagLib has no TagLib::tag target and exports no include paths, so add them here.
+# Include headers directly, e.g. #include <mpegfile.h>, #include <wavfile.h>
+target_link_libraries(QuadM PRIVATE Qt6::Widgets tag)
+target_compile_definitions(QuadM PRIVATE TAGLIB_STATIC)
+target_include_directories(QuadM PRIVATE "${taglib_SOURCE_DIR}" "${taglib_SOURCE_DIR}/taglib"
+    "${taglib_SOURCE_DIR}/taglib/toolkit" "${taglib_SOURCE_DIR}/taglib/mpeg"
+    "${taglib_SOURCE_DIR}/taglib/mpeg/id3v2" "${taglib_SOURCE_DIR}/taglib/mpeg/id3v2/frames"
+    "${taglib_SOURCE_DIR}/taglib/riff"
+    "${taglib_SOURCE_DIR}/taglib/riff/wav" "${taglib_SOURCE_DIR}/taglib/riff/info"
+    "${taglib_BINARY_DIR}")
 
 # Copy the Qt DLLs next to the exe so it runs without Qt on PATH
 if(WIN32)
