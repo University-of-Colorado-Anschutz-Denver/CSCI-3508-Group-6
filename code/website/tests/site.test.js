@@ -83,3 +83,13 @@ test("no unfinished placeholders in the Release build", { skip: !process.env.STR
     assert.ok(!read(f).includes("YOUR-USERNAME"), `${f} still contains YOUR-USERNAME`);
   }
 });
+
+// main.js calls the global `ReleaseData` that release-data.js defines, so the
+// script tags must be ordered correctly or the download page will throw a
+// "ReleaseData is not defined" error at runtime.
+test("download page loads release-data.js before main.js", () => {
+  const html = read("download.html");
+  const a = html.indexOf('src="js/release-data.js"');
+  const b = html.indexOf('src="js/main.js"');
+  assert.ok(a !== -1 && b !== -1 && a < b, "release-data.js must come first");
+});
