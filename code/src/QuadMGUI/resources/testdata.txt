@@ -1,15 +1,1 @@
-DIR|/|Pictures
-DIR|/|Videos
-DIR|/|Music
-FILE|/Pictures|cat.png
-FILE|/Pictures|sunset.jpg
-FILE|/Pictures|wallpaper.webp
-FILE|/Videos|demo.mp4
-FILE|/Videos|tutorial.mov
-FILE|/Videos|clip.mkv
-FILE|/Music|song.mp3
-FILE|/Music|podcast.wav
-FILE|/Music|track.flac
-DIR|/Pictures|Wallpapers
-FILE|/Pictures/Wallpapers|space.png
-FILE|/Pictures/Wallpapers|mountains.jpeg
+

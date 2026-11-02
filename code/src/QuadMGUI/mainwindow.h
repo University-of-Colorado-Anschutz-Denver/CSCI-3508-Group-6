@@ -13,8 +13,10 @@ QT_BEGIN_NAMESPACE
 
 
 namespace Ui {
+
 class MainWindow;
 }
+class MetadataEditor;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -34,14 +36,24 @@ private:
         QString root;
         QString name;
         bool directory; // a simple yes or no
+        QString actualPath;
     };
 
     QVector<Entry> Entries;
     QString currentPath;
     QStringList pathHistory;
+    QString filePath;
 
-    void loadData();
+    void loadRootFolders();
     void loadDirectory(const QString &path);
+    void metadataPopulate(const QString &filePath);
+    void getDrives();
+    void openMetadataEditor(const QString &filePath);
+
+    MetadataEditor *metadataEditor = nullptr;
+
+    signals:
+     void metadataSaved(const QString &filePath);
 
     
 };

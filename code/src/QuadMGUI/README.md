@@ -1,31 +1,3 @@
-## Make files
-
-### CMakeLists.txt
-
-```
-Made to be compatible with Mac. Added one line (line 22) to exclude files from the build firectory (idk if it the problem is just for me but without the exclusion, I run into a failed linker command). 
-KEY FOR WORKING: 
-"${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.h"
-"${CMAKE_CURRENT_SOURCE_DIR}/QuadMGUI/*.qrc"
-
-"list(FILTER QUADM_SOURCES EXCLUDE REGEX "/build/")"
-
-These three lines were refactored to match file path I was using. Will change soon to be in line with what everyone else has.
-
-```
-
-### CMakePresets.json
-
-```
-Changes made to have it compatible with Mac. Should generally work with the presets Harrison wrote on windows.
-```
-
-### running
-```
-If on windows copy paste the og cmake files to the ones in the directory, but just update the .txt file to be in line with the file paths I have and be sure to include the "exclude line" 
-```
-
 ## files
 
 ### .ui file
@@ -37,7 +9,13 @@ The template xml file. All the styling and widgets are managed here
 
 ```
 This one is basically the class implemention for the mainwindow. Contains functions such as loadData, to read the directories from a .txt file, and loadDirectory, to get the filepath from the file and reuse it to populate subcontents.
-Constuctor: Creates a window, then loads the data for the root. And for the content panel, when a folder is double clicked it makes sure its a directory and matches the name along with ensuring that "current root" is consistent to poulate the sub directory. If the user clicks a file it should run a preview method to populate that panel.   
+Constuctor: Creates a window, then loads the data for the root. And for the content panel, when a folder is double clicked it makes sure its a directory and matches the name along with ensuring that "current root" is consistent to poulate the sub directory. If the user clicks a file it should run a preview method to populate that panel.  
+Added funtionality to display the metadata. It uses exiftools to get key value pairs for the metadata. Then it processes keys by mapping them to their categoies mentioned in the key itself, to make it more readable. The file explorer now also allows to display files/folders from different drives, using QStorageInfo to pick up the names and path. The final functionality in this window is to open a new edit window and an immediate refresh when changes are saved using a signal. 
+```
+
+### metadataeditor
+```
+This creates a new window and populates the metadata similar to the mainwindow. Each field comes with its own delete button and there is a universal add button. It uses dialogue boxes to add fields and value. There is a check in place to add only valid field, for example any gibberish field name or a non useful field name would be rejected using a check in ExifTools. It also supports saving changes or cancel updates.  
 ```
 
 ### .qrc
@@ -48,7 +26,6 @@ Communicates the external resources like data files, images, and in this case a 
 
 ### bugs
 ```
-when first running the program, the content panel displays the same contents as the root, and the back button smh doesn't work.
 ```
 
 ### Quick progress report
@@ -61,4 +38,16 @@ First read the QT docs and setup the environment. Then created a new project to 
 Then experimented with the design studio and the .ui file to gain some understanding on the framework. 
 Then startted lining up the widgets to create a decent looking layout.
 Following that, learnt how to incorporate external resources in the project. Then finally ran the .ui through chatGPT to fix some formatting and padding between the elements. Finally added the needed cpp to populate the two columns. 
+
+v.0.2.0
+Updated main window and fix a few bugs.
+Populated metadata by making a request to ExifTools.
+Added a scroll bar
+
+v.0.3.0
+Made the metadata viewer more readable.
+Added drives change functionality for the file explorer
+Created a new window and populated it with text bar style value editors. 
+With the help of AI worked on he save, add, edit, and delete functionalities. 
+
 ```
