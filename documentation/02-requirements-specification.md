@@ -14,21 +14,26 @@
 
 ## 2. Purpose and Scope
 
-**Purpose:** [State why this document and system exist.]
+**Purpose:** QuadM is an application that allows users to view and manage metadata for various file formats. Currently, metadata information is inconvenient to view and even more difficult to edit, often requiring a full re-export from editing software. QuadM aims to make this process easier by displaying all metadata in a single window and enabling users to edit the metadata in-application, no outside application necessary. It will also allow users to search for files via metadata information by creating custom tags for files.
 
 **System scope:** [Describe the system boundary, major goals, and what is excluded.]
+The system QuadM encompasses the desktop application. This will interface with users, who can control the application. It will also interface with the third-party tool ExifTool and the user's file storage system. The user can naviagte the files stored on their device in a file explorer-like format, view all metadata for supported file types, edit that metadata in the application, add custom metadata tags, and search for files via file name and metadata information. The system does not include functionality to search for multiple qualifiers at once.
 
 ## 3. Stakeholders and Users
 
 | Stakeholder or user group | Needs | How requirements were gathered |
 | --- | --- | --- |
-| [Enter group] | [Enter needs] | [Interview, survey, observation, research, etc.] |
+| Media editors | <ul><li>Better organization for media files stored on device</li><li>Improved searching functionality in a file explorer</li></ul> | Interview, personal experience, research |
+| Film/music/photo collectors | <ul><li>Search files by fields other than file name</li><li>Easily view metadata to determine hidden file information</li></ul> | Interview |
 
 ## 4. Requirements Gathering Process
 
 **Methods used:** [Describe interviews, surveys, brainstorming, document analysis, prototypes, or other methods.]
+<ul>
+    <li></li>
+</ul>
 
-**Participants and dates:**
+**Interview participants and dates:**
 | Participant | Role | Date |
 | --- | --- | --- |
 | Helen Gover | Music supervisor; what metadata information would be useful | 2026-09-07 |
