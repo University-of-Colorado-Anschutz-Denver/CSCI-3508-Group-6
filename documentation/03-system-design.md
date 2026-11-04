@@ -2,7 +2,7 @@
 
 ## 1. Design Overview
 
-**Project:** [Enter project name]
+**Project:** QuadM (MultiMedia Metadata Manager)
 
 **Design goals:** [Summarize the qualities this design prioritizes and why.]
 
