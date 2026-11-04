@@ -21,6 +21,8 @@ file(GLOB_RECURSE QUADM_SOURCES CONFIGURE_DEPENDS
 )
 
 add_executable(QuadM ${QUADM_SOURCES})
+# Windows: Release builds are GUI programs (no terminal window); Debug keeps the console for qDebug() output
+set_target_properties(QuadM PROPERTIES WIN32_EXECUTABLE $<NOT:$<CONFIG:Debug>>)
 target_precompile_headers(QuadM PRIVATE <QtWidgets>)
 target_include_directories(QuadM PRIVATE include src)
 
