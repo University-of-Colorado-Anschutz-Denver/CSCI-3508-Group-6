@@ -1,8 +1,10 @@
 name: Release
 
 # Push a version tag (git tag v0.4.0 && git push origin v0.4.0) and this workflow:
-#   1. builds the Windows MSI with code/packaging/build-windows-msi.ps1
-#   2. installs the MSI silently on the runner and checks the app + ExifTool
+#   1. builds the installers with the scripts in code/packaging/, in parallel:
+#        Windows  .msi  (build-windows-msi.ps1)
+#        Ubuntu   .deb  (build-deb.sh)
+#   2. installs each one on a clean runner and checks the app + ExifTool start
 #   3. publishes the files to a GitHub Release, with SHA256SUMS.txt
 # Running it by hand (Actions tab -> Run workflow) builds and tests, nothing is published.
 #
@@ -124,14 +126,57 @@ jobs:
           path: code/dist/*.msi
           if-no-files-found: error
 
+  linux:
+    name: Linux .deb (amd64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Install build tools (see the header of build-deb.sh)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build git curl perl qt6-base-dev libgl1-mesa-dev
+
+      - name: Build the .deb
+        working-directory: code
+        run: bash packaging/build-deb.sh "${{ steps.v.outputs.version }}"
+
+      - name: Install the .deb and check it
+        run: |
+          sudo apt-get install -y ./code/dist/quadm_*_amd64.deb
+          /opt/quadm/exiftool/exiftool -ver
+          # No screen on the runner: the offscreen platform lets the window open. timeout's code 124 = still running after 8 s = good.
+          set +e
+          QT_QPA_PLATFORM=offscreen timeout 8 /opt/quadm/QuadM
+          code=$?
+          set -e
+          if [ "$code" -ne 124 ]; then echo "QuadM exited early with code $code"; exit 1; fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-deb
+          path: code/dist/*.deb
+          if-no-files-found: error
+
   publish:
     name: Publish GitHub Release
-    needs: [windows]
+    needs: [windows, linux]
+    # Windows decides: a failed Linux build only leaves the .deb out of the release (see the warning step).
     if: ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') && needs.windows.result == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write # create the release and upload files
     steps:
+      - name: Warn about builds that failed
+        run: |
+          if [ "${{ needs.linux.result }}" != success ]; then echo "::warning::The Linux .deb is missing from this release"; fi
+
       - uses: actions/download-artifact@v4
         with:
           path: files
