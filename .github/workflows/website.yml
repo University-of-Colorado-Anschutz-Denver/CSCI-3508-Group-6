@@ -13,8 +13,13 @@ on:
   pull_request:
     # Files included in the pull-request trigger.
     paths: ["code/website/**", ".github/workflows/website.yml"]
-  # Enable manual runs from the GitHub Actions interface.
+  # Enable manual runs from the GitHub Actions interface (release.yml also starts it this way).
   workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why this run (shown in the log)"
+        required: false
+        default: "manual run"
 
 # Permissions granted to the workflow's GitHub token.
 permissions:
