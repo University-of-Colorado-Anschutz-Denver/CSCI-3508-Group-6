@@ -26,38 +26,32 @@
 <main>
 <section class="wrap narrow">
   <h1>Download</h1>
-  <!-- JavaScript fills in the latest release version when GitHub responds. -->
   <p class="lead">Latest version: <strong id="version">loading…</strong></p>
   <p class="muted" id="release-meta"></p>
-  <!-- TODO: Add the downloadable files after the first release is published. -->
-  <!-- Download buttons link to matching files attached to a GitHub release. -->
   <div class="card">
     <h3>Windows (installer)</h3>
     <p>Windows 10 or later, 64-bit.</p>
-    <p><a class="btn primary" id="dl-win" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download .exe</a></p>
+    <p><a class="btn primary" id="dl-win" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download installer</a></p>
     <p class="muted">Installers are built automatically by our CI pipeline and published on GitHub Releases.</p>
   </div>
   <div class="card">
-    <h3>Linux (AppImage)</h3>
-    <p><a class="btn" id="dl-linux" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download AppImage</a></p>
+    <h3>Linux (Ubuntu/Debian, amd64)</h3>
+    <p><a class="btn" id="dl-linux" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download .deb</a></p>
   </div>
-  <!-- Outline the basic steps for installing and opening the app. -->
   <h2>Install steps</h2>
   <ol>
     <li>Download the installer.</li>
     <li>Run it. If Windows SmartScreen warns about an unknown publisher, choose <em>More info → Run anyway</em> (the app is not code-signed yet).</li>
-    <li>Open <em>MultiMedia Metadata Manager (QuadM)</em> and choose a folder.</li>
+    <li>Open <em>Metadata Editor</em> and choose a folder.</li>
   </ol>
 </section>
 </main>
-<!-- Shared footer links visitors to the project source code. -->
 <footer class="site-footer">
   <div class="wrap">
-    <p>MultiMedia Metadata Manager (QuadM) &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
+    <p>QuadM &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
   </div>
 </footer>
-<!-- Shared script loads release details and updates available download links. -->
- <script src="js/release-data.js"></script>
+<script src="js/release-data.js"></script>
 <script src="js/main.js"></script>
 
 </body>

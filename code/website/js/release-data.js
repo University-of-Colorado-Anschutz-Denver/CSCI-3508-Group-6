@@ -1,10 +1,12 @@
 // Shared by the browser (download page) and Node (scripts/fetch-release.js).
 // Turns a GitHub "latest release" API response into the small object the
 // website needs. One source of truth, so the page and the CI step agree.
-
-// UMD wrapper: exposes this module as `module.exports` under Node/CommonJS
-// (e.g. scripts/fetch-release.js) and as a `ReleaseData` global in the
-// browser (e.g. main.js), from the same source file.
+//
+// Files it looks for in a release:
+//   .msi  Windows installer   (falls back to a Setup .exe until the pipeline builds an .msi)
+//   .deb  Ubuntu/Debian installer, amd64
+//   .pkg  macOS graphical installer
+//   .dmg  macOS non-graphical installer
 (function (root, factory) {
   if (typeof module === "object" && module.exports) module.exports = factory();
   else root.ReleaseData = factory();
@@ -24,14 +26,21 @@
     // Only consider assets that have a name and a downloadable URL.
     const assets = (release.assets || []).filter(a => a && a.name && a.browser_download_url);
 
-    // Windows: prefer an .exe whose name suggests it's the installer
-    // (e.g. "Setup.exe"/"Install.exe") over other .exe files in the release.
     const exes = assets.filter(a => /\.exe$/i.test(a.name));
-    const windows = exes.find(a => /setup|install/i.test(a.name)) || exes[0] || null;
 
-    // Linux: look for an AppImage build.
-    const linux = assets.find(a => /\.appimage$/i.test(a.name)) || null;
+    const windows = assets.find(a => ext(a, ".msi"))
+      || (() => {
+        const exes = assets.filter(a => ext(a, ".exe"));
+        return exes.find(a => /setup|install/i.test(a.name)) || exes[0];
+      })()
+      || null;
 
+    // amd64 only: skip arm64 builds, and prefer a name that says amd64 / x86_64.
+    const debs = assets.filter(a => ext(a, ".deb") && !/arm64|aarch64/i.test(a.name));
+    const linux = debs.find(a => /amd64|x86[_-]64/i.test(a.name)) || debs[0] || null;
+
+    const macPkg = assets.find(a => ext(a, ".pkg")) || null;
+    const macDmg = assets.find(a => ext(a, ".dmg")) || null;
     // Checksums file (e.g. SHA256SUMS), if the release publishes one.
     const checksums = assets.find(a => /sha-?256/i.test(a.name)) || null;
 
@@ -41,7 +50,13 @@
       version: String(release.tag_name).replace(/^v/i, ""),   // strip a leading "v" (e.g. "v1.2.0" -> "1.2.0")
       publishedAt: release.published_at || null,
       htmlUrl: release.html_url || null,
-      assets: { windows: asset(windows), linux: asset(linux), checksums: asset(checksums) }
+      assets: {
+        windows: asset(windows),
+        linux: asset(linux),
+        macPkg: asset(macPkg),
+        macDmg: asset(macDmg),
+        checksums: asset(checksums)
+      }
     };
   }
 
