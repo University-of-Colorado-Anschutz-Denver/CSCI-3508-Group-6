@@ -19,8 +19,7 @@ permissions:
 
 env:
   QT_VERSION: "6.8.2"        # Qt used on the runners (the presets on a laptop may use another version)
-  EXIFTOOL_VERSION: "13.60"  # pinned: build-deb.sh / build-macos.sh download this exact version too
-
+  EXIFTOOL_VERSION: "13.60"  # Linux and macOS: build-deb.sh / build-macos.sh download this exact version (Windows uses the newest, see below)
 jobs:
   windows:
     name: Windows .msi
@@ -50,11 +49,19 @@ jobs:
           tools: tools_mingw1310
           cache: true
 
-      # build-windows-msi.ps1 refuses to run without code/third_party/exiftool/exiftool.exe
+      # build-windows-msi.ps1 refuses to run without code/third_party/exiftool/exiftool.exe.
+      # exiftool.org only keeps the newest Windows zip (older versions return 404), so the
+      # file name is read from the download page instead of being pinned here.
       - name: Download the Windows ExifTool
         run: |
           dest=code/third_party/exiftool
-          curl -fsSL -o "$RUNNER_TEMP/exiftool.zip" "https://exiftool.org/exiftool-${EXIFTOOL_VERSION}_64.zip"
+          zip=$(curl -fsSL https://exiftool.org/ | grep -oE 'exiftool-[0-9]+\.[0-9]+_64\.zip' | head -n1 || true)
+          if [ -z "$zip" ]; then
+            v=$(curl -fsSL https://exiftool.org/ver.txt | tr -d '[:space:]')
+            zip="exiftool-${v}_64.zip"
+          fi
+          echo "ExifTool zip: $zip"
+          curl -fsSL -o "$RUNNER_TEMP/exiftool.zip" "https://exiftool.org/$zip"
           unzip -q "$RUNNER_TEMP/exiftool.zip" -d "$RUNNER_TEMP/exiftool"
           src=$(find "$RUNNER_TEMP/exiftool" -maxdepth 1 -mindepth 1 -type d | head -n1)
           cp -R "$src"/. "$dest"/
