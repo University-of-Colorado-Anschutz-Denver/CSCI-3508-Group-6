@@ -20,6 +20,7 @@ permissions:
 env:
   QT_VERSION: "6.8.2"        # Qt used on the runners (the presets on a laptop may use another version)
   EXIFTOOL_VERSION: "13.60"  # Linux and macOS: build-deb.sh / build-macos.sh download this exact version (Windows uses the newest, see below)
+
 jobs:
   windows:
     name: Windows .msi
@@ -50,8 +51,8 @@ jobs:
           cache: true
 
       # build-windows-msi.ps1 refuses to run without code/third_party/exiftool/exiftool.exe.
-      # exiftool.org only keeps the newest Windows zip (older versions return 404), so the
-      # file name is read from the download page instead of being pinned here.
+      # exiftool.org only keeps the newest Windows zip, so the file name is read from the download
+      # page instead of being pinned here. The file itself is hosted on SourceForge.
       - name: Download the Windows ExifTool
         run: |
           dest=code/third_party/exiftool
@@ -61,7 +62,13 @@ jobs:
             zip="exiftool-${v}_64.zip"
           fi
           echo "ExifTool zip: $zip"
-          curl -fsSL -o "$RUNNER_TEMP/exiftool.zip" "https://exiftool.org/$zip"
+          # exiftool.org's download buttons point to SourceForge; the exiftool.org path itself returns 404.
+          ok=0
+          for url in "https://sourceforge.net/projects/exiftool/files/$zip/download" "https://exiftool.org/$zip"; do
+            echo "Trying $url"
+            if curl -fsSL --retry 3 -A "Mozilla/5.0" -o "$RUNNER_TEMP/exiftool.zip" "$url" && unzip -tq "$RUNNER_TEMP/exiftool.zip" >/dev/null 2>&1; then ok=1; break; fi
+          done
+          [ "$ok" = 1 ] || { echo "::error::Could not download $zip from SourceForge or exiftool.org"; exit 1; }
           unzip -q "$RUNNER_TEMP/exiftool.zip" -d "$RUNNER_TEMP/exiftool"
           src=$(find "$RUNNER_TEMP/exiftool" -maxdepth 1 -mindepth 1 -type d | head -n1)
           cp -R "$src"/. "$dest"/
