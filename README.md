@@ -9,7 +9,7 @@ Replace every bracketed placeholder in this repository with information about yo
 | Instructor      | Dr. Salah Boukhris                                                          |
 | Semester        | FA2026                                                                      |
 | Project subject | Metadata Editing and Organization Application                               |
-| Approval status | [Pending / Approved on YYYY-MM-DD]                                          |
+| Approval status | Approved during proposal presentation                                          |
 | Repository URL  | https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6 |
 
 ## Team Members
@@ -53,9 +53,9 @@ Follow the illustrated, step-by-step guide in [`documentation/00-clone-and-setup
 ## Start Here
 
 1. ~~Have the group leader create the team-owned repository and give the other students access; then have every student clone it by following the guide above.~~
-2. Fill in the project and team information above.
-3. Complete `documentation/01-project-proposal.md` and obtain subject approval before development.
-4. Assign responsibilities and record them in `documentation/06-team-collaboration-log.md`.
+2. ~~Fill in the project and team information above.~~
+3. ~~Complete `documentation/01-project-proposal.md` and obtain subject approval before development.~~
+4. ~~Assign responsibilities and record them in `documentation/06-team-collaboration-log.md`.~~
 5. Document requirements before designing and implementing the system.
 6. Keep application source code in `code/` and test code in `tests/`.
 7. Update documentation throughout the project, not only before the deadline.
