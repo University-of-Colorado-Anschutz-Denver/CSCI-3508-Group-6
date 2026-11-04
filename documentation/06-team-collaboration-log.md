@@ -54,7 +54,7 @@ Explain how the assignments are fair and how all members will participate in res
 | Requirements baseline | All (EK Lead) | 2026-10-02 | Requirements reviewed | DONE |
 | Design baseline | All (HJ Lead) | 2026-10-25 | Diagrams and schema reviewed | DONE |
 | Implementation complete | All (HJ Lead) | 2026-11-15 | Required features work | IN PROGRESS |
-| Testing complete | All (YK Lead) | 2026-11-22 | Exit criteria met | IN PROGRESS |
+| Testing complete | All (YK/EK Lead) | 2026-11-22 | Exit criteria met | IN PROGRESS |
 | Report and presentation | All | 2026-12-02 | Final files reviewed | NOT STARTED |
 
 ## Meeting Log
@@ -81,6 +81,10 @@ Explain how the assignments are fair and how all members will participate in res
 | 2026-09-25 - 2026-10-02 | YK | CI/CD pipeline structuring | Implemented through GitHub Action | HJ | Accepted |
 | 2026-10-16 | EK | Test implementation for ExifTool using ExifTool C++ Interface | Example files discussed in meeting (Interface not used in final version for various reasons, will be using custom implementation instead) | HJ | Accepted |
 | 2026-10-23 - 2026-10-25 | All | Progress presentation prep | Materials submitted in Canvas | EK | Accepted |
+| 2026-11-01 - 2026-11-11 | EK | User acceptance testing | Feedback presented to team, Kanban tasks adjusted/added | IN PROGRESS | IN PROGRESS |
+| 2026-11-04 - 2026-11-08 | EK | User guides | PDFs available on distribution website and in `documentation/` folder | IN PROGRESS | IN PROGRESS |
+| 2026-11-01 - 2026-11-07 | EK, HJ | App icon design | IN PROGRESS | IN PROGRESS | IN PROGRESS |
+| 2026-11-01 - 2026-11-07 | All | Progress report video | IN PROGRESS | IN PROGRESS | IN PROGRESS |
 
 *Programming contributions are not listed here for brevity, as they are easily viewed in Git commits*
 
@@ -90,7 +94,8 @@ Explain how the assignments are fair and how all members will participate in res
 | --- | --- | --- | --- | --- |
 | 2026-09-09, 2026-09-11 | Project selection (media metadata editor and search program, website for distribution and documentation) | <ul><li>Financial assistant and analyzer with chatbot integration</li><li>Family budget planner allowing multiple users and one year of budget planning</li><li>Metadata manager for media files [SELECTED]</li></ul> | Selected project had interested clients already; EK is familiar with the project domain; general team interest in subject matter | All |
 | 2026-10-09 | GUI development toolkit | <ul><li>Qt [SELECTED]</li><li>FLTK</li><li>Dear ImGUI</li></ul> | Qt has it's own design studio and looks very polished, plus had easy to follow documentation and tutorials available | TK |
-| 2026-10-17 | ExifTool implementation | <ul><li>Custom calls to Perl implementation [SELECTED]</li><li>ExifTool C++ Interface</li></ul> | Interface required Windows users to install and run through Cygwin; creating custom implementation with Qt calls wasn't complicated and allowed more control | HJ, EK |
+| 2026-10-17 | ExifTool implementation method | <ul><li>Custom calls to Perl implementation [SELECTED]</li><li>ExifTool C++ Interface</li></ul> | Interface required Windows users to install and run through Cygwin; creating custom implementation with Qt calls wasn't complicated and allowed more control | HJ, EK |
+| 2026-11-06 | App icon | <ul><li>HJ</li><li>EK</li></ul> | IN PROGRESS | All |
 
 ## Feedback and Communication Issues
 
