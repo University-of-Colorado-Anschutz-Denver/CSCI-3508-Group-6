@@ -1,0 +1,180 @@
+name: Release (Windows installer)
+
+# Push a version tag (git tag v0.1.0 && git push origin v0.1.0) and this
+# workflow:
+#   1. builds the Qt 6 app on a Windows runner (CMake, Release)
+#   2. bundles Qt (windeployqt) and ExifTool next to the executable
+#   3. smoke-tests the app, builds the installer .exe with Inno Setup, installs
+#      it silently on a clean runner and launches the installed app
+#   4. publishes QuadM-Setup-<version>.exe, the portable zip and SHA256SUMS.txt
+#      to a GitHub Release
+# Running it by hand (Actions tab -> Run workflow) builds and tests, nothing is published.
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# ---- Confirm these values against the repository -----------------------
+env:
+  APP_EXE: QuadM.exe        # the same name with .exe, for Windows
+  SOURCE_DIR: "."           # folder that holds the top-level CMakeLists.txt
+  CMAKE_PRESET: ""          # Windows preset from CMakePresets.json; leave empty to configure without one
+  QT_VERSION: "6.8.2"       # Qt 6 version to install on the runner
+  QT_ARCH: win64_msvc2022_64
+  EXIFTOOL_DIR: ""          # optional: repo folder holding exiftool(-k).exe + exiftool_files, if CMake does not copy it next to the executable
+# -----------------------------------------------------------------------------
+
+jobs:
+  build:
+    name: Build app and installer
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version from tag
+        id: v
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0-dev"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "VERSION=$v" >> "$GITHUB_ENV"
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: windows
+          target: desktop
+          arch: ${{ env.QT_ARCH }}
+          cache: true
+
+      - name: Set up the MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure and build (Release)
+        shell: bash
+        run: |
+          if [ -n "$CMAKE_PRESET" ]; then
+            cmake --preset "$CMAKE_PRESET"
+            cmake --build --preset "$CMAKE_PRESET" --config Release
+          else
+            cmake -S "$SOURCE_DIR" -B build -DCMAKE_BUILD_TYPE=Release
+            cmake --build build --config Release --parallel
+          fi
+
+      - name: Run unit tests (skipped if the project has none)
+        shell: bash
+        run: |
+          cache=$(find . -name CMakeCache.txt -not -path '*/_deps/*' | head -1)
+          [ -n "$cache" ] || { echo "no CMake cache found"; exit 1; }
+          ctest --test-dir "$(dirname "$cache")" -C Release --output-on-failure --no-tests=ignore
+
+      - name: Stage the app (build output + Qt + ExifTool)
+        shell: bash
+        run: |
+          exe=$(find . -name "$APP_EXE" -not -path '*/_deps/*' -not -path './dist/*' -printf '%T@ %p\n' | sort -nr | head -1 | cut -d' ' -f2-)
+          [ -n "$exe" ] || { echo "::error::$APP_EXE was not produced by the build (check APP_EXE in the env block)"; exit 1; }
+          echo "Built executable: $exe"
+          rm -rf dist && mkdir dist
+          # Everything CMake placed beside the executable (e.g. a bundled ExifTool) comes along.
+          cp -r "$(dirname "$exe")"/. dist/
+          windeployqt --release --no-translations --compiler-runtime "dist/$APP_EXE"
+          if [ -n "$EXIFTOOL_DIR" ]; then mkdir -p dist/exiftool && cp -r "$EXIFTOOL_DIR"/. dist/exiftool/; fi
+          et=$(find dist -iname 'exiftool*.exe' | head -1)
+          [ -n "$et" ] || { echo "::error::ExifTool is not in the staged app. Have CMake copy it next to $APP_EXE, or set EXIFTOOL_DIR in the env block."; exit 1; }
+          echo "Bundled ExifTool: $et"
+          "$et" -ver || echo "::warning::could not run $et -ver"
+          find dist -maxdepth 2 | sort | head -60
+
+      - name: Smoke-test the staged app
+        shell: pwsh
+        run: |
+          $proc = Start-Process -FilePath "dist\$env:APP_EXE" -PassThru
+          Start-Sleep -Seconds 8
+          if ($proc.HasExited) { Write-Error "App exited within 8 seconds (exit code $($proc.ExitCode)): missing DLL or startup crash."; exit 1 }
+          Write-Host "App still running after 8 seconds."
+          Stop-Process -Id $proc.Id -Force
+
+      - name: Build the installer and portable zip
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force release | Out-Null
+          $iscc = (Get-Command iscc -ErrorAction SilentlyContinue).Source
+          if (-not $iscc) {
+            $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+            if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress; }
+          }
+          & $iscc "/DAppVersion=$env:VERSION" "/DAppExe=$env:APP_EXE" "/DSourceDir=$PWD\dist" "/DOutputDir=$PWD\release" installer\QuadM.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Compress-Archive -Path dist\* -DestinationPath "release\QuadM-$env:VERSION-win64-portable.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: release/*
+          if-no-files-found: error
+
+  smoke-test-installer:
+    name: Install silently and launch
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-release
+          path: release
+
+      - name: Silent install, launch, uninstall
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem release -Filter "QuadM-Setup-*.exe" | Select-Object -First 1
+          $dir = Join-Path $env:RUNNER_TEMP "quadm-installed"
+          Start-Process $installer.FullName -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/DIR=$dir" -Wait
+          $exe = Get-ChildItem $dir -Filter $env:APP_EXE -Recurse | Select-Object -First 1
+          if (-not $exe) { Write-Error "Installed $env:APP_EXE not found under $dir: the installer did not install the app."; exit 1 }
+          if (-not (Get-ChildItem $dir -Recurse -Filter "exiftool*.exe")) { Write-Error "ExifTool missing from the installed app."; exit 1 }
+          $proc = Start-Process $exe.FullName -PassThru
+          Start-Sleep -Seconds 8
+          if ($proc.HasExited) { Write-Error "Installed app exited within 8 seconds (exit code $($proc.ExitCode))."; exit 1 }
+          Write-Host "Installed app is running."
+          Stop-Process -Id $proc.Id -Force
+          $unins = Get-ChildItem $dir -Filter "unins*.exe" | Select-Object -First 1
+          if ($unins) { Start-Process $unins.FullName -ArgumentList "/VERYSILENT","/NORESTART" -Wait; Write-Host "Uninstalled cleanly." }
+
+  publish:
+    name: Publish GitHub Release
+    needs: [build, smoke-test-installer]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the release and attach files
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-release
+          path: release
+
+      - name: Checksums
+        run: |
+          cd release
+          sha256sum QuadM-* > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" release/* --clobber
+          else
+            gh release create "$TAG" release/* --title "QuadM $TAG" --generate-notes
+          fi
+
