@@ -52,8 +52,9 @@ jobs:
 
       # build-windows-msi.ps1 refuses to run without code/third_party/exiftool/exiftool.exe.
       # Both public hosts refuse GitHub's runners (SourceForge answers 403, exiftool.org has no direct
-      # file), so the Windows zip comes from our own repo first: a pre-release tagged "tools-exiftool"
-      # that holds exiftool-XX.XX_64.zip (see .github/CICD.md). The public hosts are only a fallback.
+      # file), so the Windows zip comes from our own repo: first the copy committed in
+      # code/packaging/windows-deps/, then a pre-release tagged "tools-exiftool" (see .github/CICD.md).
+      # The public hosts are only a last resort.
       - name: Get the Windows ExifTool
         env:
           GH_TOKEN: ${{ github.token }}
@@ -61,7 +62,12 @@ jobs:
           dest=code/third_party/exiftool
           ok=0
           mkdir -p "$RUNNER_TEMP/dl"
-          if gh release download tools-exiftool --repo "$GITHUB_REPOSITORY" --pattern 'exiftool-*_64.zip' --dir "$RUNNER_TEMP/dl" --clobber 2>/dev/null; then
+          committed=$(ls code/packaging/windows-deps/exiftool-*_64.zip 2>/dev/null | sort | tail -n1 || true)
+          if [ -n "$committed" ] && unzip -tq "$committed" >/dev/null 2>&1; then
+            echo "Using the committed copy: $committed"
+            cp "$committed" "$RUNNER_TEMP/exiftool.zip"; ok=1
+          fi
+          if [ "$ok" != 1 ] && gh release download tools-exiftool --repo "$GITHUB_REPOSITORY" --pattern 'exiftool-*_64.zip' --dir "$RUNNER_TEMP/dl" --clobber 2>/dev/null; then
             f=$(ls "$RUNNER_TEMP"/dl/exiftool-*_64.zip | head -n1)
             echo "Using our copy: $(basename "$f")"
             if unzip -tq "$f" >/dev/null 2>&1; then cp "$f" "$RUNNER_TEMP/exiftool.zip"; ok=1; fi
@@ -75,7 +81,7 @@ jobs:
               if curl -fsSL --retry 2 -A "Mozilla/5.0" -o "$RUNNER_TEMP/exiftool.zip" "$url" && unzip -tq "$RUNNER_TEMP/exiftool.zip" >/dev/null 2>&1; then ok=1; break; fi
             done
           fi
-          [ "$ok" = 1 ] || { echo "::error::No ExifTool zip. Create a pre-release tagged tools-exiftool and attach exiftool-XX.XX_64.zip (see .github/CICD.md)."; exit 1; }
+          [ "$ok" = 1 ] || { echo "::error::No ExifTool zip. Commit exiftool-XX.XX_64.zip to code/packaging/windows-deps/ (see .github/CICD.md)."; exit 1; }
           unzip -q "$RUNNER_TEMP/exiftool.zip" -d "$RUNNER_TEMP/exiftool"
           src=$(find "$RUNNER_TEMP/exiftool" -maxdepth 1 -mindepth 1 -type d | head -n1)
           cp -R "$src"/. "$dest"/
