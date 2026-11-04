@@ -24,5 +24,10 @@ target/
 bin/
 obj/
 
+# ExifTool is downloaded per machine (see code/third_party/exiftool/README.md)
+code/third_party/exiftool/*
+!code/third_party/exiftool/README.md
+!code/third_party/exiftool/.gitkeep
+
 # Logs
 *.log

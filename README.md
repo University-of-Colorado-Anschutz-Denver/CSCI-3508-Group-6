@@ -6,35 +6,33 @@ Replace every bracketed placeholder in this repository with information about yo
 
 ## Project Information
 
-| Field | Enter your information |
-| --- | --- |
-| Course | [Enter course number and section] |
-| Instructor | [Enter instructor name] |
-| Semester | [Enter semester and year] |
-| Project subject | [Enter the proposed subject] |
-| Approval status | [Pending / Approved on YYYY-MM-DD] |
-| Repository URL | [Enter repository URL] |
+| Field           | Enter your information                                                      |
+| --------------- | --------------------------------------------------------------------------- |
+| Course          | CSCI 3508                                                                   |
+| Instructor      | Dr. Salah Boukhris                                                          |
+| Semester        | FA2026                                                                      |
+| Project subject | Metadata Editing and Organization Application                               |
+| Approval status | [Pending / Approved on YYYY-MM-DD]                                          |
+| Repository URL  | https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6 |
 
 ## Team Members
 
-This project must be completed by a group of four students. The group leader is the main point of contact and is responsible for coordinating work, not doing all of it.
-
-| Name | Role | Primary responsibilities | Contact |
-| --- | --- | --- | --- |
-| [Student 1] | Group Leader | [Enter responsibilities] | [Enter email] |
-| [Student 2] | Team Member | [Enter responsibilities] | [Enter email] |
-| [Student 3] | Team Member | [Enter responsibilities] | [Enter email] |
-| [Student 4] | Team Member | [Enter responsibilities] | [Enter email] |
+| Name             | Role         | Primary responsibilities   | Contact                    |
+| ---------------- | ------------ | -------------------------- | -------------------------- |
+| Harrison Julius  | Group Leader | Project Management, (More) | juliuszharrison@gmail.com  |
+| Teja Kandimalla  | Team Member  | [Enter responsibilities]   | tejakandimalla20@gmail.com |
+| Emelie Kronquist | Team Member  | [Enter responsibilities]   | emelie.kronquist@gmail.com |
+| Yannick Kuete    | Team Member  | [Enter responsibilities]   | yankuete@gmail.com         |
 
 ## Project Summary
 
-**Problem:** [What problem does this project solve?]
+**Problem:** It is difficult to view and edit common metadata fields for media files, such as title, authors, and more, directly from a file explorer. There are also many hidden metadata fields for different types of media files. These hidden fields can be used to sort and tag files, but as-is there is to way to access them.
 
-**Proposed solution:** [Summarize the system and its main features in 2-4 sentences.]
+**Proposed solution:** Program to view metadata for media files (pngs, mp4s, wavs, etc), and edit common metadata fields like title, author, and comments. Will run as a .exe on a user's desktop/laptop and act as a more focused file explorer that allows users to see all metadata files natively. Allows users to create metadata tags for files and search by tags through specific directories on their machine. As a secondary goal, we aim to create a website to allow users to download the application, provide user guides, and allow users to provide feedback on the program.
 
-**Target users:** [Who will use the system?]
+**Target users:** Media editors (film, sound design, photographs, etc); people with large collections of images, music, video stored on their devices
 
-**Course relevance:** [Explain how the subject relates to software engineering.]
+**Course relevance:** The project will allow us to develop our computer science skills, including the usage of C++, JavaScript, new code libraries, GUI development, and our understanding of file metadata. We will also be able to use the process frameworks and DevOps strategies discussed in class to iterate on features, add new features based on changing requirements, implementing changes, using version control software, and getting real user feedback from stakeholders.
 
 ## Repository Structure
 
@@ -57,7 +55,7 @@ Follow the illustrated, step-by-step guide in [`documentation/00-clone-and-setup
 
 ## Start Here
 
-1. Have the group leader create the team-owned repository and give the other students access; then have every student clone it by following the guide above.
+1. ~~Have the group leader create the team-owned repository and give the other students access; then have every student clone it by following the guide above.~~
 2. Fill in the project and team information above.
 3. Complete `documentation/01-project-proposal.md` and obtain subject approval before development.
 4. Assign responsibilities and record them in `documentation/06-team-collaboration-log.md`.
@@ -166,25 +164,25 @@ For cloning, authentication, command explanations, and troubleshooting, see [`do
 
 ## Grading Roadmap (200 Points)
 
-| Category | Points | Required evidence in this repository |
-| --- | ---: | --- |
-| Requirements Gathering | 20 | `documentation/02-requirements-specification.md` |
-| System Design | 30 | UML diagrams, architecture, and schema in `documentation/03-system-design.md` |
-| Implementation | 60 | Working, readable source code in `code/` with setup instructions |
-| Testing | 40 | Test strategy and results in `documentation/04-testing-report.md`; test cases and evidence in `tests/` |
-| Final Report & Documentation | 20 | Completed report based on `documentation/05-final-report-template.md`, exported as PDF |
-| Presentation and Teamwork | 30 | Presentation based on `documentation/07-presentation-outline.md` and contribution evidence in `documentation/06-team-collaboration-log.md` |
-| **Total** | **200** | Complete every row in `documentation/08-rubric-checklist.md` |
+| Category                     |  Points | Required evidence in this repository                                                                                                       |
+| ---------------------------- | ------: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Requirements Gathering       |      20 | `documentation/02-requirements-specification.md`                                                                                           |
+| System Design                |      30 | UML diagrams, architecture, and schema in `documentation/03-system-design.md`                                                              |
+| Implementation               |      60 | Working, readable source code in `code/` with setup instructions                                                                           |
+| Testing                      |      40 | Test strategy and results in `documentation/04-testing-report.md`; test cases and evidence in `tests/`                                     |
+| Final Report & Documentation |      20 | Completed report based on `documentation/05-final-report-template.md`, exported as PDF                                                     |
+| Presentation and Teamwork    |      30 | Presentation based on `documentation/07-presentation-outline.md` and contribution evidence in `documentation/06-team-collaboration-log.md` |
+| **Total**                    | **200** | Complete every row in `documentation/08-rubric-checklist.md`                                                                               |
 
 ## Required Final Deliverables
 
 Use these final submission paths unless your instructor specifies otherwise. Keep the PDF and PowerPoint in `documentation/deliverables/` and the plain-text source appendix in `documentation/appendix/`.
 
-| Deliverable | Required format | Expected path |
-| --- | --- | --- |
-| Comprehensive project report | PDF | `documentation/deliverables/final-report.pdf` |
-| Project presentation | PowerPoint (`.pptx`) | `documentation/deliverables/project-presentation.pptx` |
-| Application and test source code appendix | Plain text (`.txt`) | `documentation/appendix/source-code-appendix.txt` or clearly numbered `.txt` files |
+| Deliverable                               | Required format      | Expected path                                                                      |
+| ----------------------------------------- | -------------------- | ---------------------------------------------------------------------------------- |
+| Comprehensive project report              | PDF                  | `documentation/deliverables/final-report.pdf`                                      |
+| Project presentation                      | PowerPoint (`.pptx`) | `documentation/deliverables/project-presentation.pptx`                             |
+| Application and test source code appendix | Plain text (`.txt`)  | `documentation/appendix/source-code-appendix.txt` or clearly numbered `.txt` files |
 
 The original, runnable files must also remain in `code/` and `tests/`. The plain-text appendix is an additional submission requirement, not a replacement for the runnable files.
 
