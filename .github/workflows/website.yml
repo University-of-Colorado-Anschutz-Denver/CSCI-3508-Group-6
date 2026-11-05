@@ -187,5 +187,52 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
+          # Publishes the same site on GitHub Pages. Only the default branch deploys.
+  pages:
+    name: Deploy to GitHub Pages
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write     # upload the site
+      id-token: write  # prove to Pages that the deploy comes from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Write data/latest.json from the newest release
+        working-directory: code/website
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/fetch-release.js
+
+      - name: Assemble the site folder
+        working-directory: code/website
+        run: |
+          mkdir -p "$RUNNER_TEMP/site"
+          rsync -a --exclude node_modules --exclude tests --exclude scripts --exclude firebase \
+            --exclude package.json --exclude package-lock.json --exclude .htmlhintrc \
+            --exclude Dockerfile --exclude nginx.conf --exclude security-headers.inc \
+            --exclude .dockerignore --exclude .gitignore --exclude README.md \
+            ./ "$RUNNER_TEMP/site/"
+          touch "$RUNNER_TEMP/site/.nojekyll"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/site
+
+      - name: Deploy
+        id: deploy
+        uses: actions/deploy-pages@v4
+
       
     
