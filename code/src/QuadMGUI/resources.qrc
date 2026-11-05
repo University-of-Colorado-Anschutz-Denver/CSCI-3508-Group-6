@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="oiia_cat.gif">resources/oiia_cat.gif</file>
+        <file alias="testdata.txt">resources/testdata.txt</file>
+    </qresource>
+</RCC>
