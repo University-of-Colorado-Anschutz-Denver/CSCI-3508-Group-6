@@ -235,6 +235,7 @@ void MainWindow::openMetadataEditor(const QString &filePath)
         connect(metadataEditor, &MetadataEditor::metadataSaved, this, [this](const QString &savedPath) {
             qDebug() << "Metadata saved:" << savedPath;
             metadataPopulate(savedPath);
+            loadDirectory(currentPath);
         });
     } else {
         metadataEditor->setPath(filePath);

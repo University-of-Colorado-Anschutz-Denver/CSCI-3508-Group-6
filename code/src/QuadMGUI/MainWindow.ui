@@ -241,7 +241,7 @@
              </size>
             </property>
             <property name="text">
-             <string>View All Metadata</string>
+             <string>Edit Metadata</string>
             </property>
            </widget>
           </item>
