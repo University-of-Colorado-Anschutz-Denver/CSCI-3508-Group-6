@@ -1,6 +1,14 @@
 # Display name in the GitHub Actions interface.
 name: Website checks
 
+# On every change to code/website:
+#   pull request -> lint + tests + image build and smoke test (nothing is published)
+#   push to a listed branch -> same, then the image is pushed to GitHub Container Registry
+#   run manually, or by release.yml after a new app release -> rebuild the
+#   image so its download page carries the new installer links
+#
+# Image: ghcr.io/<owner>/quadm-website   (tags: branch name, short commit hash, latest on main)
+
 # Events that trigger this workflow.
 on:
   # Trigger on pushes to the testing branch.
@@ -88,6 +96,14 @@ jobs:
         id: name
         run: echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quadm-website" >> "$GITHUB_OUTPUT"
 
+      # Bakes the newest release's download links into the site. A missing
+      # release is fine; the page then asks the GitHub API itself.
+      - name: Write data/latest.json from the newest release
+        working-directory: code/website
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/fetch-release.js
+
       # Enable BuildKit features used by the Docker build actions.
       - uses: docker/setup-buildx-action@v3
 
@@ -123,8 +139,10 @@ jobs:
             code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
             echo "$p -> $code"; [ "$code" = 200 ] || { docker logs site; exit 1; }
           done
+          # release data must be valid JSON
+          curl -fs http://localhost:8080/data/latest.json | node -e 'const d=JSON.parse(require("fs").readFileSync(0,"utf8")); console.log("latest.json:", d.tag ?? "no release yet")'
           # test and build files must not be served
-          for p in /package.json /tests/site.test.js /Dockerfile /nginx.conf /security-headers.inc; do
+          for p in /package.json /tests/site.test.js /scripts/fetch-release.js /Dockerfile /nginx.conf /security-headers.inc; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
             echo "$p -> $code"; [ "$code" = 404 ] || { echo "::error::$p is served by the image"; exit 1; }
           done

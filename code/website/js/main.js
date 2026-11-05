@@ -7,14 +7,21 @@ const FEEDBACK_ENDPOINT = "";                       // e.g. a Cloud Function / F
 
 // ---------------------------------------------------------------------------
 // Download page
-// Fetches the latest GitHub release and renders its version/assets/metadata
-// into the page. Runs only when a #version element exists (i.e. on the
-// download page), so this script is safe to include site-wide.
+// Fetches the latest release and renders its version/assets/metadata into the
+// page. Runs only when a #version element exists (i.e. on the download page),
+// so this script is safe to include site-wide.
+// It prefers data/latest.json (baked into the Docker image by CI on every
+// release) and falls back to asking GitHub's REST API directly; either way the
+// result has the shape ReleaseData.buildLatest returns, which showRelease expects.
 // ---------------------------------------------------------------------------
-
-// Ask GitHub's REST API for the latest release, then normalize it via
-// ReleaseData.buildLatest (defined elsewhere) into the shape showRelease expects.
 async function loadLatest() {
+  try {
+    const r = await fetch("data/latest.json", { cache: "no-cache" });
+    if (r.ok) {
+      const d = await r.json();
+      if (d && d.tag) return d;
+    }
+  } catch (e) { /* not baked in (plain checkout): use the API below */ }
   const r = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
     headers: { Accept: "application/vnd.github+json" }
   });

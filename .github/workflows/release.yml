@@ -7,6 +7,7 @@ name: Release
 #        macOS    .pkg, .dmg  (build-macos.sh)
 #   2. installs each one on a clean runner and checks the app + ExifTool start
 #   3. publishes the files to a GitHub Release, with SHA256SUMS.txt
+#   4. starts website.yml so the website image shows the new download links
 # Running it by hand (Actions tab -> Run workflow) builds and tests, nothing is published.
 #
 # The packaging scripts are the ones in code/packaging/ - the same commands a
@@ -248,3 +249,19 @@ jobs:
           else
             gh release create "$TAG" files/* --title "QuadM ${TAG#v}" --generate-notes --latest
           fi
+
+  refresh-website:
+    name: Rebuild the website image with the new links
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # start website.yml
+    steps:
+      # website.yml writes data/latest.json from the newest release and publishes a new image.
+      # (Events created with GITHUB_TOKEN do not start other workflows, but workflow_dispatch is allowed.)
+      - name: Start website.yml on the default branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          REF: ${{ github.event.repository.default_branch }}
+        run: gh workflow run website.yml --ref "$REF" -f reason="release ${{ github.ref_name }}"
