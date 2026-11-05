@@ -50,6 +50,8 @@ private:
     void getDrives();
     void openMetadataEditor(const QString &filePath);
 
+    void handleOpenWindow();
+
     MetadataEditor *metadataEditor = nullptr;
 
     signals:

@@ -18,7 +18,7 @@
     <item>
      <layout class="QHBoxLayout" name="fileInfoLayout">
       <item>
-       <widget class="QLineEdit" name="fileNameLabel">
+       <widget class="QLabel" name="fileNameLabel">
         <property name="text">
          <string>File: No file selected</string>
         </property>

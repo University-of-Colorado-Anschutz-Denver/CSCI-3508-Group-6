@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include "exiftool.h"
 #include "file.h"
+#include "settings.h"
+
 
 #include <QDir>
 #include <QFileInfo>
@@ -246,6 +248,18 @@ void MainWindow::openMetadataEditor(const QString &filePath)
     metadataEditor->activateWindow();
 }
 
+
+void MainWindow::handleOpenWindow() {
+    // 3. Create the window dynamically on the heap
+    Settings *subWindow = new Settings(); 
+    
+    // 4. Automatically delete the object from memory when the user closes it
+    subWindow->setAttribute(Qt::WA_DeleteOnClose); 
+    
+    // 5. Bring the window to the screen
+    subWindow->show();
+}
+
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -311,6 +325,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(ui->driveComboBox, &QComboBox::currentIndexChanged,this, [this]() {
             loadRootFolders();
         });
+
+    QMenu *fileMenu = menuBar()->addMenu("Settings");
+    QAction *openAct = fileMenu->addAction("&Open Window");
+
+    // 2. Connect the action's triggered signal to your slot
+    connect(openAct, &QAction::triggered, this, &MainWindow::handleOpenWindow);
     //loadDirectory(QDir::homePath());
 
     ui->contentsListWidget->hide();

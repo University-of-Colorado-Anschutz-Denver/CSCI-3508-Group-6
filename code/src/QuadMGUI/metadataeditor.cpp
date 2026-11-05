@@ -148,12 +148,12 @@ void MetadataEditor::populateData()
     }
 
     // TEMPORARY DEBUG
-    qDebug() << "Fields returned by service:" << metadata.fields().size();
+    // qDebug() << "Fields returned by service:" << metadata.fields().size();
 
-    for (auto it = metadata.fields().constBegin();
-        it != metadata.fields().constEnd(); ++it) {
-        qDebug() << it.key() << "=" << it.value();
-    }
+    // for (auto it = metadata.fields().constBegin();
+    //     it != metadata.fields().constEnd(); ++it) {
+    //     qDebug() << it.key() << "=" << it.value();
+    // }
 
     // Store original metadata, including empty and ignored fields
     for (auto it = metadata.fields().constBegin();
@@ -199,10 +199,15 @@ void MetadataEditor::addMetadataField(const QString &key, const QString &value)
     QLineEdit *valueEdit = new QLineEdit(value, row);
     QPushButton *deleteButton = new QPushButton("Delete", row);
     
-    const bool readOnly = !MetadataService::isEditable(key) || isReadOnlyTag(key);
+    const bool readOnly =  isReadOnlyTag(key) && key != "File:FileName";
+
+
 
     if (readOnly) {
         valueEdit->setReadOnly(true);
+
+        qDebug() << "Read-only metadata field:" << key;
+
 
         valueEdit->setStyleSheet("QLineEdit {"
             "background-color: #e0e0e0;"
@@ -212,7 +217,7 @@ void MetadataEditor::addMetadataField(const QString &key, const QString &value)
 
         deleteButton->setEnabled(false);
         deleteButton->setToolTip("This metadata field is read-only.");
-}
+    }
 
     valueEdit->setMinimumWidth(300);
 
@@ -282,10 +287,19 @@ void MetadataEditor::saveMetadata()
    //QMap<QString, QString> changedTags;
 
     for (auto it = metadataFields.constBegin(); it != metadataFields.constEnd(); ++it) {
+        if (it.key() == "File:FileName")
+            continue;
+
         metadata.set(it.key(), it.value()->text());
     }
 
-    if (!metadata.hasChanges() && deletedMetadata.isEmpty()) {
+    QString newName = metadataFields.value("File:FileName")
+                          ? metadataFields.value("File:FileName")->text().trimmed()
+                          : QFileInfo(path).fileName();
+
+    const bool nameChanged = newName != QFileInfo(path).fileName();
+
+    if (!metadata.hasChanges() && deletedMetadata.isEmpty() && !nameChanged) {
         QMessageBox::information(this, "Metadata Editor", "No changes to save.");
         return;
     }
@@ -294,25 +308,25 @@ void MetadataEditor::saveMetadata()
         QMessageBox::warning(this, "Deletion Not Supported", "Deleted fields have been removed from the editor, but your current ExifTool writeTags() function does not support deleting tags from the file.");
     }
 
-    if (!metadata.hasChanges()) {
+    if (!metadata.hasChanges() && !nameChanged) {
         QMessageBox::information(this, "Metadata Editor", "There are no additions or edits to save.");
         return;
     }
-    QString newName = ui->fileNameLabel->text().trimmed();
 
-    if (newName.isEmpty() || newName != QFileInfo(path).fileName()) {
+    // Rename file if filename changed
+    if (nameChanged) {
         QFileInfo info(path);
         QString newPath = info.dir().filePath(newName);
 
-        if (newName.isEmpty() || QFileInfo::exists(newPath)) {
+        if (newName.isEmpty() || newName == "." || newName == ".." ||
+            QFileInfo(newName).fileName() != newName || QFileInfo::exists(newPath)) {
             QMessageBox::warning(this, "Rename Error",
-                                "Invalid filename or a file with that name already exists.");
+                                 "Invalid filename or a file with that name already exists.");
             return;
         }
 
         if (!QFile::rename(path, newPath)) {
-            QMessageBox::warning(this, "Rename Error",
-                                "Could not rename the file.");
+            QMessageBox::warning(this, "Rename Error", "Could not rename the file.");
             return;
         }
 
@@ -321,12 +335,15 @@ void MetadataEditor::saveMetadata()
 
     QString error;
 
-    if (!service.writeMetadata(path, metadata, error)) {
-        QMessageBox::critical(this, "Save Error", error);
-        return;
+    if (metadata.hasChanges()) {
+        if (!service.writeMetadata(path, metadata, error)) {
+            QMessageBox::critical(this, "Save Error", error);
+            return;
+        }
     }
 
     QMessageBox::information(this, "Metadata Editor", "Metadata changes saved successfully.");
+
     populateData();
     emit metadataSaved(path);
 }
