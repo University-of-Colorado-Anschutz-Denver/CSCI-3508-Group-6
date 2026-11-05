@@ -357,6 +357,26 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         }
     });
 
+    ui->contentsListWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(ui->contentsListWidget, &QListWidget::customContextMenuRequested, this, [this](const QPoint &pos) {
+    
+        QListWidgetItem *item = ui->contentsListWidget->itemAt(pos);
+    
+        if (!item)
+            return;
+    
+        QMenu menu(this);
+        QAction *copyPathAction = menu.addAction("Copy File Path");
+    
+        QAction *selectedAction = menu.exec(ui->contentsListWidget->mapToGlobal(pos));
+    
+        if (selectedAction == copyPathAction) {
+            QString filePath = item->data(Qt::UserRole).toString();
+            QApplication::clipboard()->setText(filePath);
+        }
+    });
+
     // Folder logic. Double click to display its content
     connect(ui->contentsListWidget, &QListWidget::itemDoubleClicked, this, [this](QListWidgetItem *item) {
         QString path = item->data(Qt::UserRole).toString();
