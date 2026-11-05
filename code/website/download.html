@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Download · QuadM</title>
+<title>Download · MultiMedia Metadata Manager (QuadM)</title>
 <meta name="description" content="View and edit hidden metadata, tag files, and search by tag across your media folders.">
+<!-- Apply the shared styles used throughout the project website. -->
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<!-- Shared navigation connects to the site's other pages. -->
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="index.html">Metadata&nbsp;Editor</a>
+    <a class="brand" href="index.html">MultiMedia&nbsp;Metadata&nbsp;Manager&nbsp;(QuadM)</a>
     <nav aria-label="Main">
       <a href="index.html">Home</a>
       <a href="download.html" aria-current="page">Download</a>
@@ -20,35 +22,57 @@
     </nav>
   </div>
 </header>
+<!-- Show release information, platform downloads, and setup instructions. -->
 <main>
 <section class="wrap narrow">
   <h1>Download</h1>
+  <!-- JavaScript fills in the latest release version when GitHub responds. -->
   <p class="lead">Latest version: <strong id="version">loading…</strong></p>
   <p class="muted" id="release-meta"></p>
-  <div class="card">
-    <h3>Windows (installer)</h3>
-    <p>Windows 10 or later, 64-bit.</p>
-    <p><a class="btn primary" id="dl-win" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download installer</a></p>
-    <p class="muted">Installers are built automatically by our CI pipeline and published on GitHub Releases.</p>
+  <!-- Download buttons link to matching files attached to a GitHub release; a card hides itself if its file is missing. -->
+  <div class="cards" id="downloads">
+    <div class="card">
+      <h3>Windows</h3>
+      <p>Windows 10 or later, 64-bit.</p>
+      <p><a class="btn primary" id="dl-win" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download for Windows</a></p>
+    </div>
+    <div class="card">
+      <h3>macOS</h3>
+      <p>macOS 12 or later, Apple Silicon (M1 or newer).</p>
+      <p>
+        <a class="btn primary" id="dl-mac-pkg" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Installer (.pkg)</a>
+        <a class="btn" id="dl-mac-dmg" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Disk image (.dmg)</a>
+      </p>
+      <p class="muted">The .pkg is the graphical installer. The .dmg is the non-graphical option.</p>
+    </div>
   </div>
-  <div class="card">
-    <h3>Linux (Ubuntu/Debian, amd64)</h3>
-    <p><a class="btn" id="dl-linux" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download .deb</a></p>
-  </div>
-  <h2>Install steps</h2>
+  <p class="muted" id="linux-row" hidden>Ubuntu / Debian (amd64): <a id="dl-linux" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">download the .deb</a>, then run <code>sudo apt install ./&lt;file&gt;.deb</code></p>
+  <p class="muted">Builds are made automatically by our CI pipeline and published on GitHub Releases. Checksums (<code>SHA256SUMS.txt</code>) are on the release page.</p>
+
+  <!-- Outline the basic steps for installing and opening the app. -->
+  <h2>Install on Windows</h2>
   <ol>
-    <li>Download the installer.</li>
-    <li>Run it. If Windows SmartScreen warns about an unknown publisher, choose <em>More info → Run anyway</em> (the app is not code-signed yet).</li>
-    <li>Open <em>QuadM</em> and choose a folder.</li>
+    <li>Download and run the installer.</li>
+    <li>If Windows SmartScreen warns about an unknown publisher, choose <em>More info &rarr; Run anyway</em> (the app is not code-signed yet).</li>
+    <li>Open <em>QuadM</em> from the Start menu and choose a folder.</li>
+  </ol>
+
+  <h2>Install on Mac</h2>
+  <ol>
+    <li>Open the downloaded .pkg and follow the installer, or open the .dmg and drag <em>QuadM</em> into <em>Applications</em>.</li>
+    <li>The app is not notarized yet. On first launch, right-click it, choose <em>Open</em>, then <em>Open</em> again (or allow it under System Settings &rarr; Privacy &amp; Security).</li>
+    <li>Choose a folder to start browsing metadata.</li>
   </ol>
 </section>
 </main>
+<!-- Shared footer links visitors to the project source code. -->
 <footer class="site-footer">
   <div class="wrap">
-    <p>QuadM &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
   </div>
 </footer>
-<script src="js/release-data.js"></script>
+<!-- Shared script loads release details and updates available download links. -->
+ <script src="js/release-data.js"></script>
 <script src="js/main.js"></script>
 
 </body>

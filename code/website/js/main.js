@@ -42,11 +42,25 @@ function showRelease(d) {
   const win = document.getElementById("dl-win");
   win.href = d.assets.windows ? d.assets.windows.url : releasesUrl;
 
-  // Linux download: link to the asset if present, otherwise hide the card
-  // entirely rather than show a broken/irrelevant link.
+  // macOS has two files: a graphical installer (.pkg) and a disk image (.dmg).
+  const macPkg = document.getElementById("dl-mac-pkg");
+  const macDmg = document.getElementById("dl-mac-dmg");
+  if (macPkg) { if (d.assets.macPkg) macPkg.href = d.assets.macPkg.url; else macPkg.hidden = true; }
+  if (macDmg) { if (d.assets.macDmg) macDmg.href = d.assets.macDmg.url; else macDmg.hidden = true; }
+  const macCard = (macPkg || macDmg) && (macPkg || macDmg).closest(".card");
+  if (macCard && !d.assets.macPkg && !d.assets.macDmg) macCard.hidden = true;   // no Mac build in this release
+
+  // Highlight the download that matches the visitor's computer.
+  const plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  const mine = /mac/i.test(plat) ? "dl-mac-pkg" : /win/i.test(plat) ? "dl-win" : /linux/i.test(plat) ? "dl-linux" : null;
+  const mineEl = mine && document.getElementById(mine);
+  if (mineEl && mineEl.closest(".card") && !mineEl.closest(".card").hidden) mineEl.closest(".card").classList.add("recommended");
+
+  // Linux download: link to the asset if present; the row stays hidden otherwise
+  // rather than show a broken/irrelevant link.
   const linux = document.getElementById("dl-linux");
-  if (d.assets.linux) linux.href = d.assets.linux.url;
-  else if (linux.closest(".card")) linux.closest(".card").hidden = true;   // no Linux build in this release
+  const linuxRow = document.getElementById("linux-row");
+  if (linux && d.assets.linux) { linux.href = d.assets.linux.url; if (linuxRow) linuxRow.hidden = false; }
 
   // Optional metadata line: publish date, Windows asset size, and whether
   // checksums are available. Only the pieces that exist are shown.

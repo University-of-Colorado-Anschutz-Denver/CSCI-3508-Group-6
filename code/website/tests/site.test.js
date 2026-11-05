@@ -74,7 +74,7 @@ test("feedback form has the required fields", () => {
 // Confirm that the download page exposes the elements required by the client-side script.
 test("download page has hooks used by main.js", () => {
   const html = read("download.html");
-  for (const id of ["version", "dl-win", "dl-linux"]) assert.match(html, new RegExp(`id="${id}"`));
+  for (const id of ["version", "dl-win", "dl-mac-pkg", "dl-mac-dmg", "dl-linux"]) assert.match(html, new RegExp(`id="${id}"`));
 });
 
 // Optional release gate to detect unfinished placeholders in production builds.
