@@ -9,4 +9,3 @@ package-lock.json
 Dockerfile
 README.md
 *.test.js
-data/latest.json
