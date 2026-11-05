@@ -1,0 +1,267 @@
+name: Release
+
+# Push a version tag (git tag v0.4.0 && git push origin v0.4.0) and this workflow:
+#   1. builds the installers with the scripts in code/packaging/, in parallel:
+#        Windows  .msi        (build-windows-msi.ps1)
+#        Ubuntu   .deb        (build-deb.sh)
+#        macOS    .pkg, .dmg  (build-macos.sh)
+#   2. installs each one on a clean runner and checks the app + ExifTool start
+#   3. publishes the files to a GitHub Release, with SHA256SUMS.txt
+#   4. starts website.yml so the website image shows the new download links
+# Running it by hand (Actions tab -> Run workflow) builds and tests, nothing is published.
+#
+# The packaging scripts are the ones in code/packaging/ - the same commands a
+# developer runs locally - so CI and a laptop produce the same installers.
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  QT_VERSION: "6.8.2"        # Qt used on the runners (the presets on a laptop may use another version)
+  EXIFTOOL_VERSION: "13.60"  # Linux and macOS: build-deb.sh / build-macos.sh download this exact version (Windows uses the newest, see below)
+
+jobs:
+  windows:
+    name: Windows .msi
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag (0.0.0 for a manual run)
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      # The script is written for the Qt MinGW kit (same as CMakePresets.json), so install that kit.
+      - name: Install Qt (MinGW kit) and the MinGW compiler
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: windows
+          target: desktop
+          arch: win64_mingw
+          tools: tools_mingw1310
+          cache: true
+
+      # build-windows-msi.ps1 refuses to run without code/third_party/exiftool/exiftool.exe.
+      # Both public hosts refuse GitHub's runners (SourceForge answers 403, exiftool.org has no direct
+      # file), so the Windows zip comes from our own repo: first the copy committed in
+      # code/packaging/windows-deps/, then a pre-release tagged "tools-exiftool" (see .github/CICD.md).
+      # The public hosts are only a last resort.
+      - name: Get the Windows ExifTool
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          dest=code/third_party/exiftool
+          ok=0
+          mkdir -p "$RUNNER_TEMP/dl"
+          committed=$(ls code/packaging/windows-deps/exiftool-*_64.zip 2>/dev/null | sort | tail -n1 || true)
+          if [ -n "$committed" ] && unzip -tq "$committed" >/dev/null 2>&1; then
+            echo "Using the committed copy: $committed"
+            cp "$committed" "$RUNNER_TEMP/exiftool.zip"; ok=1
+          fi
+          if [ "$ok" != 1 ] && gh release download tools-exiftool --repo "$GITHUB_REPOSITORY" --pattern 'exiftool-*_64.zip' --dir "$RUNNER_TEMP/dl" --clobber 2>/dev/null; then
+            f=$(ls "$RUNNER_TEMP"/dl/exiftool-*_64.zip | head -n1)
+            echo "Using our copy: $(basename "$f")"
+            if unzip -tq "$f" >/dev/null 2>&1; then cp "$f" "$RUNNER_TEMP/exiftool.zip"; ok=1; fi
+          fi
+          if [ "$ok" != 1 ]; then
+            zip=$(curl -fsSL https://exiftool.org/ | grep -oE 'exiftool-[0-9]+\.[0-9]+_64\.zip' | head -n1 || true)
+            [ -n "$zip" ] || zip="exiftool-$(curl -fsSL https://exiftool.org/ver.txt | tr -d '[:space:]')_64.zip"
+            echo "No usable tools-exiftool release; trying the public hosts for $zip"
+            for url in "https://downloads.sourceforge.net/project/exiftool/$zip" "https://sourceforge.net/projects/exiftool/files/$zip/download" "https://exiftool.org/$zip"; do
+              echo "Trying $url"
+              if curl -fsSL --retry 2 -A "Mozilla/5.0" -o "$RUNNER_TEMP/exiftool.zip" "$url" && unzip -tq "$RUNNER_TEMP/exiftool.zip" >/dev/null 2>&1; then ok=1; break; fi
+            done
+          fi
+          [ "$ok" = 1 ] || { echo "::error::No ExifTool zip. Commit exiftool-XX.XX_64.zip to code/packaging/windows-deps/ (see .github/CICD.md)."; exit 1; }
+          unzip -q "$RUNNER_TEMP/exiftool.zip" -d "$RUNNER_TEMP/exiftool"
+          src=$(find "$RUNNER_TEMP/exiftool" -maxdepth 1 -mindepth 1 -type d | head -n1)
+          cp -R "$src"/. "$dest"/
+          [ -f "$dest/exiftool(-k).exe" ] && mv "$dest/exiftool(-k).exe" "$dest/exiftool.exe"
+          test -f "$dest/exiftool.exe" && test -d "$dest/exiftool_files"
+          "$dest/exiftool.exe" -ver
+
+      - name: Build the MSI
+        shell: pwsh
+        working-directory: code
+        run: |
+          $qtRoot = Split-Path -Parent (Split-Path -Parent $env:QT_ROOT_DIR)   # ...\Qt
+          $mingw = Join-Path $qtRoot "Tools\mingw1310_64"
+          if (-not (Test-Path "$mingw\bin\g++.exe")) { throw "MinGW not found at $mingw" }
+          $ninja = Split-Path -Parent (Get-Command ninja).Source
+          .\packaging\build-windows-msi.ps1 -Version "${{ steps.v.outputs.version }}" `
+            -QtDir $env:QT_ROOT_DIR -MinGwDir $mingw -NinjaDir $ninja
+
+      - name: Install the MSI on this runner and check it
+        shell: pwsh
+        run: |
+          $msi = (Get-ChildItem code\dist\*.msi).FullName
+          $p = Start-Process msiexec.exe -ArgumentList "/i `"$msi`" /qn /l*v $env:RUNNER_TEMP\install.log" -Wait -PassThru
+          if ($p.ExitCode -ne 0) { Get-Content $env:RUNNER_TEMP\install.log -Tail 60; throw "msiexec exit code $($p.ExitCode)" }
+          $dir = "$env:ProgramFiles\QuadM"
+          foreach ($f in "QuadM.exe", "exiftool\exiftool.exe", "Qt6Widgets.dll") {
+            if (-not (Test-Path "$dir\$f")) { throw "Missing after install: $dir\$f" }
+          }
+          & "$dir\exiftool\exiftool.exe" -ver
+          $app = Start-Process "$dir\QuadM.exe" -PassThru
+          Start-Sleep -Seconds 8
+          if ($app.HasExited) { throw "QuadM exited right after start (code $($app.ExitCode))" }
+          Stop-Process $app
+          $u = Start-Process msiexec.exe -ArgumentList "/x `"$msi`" /qn" -Wait -PassThru
+          if ($u.ExitCode -ne 0) { throw "uninstall exit code $($u.ExitCode)" }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-msi
+          path: code/dist/*.msi
+          if-no-files-found: error
+
+  linux:
+    name: Linux .deb (amd64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Install build tools (see the header of build-deb.sh)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build git curl perl qt6-base-dev libgl1-mesa-dev
+
+      - name: Build the .deb
+        working-directory: code
+        run: bash packaging/build-deb.sh "${{ steps.v.outputs.version }}"
+
+      - name: Install the .deb and check it
+        run: |
+          sudo apt-get install -y ./code/dist/quadm_*_amd64.deb
+          /opt/quadm/exiftool/exiftool -ver
+          # No screen on the runner: the offscreen platform lets the window open. timeout's code 124 = still running after 8 s = good.
+          set +e
+          QT_QPA_PLATFORM=offscreen timeout 8 /opt/quadm/QuadM
+          code=$?
+          set -e
+          if [ "$code" -ne 124 ]; then echo "QuadM exited early with code $code"; exit 1; fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-deb
+          path: code/dist/*.deb
+          if-no-files-found: error
+
+  macos:
+    name: macOS .pkg and .dmg (Apple Silicon)
+    runs-on: macos-latest # arm64; build-macos.sh builds for the machine it runs on
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Install build tools (Packaging-macOS.md)
+        run: brew install cmake ninja qt
+
+      - name: Build the .app, .dmg and .pkg
+        working-directory: code
+        run: bash packaging/build-macos.sh "${{ steps.v.outputs.version }}"
+
+      - name: Check the .dmg and the .pkg
+        run: |
+          set -euo pipefail
+          dmg=$(ls code/dist/*.dmg)
+          pkg=$(ls code/dist/*.pkg)
+          # .dmg: mount it and look inside
+          hdiutil attach "$dmg" -mountpoint /tmp/quadm-dmg -nobrowse -quiet
+          test -x /tmp/quadm-dmg/QuadM.app/Contents/MacOS/QuadM
+          /tmp/quadm-dmg/QuadM.app/Contents/Resources/exiftool/exiftool -ver
+          codesign --verify --deep /tmp/quadm-dmg/QuadM.app
+          hdiutil detach /tmp/quadm-dmg -quiet
+          # .pkg: install it for real, then remove it again
+          sudo installer -pkg "$pkg" -target /
+          test -x /Applications/QuadM.app/Contents/MacOS/QuadM
+          /Applications/QuadM.app/Contents/Resources/exiftool/exiftool -ver
+          sudo rm -rf /Applications/QuadM.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-installers
+          path: |
+            code/dist/*.pkg
+            code/dist/*.dmg
+          if-no-files-found: error
+
+  publish:
+    name: Publish GitHub Release
+    needs: [windows, linux, macos]
+    # Windows decides: a failed Linux or Mac build only leaves its files out of the release (see the warning step).
+    if: ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') && needs.windows.result == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the release and upload files
+    steps:
+      - name: Warn about builds that failed
+        run: |
+          echo "linux: ${{ needs.linux.result }}, macos: ${{ needs.macos.result }}"
+          if [ "${{ needs.linux.result }}" != success ]; then echo "::warning::The Linux .deb is missing from this release"; fi
+          if [ "${{ needs.macos.result }}" != success ]; then echo "::warning::The macOS .pkg/.dmg are missing from this release"; fi
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: files
+          merge-multiple: true
+
+      - name: Checksums
+        working-directory: files
+        run: |
+          ls -l
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          # Safe to re-run: if the release exists, the files are replaced.
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" files/* --clobber
+          else
+            gh release create "$TAG" files/* --title "QuadM ${TAG#v}" --generate-notes --latest
+          fi
+
+  refresh-website:
+    name: Rebuild the website image with the new links
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # start website.yml
+    steps:
+      # website.yml writes data/latest.json from the newest release and publishes a new image.
+      # (Events created with GITHUB_TOKEN do not start other workflows, but workflow_dispatch is allowed.)
+      - name: Start website.yml on the default branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          REF: ${{ github.event.repository.default_branch }}
+        run: gh workflow run website.yml --ref "$REF" -f reason="release ${{ github.ref_name }}"

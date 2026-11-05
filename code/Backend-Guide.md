@@ -317,7 +317,7 @@ In Qt, "when X happens do Y" is written with `connect(...)`. The existing code i
 - Each row needs two `QTableWidgetItem`s (one per column). To make one read-only, remove its edit permission:
   `item->setFlags(item->flags() & ~Qt::ItemIsEditable);`
 - While you fill the table with code, the table may report "cell changed" for every cell you add. Turn that off while filling with `ui->metadataTableWidget->blockSignals(true);` and back on with `false` when done. Otherwise those fake edits count as changes.
-- The existing `metadataPlaceholderLabel` (the cat GIF) in `MainWindow.ui` can be replaced by this panel.
+- The existing `metadataPlaceholderLabel` (the cat GIF) in `mainwindow.ui` can be replaced by this panel.
 
 ### Search panel (separate from the metadata panel)
 

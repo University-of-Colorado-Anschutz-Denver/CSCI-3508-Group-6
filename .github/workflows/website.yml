@@ -1,6 +1,14 @@
 # Display name in the GitHub Actions interface.
 name: Website checks
 
+# On every change to code/website:
+#   pull request -> lint + tests + image build and smoke test (nothing is published)
+#   push to a listed branch -> same, then the image is pushed to GitHub Container Registry
+#   run manually, or by release.yml after a new app release -> rebuild the
+#   image so its download page carries the new installer links
+#
+# Image: ghcr.io/<owner>/quadm-website   (tags: branch name, short commit hash, latest on main)
+
 # Events that trigger this workflow.
 on:
   # Trigger on pushes to the testing branch.
@@ -13,8 +21,13 @@ on:
   pull_request:
     # Files included in the pull-request trigger.
     paths: ["code/website/**", ".github/workflows/website.yml"]
-  # Enable manual runs from the GitHub Actions interface.
+  # Enable manual runs from the GitHub Actions interface (release.yml also starts it this way).
   workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why this run (shown in the log)"
+        required: false
+        default: "manual run"
 
 # Permissions granted to the workflow's GitHub token.
 permissions:
@@ -83,6 +96,14 @@ jobs:
         id: name
         run: echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quadm-website" >> "$GITHUB_OUTPUT"
 
+      # Bakes the newest release's download links into the site. A missing
+      # release is fine; the page then asks the GitHub API itself.
+      - name: Write data/latest.json from the newest release
+        working-directory: code/website
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/fetch-release.js
+
       # Enable BuildKit features used by the Docker build actions.
       - uses: docker/setup-buildx-action@v3
 
@@ -118,8 +139,10 @@ jobs:
             code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
             echo "$p -> $code"; [ "$code" = 200 ] || { docker logs site; exit 1; }
           done
+          # release data must be valid JSON
+          curl -fs http://localhost:8080/data/latest.json | node -e 'const d=JSON.parse(require("fs").readFileSync(0,"utf8")); console.log("latest.json:", d.tag ?? "no release yet")'
           # test and build files must not be served
-          for p in /package.json /tests/site.test.js /Dockerfile /nginx.conf /security-headers.inc; do
+          for p in /package.json /tests/site.test.js /scripts/fetch-release.js /Dockerfile /nginx.conf /security-headers.inc; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
             echo "$p -> $code"; [ "$code" = 404 ] || { echo "::error::$p is served by the image"; exit 1; }
           done
@@ -163,6 +186,53 @@ jobs:
               echo "Built and tested only (not published from this ref)."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+          # Publishes the same site on GitHub Pages. Only the default branch deploys.
+  pages:
+    name: Deploy to GitHub Pages
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write     # upload the site
+      id-token: write  # prove to Pages that the deploy comes from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Write data/latest.json from the newest release
+        working-directory: code/website
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/fetch-release.js
+
+      - name: Assemble the site folder
+        working-directory: code/website
+        run: |
+          mkdir -p "$RUNNER_TEMP/site"
+          rsync -a --exclude node_modules --exclude tests --exclude scripts --exclude firebase \
+            --exclude package.json --exclude package-lock.json --exclude .htmlhintrc \
+            --exclude Dockerfile --exclude nginx.conf --exclude security-headers.inc \
+            --exclude .dockerignore --exclude .gitignore --exclude README.md \
+            ./ "$RUNNER_TEMP/site/"
+          touch "$RUNNER_TEMP/site/.nojekyll"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/site
+
+      - name: Deploy
+        id: deploy
+        uses: actions/deploy-pages@v4
 
       
     

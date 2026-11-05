@@ -1,20 +1,29 @@
 // ---------------------------------------------------------------------------
 // Configuration
-// Set these once the repo and feedback backend exist.
+// Set these once the repo and the Firebase project exist.
 // ---------------------------------------------------------------------------
 const REPO = "YOUR-USERNAME/YOUR-REPO";            // owner/name on GitHub
-const FEEDBACK_ENDPOINT = "";                       // e.g. a Cloud Function / Formspree URL
+// Firebase project that holds the "feedback" collection (Firebase console -> Project settings).
+// The web API key is meant to be public; firebase/firestore.rules is what protects the data.
+const FIREBASE = { projectId: "", apiKey: "" };
 
 // ---------------------------------------------------------------------------
 // Download page
-// Fetches the latest GitHub release and renders its version/assets/metadata
-// into the page. Runs only when a #version element exists (i.e. on the
-// download page), so this script is safe to include site-wide.
+// Fetches the latest release and renders its version/assets/metadata into the
+// page. Runs only when a #version element exists (i.e. on the download page),
+// so this script is safe to include site-wide.
+// It prefers data/latest.json (baked into the Docker image by CI on every
+// release) and falls back to asking GitHub's REST API directly; either way the
+// result has the shape ReleaseData.buildLatest returns, which showRelease expects.
 // ---------------------------------------------------------------------------
-
-// Ask GitHub's REST API for the latest release, then normalize it via
-// ReleaseData.buildLatest (defined elsewhere) into the shape showRelease expects.
 async function loadLatest() {
+  try {
+    const r = await fetch("data/latest.json", { cache: "no-cache" });
+    if (r.ok) {
+      const d = await r.json();
+      if (d && d.tag) return d;
+    }
+  } catch (e) { /* not baked in (plain checkout): use the API below */ }
   const r = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
     headers: { Accept: "application/vnd.github+json" }
   });
@@ -35,11 +44,25 @@ function showRelease(d) {
   const win = document.getElementById("dl-win");
   win.href = d.assets.windows ? d.assets.windows.url : releasesUrl;
 
-  // Linux download: link to the asset if present, otherwise hide the card
-  // entirely rather than show a broken/irrelevant link.
+  // macOS has two files: a graphical installer (.pkg) and a disk image (.dmg).
+  const macPkg = document.getElementById("dl-mac-pkg");
+  const macDmg = document.getElementById("dl-mac-dmg");
+  if (macPkg) { if (d.assets.macPkg) macPkg.href = d.assets.macPkg.url; else macPkg.hidden = true; }
+  if (macDmg) { if (d.assets.macDmg) macDmg.href = d.assets.macDmg.url; else macDmg.hidden = true; }
+  const macCard = (macPkg || macDmg) && (macPkg || macDmg).closest(".card");
+  if (macCard && !d.assets.macPkg && !d.assets.macDmg) macCard.hidden = true;   // no Mac build in this release
+
+  // Highlight the download that matches the visitor's computer.
+  const plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  const mine = /mac/i.test(plat) ? "dl-mac-pkg" : /win/i.test(plat) ? "dl-win" : /linux/i.test(plat) ? "dl-linux" : null;
+  const mineEl = mine && document.getElementById(mine);
+  if (mineEl && mineEl.closest(".card") && !mineEl.closest(".card").hidden) mineEl.closest(".card").classList.add("recommended");
+
+  // Linux download: link to the asset if present; the row stays hidden otherwise
+  // rather than show a broken/irrelevant link.
   const linux = document.getElementById("dl-linux");
-  if (d.assets.linux) linux.href = d.assets.linux.url;
-  else if (linux.closest(".card")) linux.closest(".card").hidden = true;   // no Linux build in this release
+  const linuxRow = document.getElementById("linux-row");
+  if (linux && d.assets.linux) { linux.href = d.assets.linux.url; if (linuxRow) linuxRow.hidden = false; }
 
   // Optional metadata line: publish date, Windows asset size, and whether
   // checksums are available. Only the pieces that exist are shown.
@@ -66,8 +89,8 @@ if (document.getElementById("version")) {
 // ---------------------------------------------------------------------------
 // Feedback form
 // Intercepts the form submit, does basic validation/spam-filtering, and
-// posts the data to FEEDBACK_ENDPOINT as JSON. Runs only if the form exists
-// on the current page.
+// stores the message in Cloud Firestore through FeedbackService
+// (js/feedback-service.js). Runs only if the form exists on the current page.
 // ---------------------------------------------------------------------------
 const form = document.getElementById("feedback-form");
 if (form) {
@@ -76,12 +99,13 @@ if (form) {
     const status = document.getElementById("form-status");
     const data = Object.fromEntries(new FormData(form));
     if (data.website) return;                        // honeypot: bots fill this
-    if (!data.message || !data.message.trim()) { status.textContent = "Please write a message."; return; }
-    if (!FEEDBACK_ENDPOINT) { status.textContent = "Feedback backend not connected yet."; return; }
-    try {
-      const r = await fetch(FEEDBACK_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-      if (!r.ok) throw new Error();
-      form.reset(); status.textContent = "Thanks! Your feedback was sent.";
-    } catch { status.textContent = "Could not send. Please try again later."; }
+    const btn = form.querySelector("button[type=submit]");
+    btn.disabled = true; status.textContent = "Sending…";
+    const res = await FeedbackService.submit(data, FIREBASE);
+    btn.disabled = false;
+    if (res.ok) { form.reset(); status.textContent = "Thanks! Your feedback was sent."; }
+    else if (res.reason === "invalid") status.textContent = Object.values(res.errors)[0];
+    else if (res.reason === "not-configured") status.textContent = "Feedback backend not connected yet.";
+    else status.textContent = "Could not send. Please try again later.";
   });
 }
