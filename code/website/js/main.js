@@ -1,9 +1,11 @@
 // ---------------------------------------------------------------------------
 // Configuration
-// Set these once the repo and feedback backend exist.
+// Set these once the repo and the Firebase project exist.
 // ---------------------------------------------------------------------------
 const REPO = "YOUR-USERNAME/YOUR-REPO";            // owner/name on GitHub
-const FEEDBACK_ENDPOINT = "";                       // e.g. a Cloud Function / Formspree URL
+// Firebase project that holds the "feedback" collection (Firebase console -> Project settings).
+// The web API key is meant to be public; firebase/firestore.rules is what protects the data.
+const FIREBASE = { projectId: "", apiKey: "" };
 
 // ---------------------------------------------------------------------------
 // Download page
@@ -87,8 +89,8 @@ if (document.getElementById("version")) {
 // ---------------------------------------------------------------------------
 // Feedback form
 // Intercepts the form submit, does basic validation/spam-filtering, and
-// posts the data to FEEDBACK_ENDPOINT as JSON. Runs only if the form exists
-// on the current page.
+// stores the message in Cloud Firestore through FeedbackService
+// (js/feedback-service.js). Runs only if the form exists on the current page.
 // ---------------------------------------------------------------------------
 const form = document.getElementById("feedback-form");
 if (form) {
@@ -97,12 +99,13 @@ if (form) {
     const status = document.getElementById("form-status");
     const data = Object.fromEntries(new FormData(form));
     if (data.website) return;                        // honeypot: bots fill this
-    if (!data.message || !data.message.trim()) { status.textContent = "Please write a message."; return; }
-    if (!FEEDBACK_ENDPOINT) { status.textContent = "Feedback backend not connected yet."; return; }
-    try {
-      const r = await fetch(FEEDBACK_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-      if (!r.ok) throw new Error();
-      form.reset(); status.textContent = "Thanks! Your feedback was sent.";
-    } catch { status.textContent = "Could not send. Please try again later."; }
+    const btn = form.querySelector("button[type=submit]");
+    btn.disabled = true; status.textContent = "Sending…";
+    const res = await FeedbackService.submit(data, FIREBASE);
+    btn.disabled = false;
+    if (res.ok) { form.reset(); status.textContent = "Thanks! Your feedback was sent."; }
+    else if (res.reason === "invalid") status.textContent = Object.values(res.errors)[0];
+    else if (res.reason === "not-configured") status.textContent = "Feedback backend not connected yet.";
+    else status.textContent = "Could not send. Please try again later.";
   });
 }

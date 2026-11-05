@@ -93,3 +93,12 @@ test("download page loads release-data.js before main.js", () => {
   const b = html.indexOf('src="js/main.js"');
   assert.ok(a !== -1 && b !== -1 && a < b, "release-data.js must come first");
 });
+
+test("feedback page loads feedback-service.js before main.js and option values match the schema", () => {
+  const html = read("feedback.html");
+  const a = html.indexOf('src="js/feedback-service.js"');
+  const b = html.indexOf('src="js/main.js"');
+  assert.ok(a !== -1 && b !== -1 && a < b, "feedback-service.js must come first");
+  const values = [...html.matchAll(/<option value="([^"]+)"/g)].map(m => m[1]);
+  assert.deepStrictEqual(values, ["bug", "feature", "question", "other"]);
+});

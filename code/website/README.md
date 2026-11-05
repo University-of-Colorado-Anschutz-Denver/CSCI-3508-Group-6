@@ -13,7 +13,7 @@ Plain HTML/CSS/JS, no build step.
 ## TODO
 - Replace `YOUR-USERNAME/YOUR-REPO` in the HTML and in `js/main.js`.
 - Add screenshots to `assets/` (the GUI mockup PNG works as a placeholder).
-- Set `FEEDBACK_ENDPOINT` in `js/main.js` (Firestore function, Formspree, etc.).
+- Connect feedback storage: follow `firebase/README.md` and fill `FIREBASE` in `js/main.js`.
 - Deploy: GitHub Pages from `code/website` (Actions workflow or a `gh-pages` branch).
 
 Preview locally: `python3 -m http.server 8000` in this folder.
