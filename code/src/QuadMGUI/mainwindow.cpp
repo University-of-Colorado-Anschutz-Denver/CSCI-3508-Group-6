@@ -94,6 +94,7 @@ void MainWindow::loadDirectory(const QString &path)
     ui->contentsListWidget->show();
     ui->currentPathLabel->show();
     ui->backButton->setVisible(!atHome);
+    ui->filePathSearchBar->show();
 
     QFileIconProvider iconProvider;
 
@@ -336,6 +337,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     ui->contentsListWidget->hide();
     ui->currentPathLabel->hide();
     ui->backButton->hide();
+    ui->filePathSearchBar->hide();
 
     // Clicking a root folder loads its contents.
     connect(ui->rootListWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem *item) {
@@ -354,6 +356,49 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
             // Read metadata when the user selects a supported file.
             metadataPopulate(filePath);
+        }
+    });
+
+    connect(ui->filePathSearchBar, &QLineEdit::returnPressed, this, [this]() {
+        
+        QString searchPath = ui->filePathSearchBar->text().trimmed();
+
+        if (searchPath.isEmpty()) {
+            return;
+        }
+
+        QFileInfo info(searchPath);
+
+        if (!info.exists()) {
+            qDebug() << "Path does not exist:" << searchPath;
+            return;
+        }
+
+        if (info.isDir()) {
+            loadDirectory(info.absoluteFilePath());
+    
+        } else if (info.isFile() && FileManager::isSupportedFile(searchPath)) {
+    
+            filePath = info.absoluteFilePath();
+    
+            // Load the parent directory.
+            loadDirectory(info.absolutePath());
+            ui->contentsListWidget->clear();
+
+            QFileIconProvider iconProvider;
+
+            auto *item = new QListWidgetItem(iconProvider.icon(QFileInfo(filePath)),QFileInfo(filePath).fileName());
+
+            item->setData(Qt::UserRole, filePath);
+            
+
+            ui->contentsListWidget->addItem(item);
+            ui->contentsListWidget->setCurrentItem(item);
+            
+            // Populate metadata.
+            metadataPopulate(filePath);
+        } else {
+            qDebug() << "Unsupported file type or invalid path:" << searchPath;
         }
     });
 
