@@ -75,7 +75,7 @@ void MainWindow::loadDirectory(const QString &path)
         return;
     }
 
-    QString absolutePath = dir.absolutePath();
+    QString absolutePath = path;
 
     // Save the current directory for Back navigation.
     if (!currentPath.isEmpty() && currentPath != absolutePath) {
@@ -84,9 +84,7 @@ void MainWindow::loadDirectory(const QString &path)
 
     currentPath = absolutePath;
 
-    const bool atHome =
-        QDir::cleanPath(currentPath) ==
-        QDir::cleanPath(QDir::homePath());
+    const bool atHome =QDir::cleanPath(currentPath) ==QDir::cleanPath(QDir::homePath());
 
     ui->contentsListWidget->clear();
     ui->currentPathLabel->setText(currentPath);
@@ -99,24 +97,17 @@ void MainWindow::loadDirectory(const QString &path)
     QFileIconProvider iconProvider;
 
     // Show folders first, then supported media files.
-    QFileInfoList entries = dir.entryInfoList(
-        QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot,
-        QDir::DirsFirst | QDir::Name
-    );
+    QFileInfoList entries = dir.entryInfoList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot,QDir::DirsFirst | QDir::Name);
 
     for (const QFileInfo &entry : entries) {
 
         // Always allow folders so users can navigate through them.
         // Only display files accepted by FileManager.
-        if (entry.isFile() &&
-            !FileManager::isSupportedFile(entry.absoluteFilePath())) {
+        if (entry.isFile() && !FileManager::isSupportedFile(entry.absoluteFilePath())) {
             continue;
         }
 
-        auto *item = new QListWidgetItem(
-            iconProvider.icon(entry),
-            entry.fileName()
-        );
+        auto *item = new QListWidgetItem(iconProvider.icon(entry),entry.fileName());
 
         // Keep the full path attached to the list item.
         item->setData(Qt::UserRole, entry.absoluteFilePath());
@@ -159,11 +150,9 @@ void MainWindow::metadataPopulate(const QString &filePath)
 
     html += "<b>Name:</b> " + fileInfo.fileName().toHtmlEscaped() + "<br>";
     html += "<b>Type:</b> " + fileInfo.suffix().toUpper() + "<br>";
-    html += "<b>Size:</b> " +
-            QString::number(fileInfo.size() / 1024.0, 'f', 2) + " KB<br>";
+    html += "<b>Size:</b> " +QString::number(fileInfo.size() / 1024.0, 'f', 2) + " KB<br>";
 
-    html += "<b>Modified:</b> " +
-            fileInfo.lastModified().toString("yyyy-MM-dd hh:mm:ss") + "<br>";
+    html += "<b>Modified:</b> " +fileInfo.lastModified().toString("yyyy-MM-dd hh:mm:ss") + "<br>";
 
     html += "<hr>";
 
@@ -359,14 +348,17 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
         }
     });
 
-    connect(ui->filePathSearchBar, &QLineEdit::returnPressed, this, [this]() {
-        
+    connect(ui->filePathSearchBar, &QLineEdit::returnPressed, this, [this]() {      
         QString searchPath = ui->filePathSearchBar->text().trimmed();
-
         if (searchPath.isEmpty()) {
             return;
         }
 
+        QUrl url(searchPath);
+
+        if (url.isLocalFile()) {
+            searchPath = url.toLocalFile();
+        }
         QFileInfo info(searchPath);
 
         if (!info.exists()) {

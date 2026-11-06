@@ -113,8 +113,6 @@
           </sizepolicy>
          </property>
          <layout class="QVBoxLayout" name="contentsPanelLayout">
-
-            
           <item>
            <widget class="QLineEdit" name="filePathSearchBar">
             <property name="minimumSize">
@@ -133,7 +131,6 @@
           </item>
           <item>
            <layout class="QHBoxLayout" name="contentsHeaderLayout">
-
             <item>
              <widget class="QPushButton" name="backButton">
               <property name="enabled">
@@ -363,8 +360,8 @@
      <string>Settings</string>
     </property>
    </widget>
-   <addaction name="menuSettings"/>
    <addaction name="menuQuadM"/>
+   <addaction name="menuSettings"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
