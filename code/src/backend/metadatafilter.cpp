@@ -68,6 +68,18 @@ bool isBinaryPlaceholder(const QString &text)
     return text.startsWith(QLatin1String("(Binary data")) || text.startsWith(QLatin1String("base64:"));
 }
 
+// Commonly-edited tags per file type, so the GUI can offer a blank row for them even
+// when the file doesn't have a value yet. "ID3:*" is handled by TagLibHandler, the rest by
+// ExifToolHandler; both accept writes to keys that aren't in the file.
+const QMap<QString, QStringList> kExpectedTagsByFileType = {
+    {"MP3", {"ID3:Title", "ID3:Artist", "ID3:Album", "ID3:Genre", "ID3:Comment", "ID3:Year", "ID3:Track"}},
+    {"WAV", {"ID3:Title", "ID3:Artist", "ID3:Album", "ID3:Genre", "ID3:Comment", "ID3:Year", "ID3:Track"}},
+    {"JPEG", {"XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights"}},
+    {"PNG", {"XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights"}},
+    {"TIFF", {"XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights"}},
+    {"MP4", {"XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights"}},
+};
+
 } // namespace
 
 bool isIgnoredTag(const QString &key)
@@ -78,6 +90,13 @@ bool isIgnoredTag(const QString &key)
 bool isReadOnlyTag(const QString &key)
 {
     return kReadOnlyTags.contains(key);
+}
+
+void addExpectedTags(QMap<QString, QString> &fields, const QString &fileType)
+{
+    for (const QString &key : kExpectedTagsByFileType.value(fileType.toUpper()))
+        if (!fields.contains(key))
+            fields.insert(key, QString());
 }
 
 QMap<QString, QString> filterMetadata(const QJsonObject &raw)

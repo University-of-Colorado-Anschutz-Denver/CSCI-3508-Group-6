@@ -21,6 +21,8 @@ bool MetadataService::readMetadata(const QString &path, Metadata &out, QString &
 
     // The tags are kept apart from the normal fields (the GUI shows them as chips, not as rows)
     QMap<QString, QString> fields = filterMetadata(raw);
+    const QString fileType = raw.value(QStringLiteral("File:FileType")).toString();
+    addExpectedTags(fields, fileType);
     QStringList tags;
     const QJsonValue xmp = raw.value(TagStorage::XmpReadKey);
     if (xmp.isArray()) {
@@ -34,7 +36,7 @@ bool MetadataService::readMetadata(const QString &path, Metadata &out, QString &
     fields.remove(TagStorage::Id3ReadKey);
     tags.removeDuplicates();
 
-    out.load(raw.value(QStringLiteral("File:FileType")).toString(), fields, tags);
+    out.load(fileType, fields, tags);
     return true;
 }
 
