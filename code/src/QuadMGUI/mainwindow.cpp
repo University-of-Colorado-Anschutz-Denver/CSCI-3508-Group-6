@@ -190,7 +190,7 @@ void MainWindow::metadataPopulate(const QString &filePath)
         }
 
         for (auto ctg = groupedMetadata.constBegin(); ctg != groupedMetadata.constEnd(); ++ctg) {
-            html += "<h4>" + ctg.key().toHtmlEscaped() + "</h4>";
+            html += "<h3>" + ctg.key().toHtmlEscaped() + "</h3>";
 
             for (auto p0 = ctg.value().constBegin(); p0 != ctg.value().constEnd(); ++p0){
                 html += "<b>" + p0.key().toHtmlEscaped() + ":</b> "+ p0.value().toHtmlEscaped() + "<br>";

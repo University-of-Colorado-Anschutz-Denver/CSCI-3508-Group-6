@@ -147,13 +147,13 @@ void MetadataEditor::populateData()
         return;
     }
 
-    // TEMPORARY DEBUG
-    // qDebug() << "Fields returned by service:" << metadata.fields().size();
+    //TEMPORARY DEBUG
+    qDebug() << "Fields returned by service:" << metadata.fields().size();
 
-    // for (auto it = metadata.fields().constBegin();
-    //     it != metadata.fields().constEnd(); ++it) {
-    //     qDebug() << it.key() << "=" << it.value();
-    // }
+    for (auto it = metadata.fields().constBegin();
+        it != metadata.fields().constEnd(); ++it) {
+        qDebug() << it.key() << "=" << it.value();
+    }
 
     // Store original metadata, including empty and ignored fields
     for (auto it = metadata.fields().constBegin();
@@ -228,7 +228,7 @@ void MetadataEditor::addMetadataField(const QString &key, const QString &value)
     metadataFields[key] = valueEdit;
     metadataRows[key] = row;
 
-    ui->metadataLayout->insertWidget(ui->metadataLayout->count() - 1, row);
+    ui->metadataLayout->addWidget(row); // label line
 
     // delte only if not read-only
     if (!readOnly) {
