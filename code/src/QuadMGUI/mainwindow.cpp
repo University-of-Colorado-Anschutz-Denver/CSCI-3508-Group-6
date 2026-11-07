@@ -21,11 +21,29 @@
 #include <QStorageInfo>
 
 #include "metadataeditor.h"
+#include <QSettings>
 
+
+void MainWindow::loadDefaultDrive()
+{
+    QSettings settings("QuadM", "QUADM");
+
+    QString defaultDrive =settings.value("defaultDrive", QDir::rootPath()).toString();
+
+    int index = ui->driveComboBox->findData(defaultDrive);
+
+    if (index == -1){
+        index = 0;}
+
+    if (index >= 0)
+    {ui->driveComboBox->setCurrentIndex(index);}
+}
 
 void MainWindow::getDrives() {
 
-    for (const QStorageInfo& drive : QStorageInfo::mountedVolumes()) {
+
+    ui->driveComboBox->clear();
+    for (const QStorageInfo &drive : QStorageInfo::mountedVolumes()) {
         QString driveInfo;
         if (drive.isReady()) {
             if (drive.displayName().isEmpty() || drive.displayName() == "Local Disk" || drive.displayName() == drive.rootPath()) {
@@ -288,13 +306,15 @@ void MainWindow::openMetadataEditor(const QString& filePath)
 
 
 void MainWindow::handleOpenWindow() {
-    // 3. Create the window dynamically on the heap
-    Settings* subWindow = new Settings();
 
-    // 4. Automatically delete the object from memory when the user closes it
-    subWindow->setAttribute(Qt::WA_DeleteOnClose);
+    Settings *subWindow = new Settings(); 
 
-    // 5. Bring the window to the screen
+    connect(subWindow, &Settings::settingsSave, this, [this]() {
+        loadDefaultDrive();
+        loadRootFolders();
+    });
+    
+    subWindow->setAttribute(Qt::WA_DeleteOnClose); 
     subWindow->show();
 }
 
@@ -363,6 +383,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     catMovie->start();
 
     getDrives();
+    loadDefaultDrive();
     // Populate the Root panel and load the initial directory.
     loadRootFolders();
 
@@ -380,7 +401,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->contentsListWidget->hide();
     ui->currentPathLabel->hide();
     ui->backButton->hide();
-    ui->filePathSearchBar->hide();
+   // ui->filePathSearchBar->hide();
     ui->tagFilterBar->hide();
 
     connect(ui->tagFilterBar, &QLineEdit::textChanged, this, [this]() {
