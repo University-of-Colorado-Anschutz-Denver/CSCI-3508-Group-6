@@ -130,6 +130,22 @@
            </widget>
           </item>
           <item>
+           <widget class="QLineEdit" name="tagFilterBar">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>36</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Filter by tag...</string>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="contentsHeaderLayout">
             <item>
              <widget class="QPushButton" name="backButton">

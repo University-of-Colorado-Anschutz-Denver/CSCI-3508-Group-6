@@ -6,100 +6,100 @@
 
 namespace {
 
-// Everything in these groups is dropped (the part before the colon in "Group:Tag").
-// ICC_Profile is deliberately NOT here: designers need the color profile.
-const QSet<QString> kIgnoredGroups = {
-    "ExifTool",    // ExifTool's own version/warnings
-    "System",
-    "MakerNotes",  // camera-specific internals
-};
+    // Everything in these groups is dropped (the part before the colon in "Group:Tag").
+    // ICC_Profile is deliberately NOT here: designers need the color profile.
+    const QSet<QString> kIgnoredGroups = {
+        "ExifTool",    // ExifTool's own version/warnings
+        "System",
+        "MakerNotes",  // camera-specific internals
+    };
 
-// Individual tags that are dropped. Add new "useless" tags here.
-const QSet<QString> kIgnoredTags = {
-    "SourceFile",
-    "File:Directory",
-    "File:FilePermissions",
-    "File:FileAccessDate",     // changes every time the file is read
-    "File:FileInodeChangeDate",
-    "File:FileTypeExtension",
-    "File:ID3Size",
-    "EXIF:ThumbnailImage",
-    "EXIF:PrintIM",
-};
+    // Individual tags that are dropped. Add new "useless" tags here.
+    const QSet<QString> kIgnoredTags = {
+        "SourceFile",
+        "File:Directory",
+        "File:FilePermissions",
+        "File:FileAccessDate",     // changes every time the file is read
+        "File:FileInodeChangeDate",
+        "File:FileTypeExtension",
+        "File:ID3Size",
+        "EXIF:ThumbnailImage",
+        "EXIF:PrintIM",
+    };
 
-// Shown, but ExifTool can't write them (they are part of the PNG header or computed),
-// so the GUI should not offer edit controls. Gamma, sRGB and pixel density ARE writable.
-const QSet<QString> kReadOnlyTags = {
-    "PNG:ImageWidth",
-    "PNG:ImageHeight",
-    "PNG:BitDepth",
-    "PNG:ColorType",
-    "PNG:Compression",
-    "PNG:Filter",
-    "PNG:Interlace",
-    "File:FileName",
-    "File:FileSize",
-    "File:FileType",
-    "File:MIMEType",
-    "File:FileModifyDate",
-    "File:FileCreateDate",
-    "Composite:ImageSize",
-    "Composite:Megapixels",
-};
+    // Shown, but ExifTool can't write them (they are part of the PNG header or computed),
+    // so the GUI should not offer edit controls. Gamma, sRGB and pixel density ARE writable.
+    const QSet<QString> kReadOnlyTags = {
+        "PNG:ImageWidth",
+        "PNG:ImageHeight",
+        "PNG:BitDepth",
+        "PNG:ColorType",
+        "PNG:Compression",
+        "PNG:Filter",
+        "PNG:Interlace",
+        "File:FileName",
+        "File:FileSize",
+        "File:FileType",
+        "File:MIMEType",
+        "File:FileModifyDate",
+        "File:FileCreateDate",
+        "Composite:ImageSize",
+        "Composite:Megapixels",
+    };
 
-// Turns any JSON value (string, number, bool, array, object) into display text.
-QString valueToString(const QJsonValue &value)
-{
-    switch (value.type()) {
-    case QJsonValue::String:
-        return value.toString();
-    case QJsonValue::Array:
-        return QString::fromUtf8(QJsonDocument(value.toArray()).toJson(QJsonDocument::Compact));
-    case QJsonValue::Object:
-        return QString::fromUtf8(QJsonDocument(value.toObject()).toJson(QJsonDocument::Compact));
-    default:
-        return value.toVariant().toString(); // numbers and booleans
+    // Turns any JSON value (string, number, bool, array, object) into display text.
+    QString valueToString(const QJsonValue& value)
+    {
+        switch (value.type()) {
+        case QJsonValue::String:
+            return value.toString();
+        case QJsonValue::Array:
+            return QString::fromUtf8(QJsonDocument(value.toArray()).toJson(QJsonDocument::Compact));
+        case QJsonValue::Object:
+            return QString::fromUtf8(QJsonDocument(value.toObject()).toJson(QJsonDocument::Compact));
+        default:
+            return value.toVariant().toString(); // numbers and booleans
+        }
     }
-}
 
-// ExifTool prints binary data (thumbnails, previews) as text starting with one of these.
-bool isBinaryPlaceholder(const QString &text)
-{
-    return text.startsWith(QLatin1String("(Binary data")) || text.startsWith(QLatin1String("base64:"));
-}
+    // ExifTool prints binary data (thumbnails, previews) as text starting with one of these.
+    bool isBinaryPlaceholder(const QString& text)
+    {
+        return text.startsWith(QLatin1String("(Binary data")) || text.startsWith(QLatin1String("base64:"));
+    }
 
-// Commonly-edited tags per file type, so the GUI can offer a blank row for them even
-// when the file doesn't have a value yet. "ID3:*" is handled by TagLibHandler, the rest by
-// ExifToolHandler; both accept writes to keys that aren't in the file.
-const QMap<QString, QStringList> kExpectedTagsByFileType = {
-    {"MP3", {"ID3:Title", "ID3:Artist", "ID3:Album", "ID3:Genre", "ID3:Comment", "ID3:Year", "ID3:Track"}},
-    {"WAV", {"ID3:Title", "ID3:Artist", "ID3:Album", "ID3:Genre", "ID3:Comment", "ID3:Year", "ID3:Track"}},
-    {"JPEG", {"XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights"}},
-    {"PNG", {"XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights"}},
-    {"TIFF", {"XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights"}},
-    {"MP4", {"XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights"}},
-};
+    // Commonly-edited tags per file type, so the GUI can offer a blank row for them even
+    // when the file doesn't have a value yet. "ID3:*" is handled by TagLibHandler, the rest by
+    // ExifToolHandler; both accept writes to keys that aren't in the file.
+    const QMap<QString, QStringList> kExpectedTagsByFileType = {
+        { "MP3",{ "ID3:Title", "ID3:Artist", "ID3:Album", "ID3:Genre", "ID3:Comment", "ID3:Year", "ID3:Track" } },
+        { "WAV",{ "ID3:Title", "ID3:Artist", "ID3:Album", "ID3:Genre", "ID3:Comment", "ID3:Year", "ID3:Track" } },
+        { "JPEG",{ "XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights" } },
+        { "PNG",{ "XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights" } },
+        { "TIFF",{ "XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights" } },
+        { "MP4",{ "XMP:Title", "XMP:Description", "XMP:Creator", "XMP:Rights" } },
+    };
 
 } // namespace
 
-bool isIgnoredTag(const QString &key)
+bool isIgnoredTag(const QString& key)
 {
     return kIgnoredTags.contains(key) || kIgnoredGroups.contains(key.section(':', 0, 0));
 }
 
-bool isReadOnlyTag(const QString &key)
+bool isReadOnlyTag(const QString& key)
 {
     return kReadOnlyTags.contains(key);
 }
 
-void addExpectedTags(QMap<QString, QString> &fields, const QString &fileType)
+void addExpectedTags(QMap<QString, QString>& fields, const QString& fileType)
 {
-    for (const QString &key : kExpectedTagsByFileType.value(fileType.toUpper()))
+    for (const QString& key : kExpectedTagsByFileType.value(fileType.toUpper()))
         if (!fields.contains(key))
             fields.insert(key, QString());
 }
 
-QMap<QString, QString> filterMetadata(const QJsonObject &raw)
+QMap<QString, QString> filterMetadata(const QJsonObject& raw)
 {
     QMap<QString, QString> result;
     for (auto it = raw.begin(); it != raw.end(); ++it) {
