@@ -62,6 +62,8 @@ private:
     void openMetadataEditor(const QString& filePath);
     void applyTagFilter(const QString& query);
     void ensureDirectoryMetadataScanned();
+    void loadDefaultDrive();
+    QString formatMetadataKey(const QString& key);
 
     void handleOpenWindow();
 

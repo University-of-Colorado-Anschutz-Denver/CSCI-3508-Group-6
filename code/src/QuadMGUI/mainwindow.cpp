@@ -59,6 +59,8 @@ void MainWindow::getDrives() {
 
 void MainWindow::loadRootFolders()
 {
+    currentPath.clear();
+    pathHistory.clear();
     ui->rootListWidget->clear();
 
     QString path = ui->driveComboBox->currentData().toString(); //drive path
@@ -96,20 +98,18 @@ void MainWindow::loadDirectory(const QString& path)
     QString absolutePath = path;
 
     // Save the current directory for Back navigation.
-    if (!currentPath.isEmpty() && currentPath != absolutePath) {
+    if (!currentPath.isEmpty() &&QDir::cleanPath(currentPath) != QDir::cleanPath(absolutePath)) {
         pathHistory.append(currentPath);
     }
 
     currentPath = absolutePath;
-
-    const bool atHome = QDir::cleanPath(currentPath) == QDir::cleanPath(QDir::homePath());
 
     ui->contentsListWidget->clear();
     ui->currentPathLabel->setText(currentPath);
 
     ui->contentsListWidget->show();
     ui->currentPathLabel->show();
-    ui->backButton->setVisible(!atHome);
+    ui->backButton->setVisible(!pathHistory.isEmpty());
     ui->filePathSearchBar->show();
     ui->tagFilterBar->show();
 
@@ -184,6 +184,21 @@ void MainWindow::applyTagFilter(const QString& query)
     }
 }
 
+QString MainWindow::formatMetadataKey(const QString& key)
+{
+    QString result;
+
+    for (int i = 0; i < key.length(); ++i) {
+        QChar current = key[i];
+        if (i > 0 && current.isUpper() && key[i - 1].isLower()) {
+            result += ' ';
+        }
+        result += current;
+    }
+
+    return result;
+}
+
 void MainWindow::metadataPopulate(const QString& filePath)
 {
     QFileInfo fileInfo(filePath);
@@ -255,10 +270,10 @@ void MainWindow::metadataPopulate(const QString& filePath)
         }
 
         for (auto ctg = groupedMetadata.constBegin(); ctg != groupedMetadata.constEnd(); ++ctg) {
-            html += "<h3>" + ctg.key().toHtmlEscaped() + "</h3>";
+            html += "<h3>" + formatMetadataKey(ctg.key()).toHtmlEscaped() + "</h3>";
 
             for (auto p0 = ctg.value().constBegin(); p0 != ctg.value().constEnd(); ++p0) {
-                html += "<b>" + p0.key().toHtmlEscaped() + ":</b> " + p0.value().toHtmlEscaped() + "<br>";
+                html += "<b>" + formatMetadataKey(p0.key()).toHtmlEscaped() + ":</b> " + p0.value().toHtmlEscaped() + "<br>";
             }
         }
 
@@ -412,6 +427,12 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Clicking a root folder loads its contents.
     connect(ui->rootListWidget, &QListWidget::itemClicked, this, [this](QListWidgetItem* item) {
+
+        //reset the path history and current path when a root folder is clicked to avoid confusion in back navigation
+        pathHistory.clear();
+        currentPath.clear();
+
+
         loadDirectory(item->data(Qt::UserRole).toString());
         });
 
@@ -516,17 +537,18 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     //Navigate backward
     connect(ui->backButton, &QPushButton::clicked, this, [this]() {
-        if (pathHistory.isEmpty()) {
+
+        if (pathHistory.isEmpty())
             return;
-        }
-
+    
         QString previousPath = pathHistory.takeLast();
-
-        // Avoid recording the current path again.
+    
+        // Prevent loadDirectory() from adding the current path again.
         currentPath.clear();
-
+    
         loadDirectory(previousPath);
-        });
+    
+    });
 
     // connect(ui->backButton, &QPushButton::clicked, this, []() {
     //     qDebug() << "click";
