@@ -30,22 +30,22 @@
     <property name="bottomMargin">
      <number>12</number>
     </property>
-              <item>
-           <widget class="QLineEdit" name="filePathSearchBar">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>36</height>
-             </size>
-            </property>
-            <property name="placeholderText">
-             <string>Enter file path</string>
-            </property>
-            <property name="clearButtonEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
+    <item>
+     <widget class="QLineEdit" name="filePathSearchBar">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>36</height>
+       </size>
+      </property>
+      <property name="placeholderText">
+       <string>Enter file path</string>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QWidget" name="contentWidget" native="true">
       <layout class="QHBoxLayout" name="contentLayout">
@@ -288,7 +288,7 @@
                   <x>0</x>
                   <y>0</y>
                   <width>351</width>
-                  <height>517</height>
+                  <height>471</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="metadataScrollContentsLayout">
@@ -371,13 +371,7 @@
      <string>QuadM</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>Settings</string>
-    </property>
-   </widget>
    <addaction name="menuQuadM"/>
-   <addaction name="menuSettings"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
