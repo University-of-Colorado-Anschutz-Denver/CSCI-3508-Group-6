@@ -31,7 +31,7 @@
   <form id="feedback-form" novalidate>
     <!-- Capture the feedback category, optional contact, message, and app version. -->
     <label>Type
-      <select name="type"><option>Bug</option><option>Feature request</option><option>Question</option><option>Other</option></select>
+      <select name="type"><option value="bug">Bug</option><option value="feature">Feature request</option><option value="question">Question</option><option value="other">Other</option></select>
     </label>
     <label>Your email (optional)
       <input type="email" name="email" autocomplete="email">
@@ -56,7 +56,8 @@
     <p>MultiMedia Metadata Manager (QuadM) &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
   </div>
 </footer>
-<!-- Shared script handles form submission and other page-specific behavior. -->
+<!-- Shared scripts: feedback-service.js validates and sends the form, main.js wires it to the page. -->
+<script src="js/feedback-service.js"></script>
 <script src="js/main.js"></script>
 
 </body>

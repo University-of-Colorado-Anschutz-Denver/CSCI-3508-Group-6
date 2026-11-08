@@ -74,7 +74,7 @@ test("feedback form has the required fields", () => {
 // Confirm that the download page exposes the elements required by the client-side script.
 test("download page has hooks used by main.js", () => {
   const html = read("download.html");
-  for (const id of ["version", "dl-win", "dl-linux"]) assert.match(html, new RegExp(`id="${id}"`));
+  for (const id of ["version", "dl-win", "dl-mac-pkg", "dl-mac-dmg", "dl-linux"]) assert.match(html, new RegExp(`id="${id}"`));
 });
 
 // Optional release gate to detect unfinished placeholders in production builds.
@@ -82,4 +82,23 @@ test("no unfinished placeholders in the Release build", { skip: !process.env.STR
   for (const f of [...PAGES, "js/main.js"]) {
     assert.ok(!read(f).includes("YOUR-USERNAME"), `${f} still contains YOUR-USERNAME`);
   }
+});
+
+// main.js calls the global `ReleaseData` that release-data.js defines, so the
+// script tags must be ordered correctly or the download page will throw a
+// "ReleaseData is not defined" error at runtime.
+test("download page loads release-data.js before main.js", () => {
+  const html = read("download.html");
+  const a = html.indexOf('src="js/release-data.js"');
+  const b = html.indexOf('src="js/main.js"');
+  assert.ok(a !== -1 && b !== -1 && a < b, "release-data.js must come first");
+});
+
+test("feedback page loads feedback-service.js before main.js and option values match the schema", () => {
+  const html = read("feedback.html");
+  const a = html.indexOf('src="js/feedback-service.js"');
+  const b = html.indexOf('src="js/main.js"');
+  assert.ok(a !== -1 && b !== -1 && a < b, "feedback-service.js must come first");
+  const values = [...html.matchAll(/<option value="([^"]+)"/g)].map(m => m[1]);
+  assert.deepStrictEqual(values, ["bug", "feature", "question", "other"]);
 });
