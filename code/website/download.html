@@ -4,15 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Download · MultiMedia Metadata Manager (QuadM)</title>
-<meta name="description" content="View and edit hidden metadata, tag files, and search by tag across your media folders.">
-<!-- Apply the shared styles used throughout the project website. -->
+<meta name="description" content="Download QuadM for Windows, macOS or Linux. Builds published on GitHub Releases with checksums.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<!-- Shared navigation connects to the site's other pages. -->
+<a class="skip" href="#content">Skip to main content</a>
+<!-- Shared header: same brand and navigation on every page; the current page is marked. -->
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="index.html">MultiMedia&nbsp;Metadata&nbsp;Manager&nbsp;(QuadM)</a>
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="28" height="28"><span>MultiMedia Metadata Manager (QuadM)</span></a>
     <nav aria-label="Main">
       <a href="index.html">Home</a>
       <a href="download.html" aria-current="page">Download</a>
@@ -22,58 +23,69 @@
     </nav>
   </div>
 </header>
-<!-- Show release information, platform downloads, and setup instructions. -->
 <main>
-<section class="wrap narrow">
+<section class="wrap narrow" id="content">
   <h1>Download</h1>
-  <!-- JavaScript fills in the latest release version when GitHub responds. -->
-  <p class="lead">Latest version: <strong id="version">loading…</strong></p>
+  <!-- Status: JavaScript replaces "loading…" with the latest release version. -->
+  <p class="lead">Latest version: <strong id="version" role="status">loading…</strong></p>
   <p class="muted" id="release-meta"></p>
   <!-- Download buttons link to matching files attached to a GitHub release; a card hides itself if its file is missing. -->
+  <h2 class="sr-only">Choose your download</h2>
   <div class="cards" id="downloads">
     <div class="card">
-      <h3>Windows</h3>
+      <h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Windows</h3>
       <p>Windows 10 or later, 64-bit.</p>
-      <p><a class="btn primary" id="dl-win" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Download for Windows</a></p>
+      <p><a class="btn primary" id="dl-win" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Download for Windows</a></p>
     </div>
     <div class="card">
-      <h3>macOS</h3>
+      <h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 20h20"/></svg>macOS</h3>
       <p>macOS 12 or later, Apple Silicon (M1 or newer).</p>
       <p>
-        <a class="btn primary" id="dl-mac-pkg" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Installer (.pkg)</a>
-        <a class="btn" id="dl-mac-dmg" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">Disk image (.dmg)</a>
+        <a class="btn primary" id="dl-mac-pkg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Installer (.pkg)</a>
+        <a class="btn" id="dl-mac-dmg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Disk image (.dmg)</a>
       </p>
-      <p class="muted">The .pkg is the graphical installer. The .dmg is the non-graphical option.</p>
+      <p class="muted small">The .pkg is the graphical installer. The .dmg is the non-graphical option.</p>
     </div>
   </div>
-  <p class="muted" id="linux-row" hidden>Ubuntu / Debian (amd64): <a id="dl-linux" href="https://github.com/YOUR-USERNAME/YOUR-REPO/releases/latest">download the .deb</a>, then run <code>sudo apt install ./&lt;file&gt;.deb</code></p>
-  <p class="muted">Builds are made automatically by our CI pipeline and published on GitHub Releases. Checksums (<code>SHA256SUMS.txt</code>) are on the release page.</p>
+  <p class="muted" id="linux-row" hidden>Ubuntu / Debian (amd64): <a id="dl-linux" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">download the .deb</a>, then run <code>sudo apt install ./&lt;file&gt;.deb</code></p>
+  <p class="muted small">Builds are made automatically by our CI pipeline and published on GitHub Releases. Checksums (<code>SHA256SUMS.txt</code>) are on the release page.</p>
 
-  <!-- Outline the basic steps for installing and opening the app. -->
-  <h2>Install on Windows</h2>
-  <ol>
-    <li>Download and run the installer.</li>
-    <li>If Windows SmartScreen warns about an unknown publisher, choose <em>More info &rarr; Run anyway</em> (the app is not code-signed yet).</li>
-    <li>Open <em>QuadM</em> from the Start menu and choose a folder.</li>
-  </ol>
-
-  <h2>Install on Mac</h2>
-  <ol>
-    <li>Open the downloaded .pkg and follow the installer, or open the .dmg and drag <em>QuadM</em> into <em>Applications</em>.</li>
-    <li>The app is not notarized yet. On first launch, right-click it, choose <em>Open</em>, then <em>Open</em> again (or allow it under System Settings &rarr; Privacy &amp; Security).</li>
-    <li>Choose a folder to start browsing metadata.</li>
-  </ol>
+  <!-- Help right where it is needed: install steps per system; JavaScript opens the one that matches your computer. -->
+  <h2>How to install</h2>
+  <details id="steps-win" open>
+    <summary>Windows</summary>
+    <ol>
+      <li>Download and run the installer.</li>
+      <li>If Windows SmartScreen warns about an unknown publisher, choose <em>More info &rarr; Run anyway</em>.</li>
+      <li>Open <em>QuadM</em> from the Start menu and choose a folder.</li>
+    </ol>
+    <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>The app is not code-signed yet, which is why SmartScreen shows this warning.</span></p>
+  </details>
+  <details id="steps-mac" open>
+    <summary>macOS</summary>
+    <ol>
+      <li>Open the downloaded .pkg and follow the installer, or open the .dmg and drag <em>QuadM</em> into <em>Applications</em>.</li>
+      <li>On first launch, right-click the app, choose <em>Open</em>, then <em>Open</em> again (or allow it under System Settings &rarr; Privacy &amp; Security).</li>
+      <li>Choose a folder to start browsing metadata.</li>
+    </ol>
+    <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>The app is not notarized yet, which is why macOS asks you to confirm the first launch.</span></p>
+  </details>
+  <p>Need help? Read the <a href="guide.html">user guide</a> or <a href="feedback.html">send us feedback</a>.</p>
 </section>
 </main>
-<!-- Shared footer links visitors to the project source code. -->
+<!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
 <footer class="site-footer">
-  <div class="wrap">
-    <p>MultiMedia Metadata Manager (QuadM) &middot; course project &middot; <a href="https://github.com/YOUR-USERNAME/YOUR-REPO">Source on GitHub</a></p>
+  <div class="wrap footer-grid">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project</p>
+    <nav aria-label="Footer">
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Send feedback</a>
+      <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a>
+    </nav>
   </div>
 </footer>
-<!-- Shared script loads release details and updates available download links. -->
- <script src="js/release-data.js"></script>
+<script src="js/release-data.js"></script>
 <script src="js/main.js"></script>
-
 </body>
 </html>

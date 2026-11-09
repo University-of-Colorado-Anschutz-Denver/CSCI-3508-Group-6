@@ -102,3 +102,25 @@ test("feedback page loads feedback-service.js before main.js and option values m
   const values = [...html.matchAll(/<option value="([^"]+)"/g)].map(m => m[1]);
   assert.deepStrictEqual(values, ["bug", "feature", "question", "other"]);
 });
+
+// Accessibility and consistency rules from the GUI design review.
+for (const page of PAGES) {
+  test(`${page}: has a skip link that points to an existing target`, () => {
+    const html = read(page);
+    assert.match(html, /<a class="skip" href="#content">/, "skip link present");
+    assert.match(html, /id="content"/, "skip link target exists");
+  });
+}
+
+test("every form control has a visible label", () => {
+  const html = read("feedback.html");
+  for (const id of ["f-type", "f-email", "f-message", "f-version"]) {
+    assert.match(html, new RegExp(`<label for="${id}"`), `no label for ${id}`);
+    assert.match(html, new RegExp(`id="err-${id.slice(2)}"`), `no error slot for ${id}`);
+  }
+});
+
+test("all pages share an identical header navigation", () => {
+  const navs = PAGES.map(p => read(p).match(/<nav aria-label="Main">[\s\S]*?<\/nav>/)[0].replace(/ aria-current="page"/, ""));
+  for (const n of navs) assert.strictEqual(n, navs[0]);
+});
