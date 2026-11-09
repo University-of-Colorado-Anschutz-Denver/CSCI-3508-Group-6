@@ -54,10 +54,11 @@ code{background:var(--card);padding:1px 6px;border-radius:4px;font-size:.92em;ov
 [hidden]{display:none !important}
 
 /* ---- 3. Layout grid + spacing ------------------------------------------ */
-.wrap{max-width:1040px;margin:0 auto;padding:0 clamp(16px,4vw,24px)}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:clamp(16px,4vw,24px)}
 .narrow{max-width:760px}
 main>section{padding-block:var(--s6)}
 main>section:first-child{padding-top:var(--s7)}
+main>section>h2:first-child{margin-top:0}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:var(--s4)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s5)}
 .card h3{display:flex;align-items:flex-start;gap:var(--s2)}
@@ -155,7 +156,7 @@ details[open]>summary{border-bottom:1px solid var(--line);margin-bottom:var(--s3
 details>:last-child{margin-bottom:var(--s4)}
 
 /* ---- 11. About (people cards) ------------------------------------------ */
-.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--s4);margin:0;padding:0;list-style:none}
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--s4);margin:0;padding:0;list-style:none}
 .team .card h3{margin-bottom:var(--s1)}
 .role{margin:0 0 var(--s3);color:var(--muted);font-weight:600}
 .tags{display:flex;flex-wrap:wrap;gap:var(--s2);margin:0 0 var(--s3);padding:0;list-style:none}
@@ -164,7 +165,7 @@ details>:last-child{margin-bottom:var(--s4)}
 
 /* ---- 12. Footer --------------------------------------------------------- */
 .site-footer{margin-top:var(--s8);border-top:1px solid var(--line);padding:var(--s5) 0;color:var(--muted)}
-.footer-grid{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s3) var(--s5)}
+.footer-grid{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s3) var(--s5)}
 .footer-grid p{margin:0}
 .site-footer nav{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4)}
 .site-footer nav a{display:inline-flex;align-items:center;min-height:44px}
