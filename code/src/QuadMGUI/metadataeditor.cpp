@@ -2,6 +2,10 @@
 #include "ui_metadataeditor.h"
 #include "exiftool.h"
 
+#include "api/metadataservice.h"
+#include "backend/metadata.h"
+#include "backend/metadatafilter.h" 
+
 #include <QFileInfo>
 #include <QLabel>
 #include <QPushButton>
@@ -13,6 +17,15 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QSet>
+
+
+
+// NEW: Run ExifTool and parse its XML tag database
+#include <QProcess>
+#include <QXmlStreamReader>
+#include <QStandardPaths>
+#include <QSet>
+#include <QRegularExpression>
 
 MetadataEditor::MetadataEditor(const QString &filePath, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MetadataEditor)
@@ -41,7 +54,7 @@ void MetadataEditor::setPath(const QString &filePath)
 
 void MetadataEditor::populateData()
 {
-    QJsonObject metadata;
+    //QJsonObject metadata;
     QString error;
     QFileInfo fileInfo(path);
 
@@ -65,33 +78,53 @@ void MetadataEditor::populateData()
     originalMetadata.clear();
     deletedMetadata.clear();
 
-    if (!ExifTool::readMetadata(path, metadata, error)) {
+    if (!service.readMetadata(path, metadata, error)) {
         ui->metadataLayout->addWidget(new QLabel(error));
         return;
     }
 
-    // Store original metadata
-    for (auto it = metadata.constBegin(); it != metadata.constEnd(); ++it)
-        originalMetadata[it.key()] = it.value().toVariant().toString();
+    //TEMPORARY DEBUG
+    qDebug() << "Fields returned by service:" << metadata.fields().size();
+
+    for (auto it = metadata.fields().constBegin();
+        it != metadata.fields().constEnd(); ++it) {
+        qDebug() << it.key() << "=" << it.value();
+    }
+
+    // Store original metadata, including empty and ignored fields
+    for (auto it = metadata.fields().constBegin();
+         it != metadata.fields().constEnd(); ++it) {
+        originalMetadata[it.key()] = it.value();
+    }
 
     // Populate metadata fields
     QSet<QString> categories;
 
-    for (auto it = originalMetadata.constBegin(); it != originalMetadata.constEnd(); ++it) {
-        QString category = it.key().contains(':') ? it.key().section(':', 0, 0) : "Other";
+    for (auto it = originalMetadata.constBegin();
+         it != originalMetadata.constEnd(); ++it) {
+
+        QString category = it.key().contains(':')
+            ? it.key().section(':', 0, 0)
+            : "Other";
 
         if (!categories.contains(category)) {
             auto *categoryLabel = new QLabel(category);
-            categoryLabel->setStyleSheet("font-size: 16px; font-weight: bold;");
+            categoryLabel->setStyleSheet(
+                "font-size: 16px; font-weight: bold;"
+            );
+
             ui->metadataLayout->addWidget(categoryLabel);
             categories.insert(category);
         }
 
+        // Display every field, including ignored and empty fields
         addMetadataField(it.key(), it.value());
     }
 
     ui->metadataLayout->addStretch();
 }
+
+
 
 void MetadataEditor::addMetadataField(const QString &key, const QString &value)
 {
@@ -101,6 +134,26 @@ void MetadataEditor::addMetadataField(const QString &key, const QString &value)
     QLabel *propertyLabel = new QLabel(key.section(':', -1), row);
     QLineEdit *valueEdit = new QLineEdit(value, row);
     QPushButton *deleteButton = new QPushButton("Delete", row);
+    
+    const bool readOnly =  isReadOnlyTag(key) && key != "File:FileName";
+
+
+
+    if (readOnly) {
+        valueEdit->setReadOnly(true);
+
+        qDebug() << "Read-only metadata field:" << key;
+
+
+        valueEdit->setStyleSheet("QLineEdit {"
+            "background-color: #e0e0e0;"
+            "color: #777777;"
+            "border: 1px solid #c0c0c0;""}"
+        );
+
+        deleteButton->setEnabled(false);
+        deleteButton->setToolTip("This metadata field is read-only.");
+    }
 
     valueEdit->setMinimumWidth(300);
 
@@ -111,11 +164,14 @@ void MetadataEditor::addMetadataField(const QString &key, const QString &value)
     metadataFields[key] = valueEdit;
     metadataRows[key] = row;
 
-    ui->metadataLayout->insertWidget(ui->metadataLayout->count() - 1, row);
+    ui->metadataLayout->addWidget(row); // label line
 
-    connect(deleteButton, &QPushButton::clicked, this, [this, key]() {
-        deleteMetadataField(key);
-    });
+    // delte only if not read-only
+    if (!readOnly) {
+        connect(deleteButton, &QPushButton::clicked, this, [this, key]() {
+            deleteMetadataField(key);
+        });
+    }
 }
 
 void MetadataEditor::addMetadata()
@@ -164,16 +220,22 @@ void MetadataEditor::deleteMetadataField(const QString &key)
 
 void MetadataEditor::saveMetadata()
 {
-    QMap<QString, QString> changedTags;
+   //QMap<QString, QString> changedTags;
 
     for (auto it = metadataFields.constBegin(); it != metadataFields.constEnd(); ++it) {
-        QString currentValue = it.value()->text();
+        if (it.key() == "File:FileName")
+            continue;
 
-        if (!originalMetadata.contains(it.key()) || originalMetadata.value(it.key()) != currentValue)
-            changedTags[it.key()] = currentValue;
+        metadata.set(it.key(), it.value()->text());
     }
 
-    if (changedTags.isEmpty() && deletedMetadata.isEmpty()) {
+    QString newName = metadataFields.value("File:FileName")
+                          ? metadataFields.value("File:FileName")->text().trimmed()
+                          : QFileInfo(path).fileName();
+
+    const bool nameChanged = newName != QFileInfo(path).fileName();
+
+    if (!metadata.hasChanges() && deletedMetadata.isEmpty() && !nameChanged) {
         QMessageBox::information(this, "Metadata Editor", "No changes to save.");
         return;
     }
@@ -182,19 +244,42 @@ void MetadataEditor::saveMetadata()
         QMessageBox::warning(this, "Deletion Not Supported", "Deleted fields have been removed from the editor, but your current ExifTool writeTags() function does not support deleting tags from the file.");
     }
 
-    if (changedTags.isEmpty()) {
+    if (!metadata.hasChanges() && !nameChanged) {
         QMessageBox::information(this, "Metadata Editor", "There are no additions or edits to save.");
         return;
     }
 
+    // Rename file if filename changed
+    if (nameChanged) {
+        QFileInfo info(path);
+        QString newPath = info.dir().filePath(newName);
+
+        if (newName.isEmpty() || newName == "." || newName == ".." ||
+            QFileInfo(newName).fileName() != newName || QFileInfo::exists(newPath)) {
+            QMessageBox::warning(this, "Rename Error",
+                                 "Invalid filename or a file with that name already exists.");
+            return;
+        }
+
+        if (!QFile::rename(path, newPath)) {
+            QMessageBox::warning(this, "Rename Error", "Could not rename the file.");
+            return;
+        }
+
+        path = newPath;
+    }
+
     QString error;
 
-    if (!ExifTool::writeTags(path, changedTags, error)) {
-        QMessageBox::critical(this, "Save Error", error);
-        return;
+    if (metadata.hasChanges()) {
+        if (!service.writeMetadata(path, metadata, error)) {
+            QMessageBox::critical(this, "Save Error", error);
+            return;
+        }
     }
 
     QMessageBox::information(this, "Metadata Editor", "Metadata changes saved successfully.");
+
     populateData();
     emit metadataSaved(path);
 }
