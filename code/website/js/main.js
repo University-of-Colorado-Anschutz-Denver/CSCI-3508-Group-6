@@ -70,42 +70,50 @@ async function loadLatest() {
   return ReleaseData.buildLatest(await r.json(), REPO);
 }
 
+// Open the install steps for the visitor's system and fold the other away.
+function showMatchingInstallSteps() {
+  const os = detectOS();
+  const win = byId("steps-win"), mac = byId("steps-mac");
+  if (!win || !mac) return;
+  if (os === "mac") win.open = false;
+  if (os === "win") mac.open = false;
+}
+
 // Populate the download page UI (version badge, OS download links, and the
 // release metadata line) from the normalized release data `d`.
 function showRelease(d) {
   // Version badge.
-  const verEl = document.getElementById("version");
-  verEl.textContent = d.tag;
+  byId("version").textContent = d.tag;
   const releasesUrl = d.htmlUrl || `https://github.com/${d.repo || REPO}/releases/latest`;
 
   // Windows download: link directly to the asset, or fall back to the
   // releases page if no Windows asset was published.
-  const win = document.getElementById("dl-win");
+  const win = byId("dl-win");
   win.href = d.assets.windows ? d.assets.windows.url : releasesUrl;
 
   // macOS has two files: a graphical installer (.pkg) and a disk image (.dmg).
-  const macPkg = document.getElementById("dl-mac-pkg");
-  const macDmg = document.getElementById("dl-mac-dmg");
+  const macPkg = byId("dl-mac-pkg");
+  const macDmg = byId("dl-mac-dmg");
   if (macPkg) { if (d.assets.macPkg) macPkg.href = d.assets.macPkg.url; else macPkg.hidden = true; }
   if (macDmg) { if (d.assets.macDmg) macDmg.href = d.assets.macDmg.url; else macDmg.hidden = true; }
   const macCard = (macPkg || macDmg) && (macPkg || macDmg).closest(".card");
   if (macCard && !d.assets.macPkg && !d.assets.macDmg) macCard.hidden = true;   // no Mac build in this release
 
   // Highlight the download that matches the visitor's computer.
-  const plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
-  const mine = /mac/i.test(plat) ? "dl-mac-pkg" : /win/i.test(plat) ? "dl-win" : /linux/i.test(plat) ? "dl-linux" : null;
-  const mineEl = mine && document.getElementById(mine);
-  if (mineEl && mineEl.closest(".card") && !mineEl.closest(".card").hidden) mineEl.closest(".card").classList.add("recommended");
+  const mine = { mac: "dl-mac-pkg", win: "dl-win", linux: "dl-linux" }[detectOS()];
+  const mineEl = mine && byId(mine);
+  const mineCard = mineEl && mineEl.closest(".card");
+  if (mineCard && !mineCard.hidden) mineCard.classList.add("recommended");
 
   // Linux download: link to the asset if present; the row stays hidden otherwise
   // rather than show a broken/irrelevant link.
-  const linux = document.getElementById("dl-linux");
-  const linuxRow = document.getElementById("linux-row");
+  const linux = byId("dl-linux");
+  const linuxRow = byId("linux-row");
   if (linux && d.assets.linux) { linux.href = d.assets.linux.url; if (linuxRow) linuxRow.hidden = false; }
 
   // Optional metadata line: publish date, Windows asset size, and whether
   // checksums are available. Only the pieces that exist are shown.
-  const meta = document.getElementById("release-meta");
+  const meta = byId("release-meta");
   if (meta) {
     const bits = [];
     if (d.publishedAt) bits.push("Released " + new Date(d.publishedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }));
@@ -116,11 +124,14 @@ function showRelease(d) {
 }
 
 // Only run the release lookup on pages that actually have a #version element.
-// On failure (e.g. network issue, no releases yet), fall back to a generic
-// message instead of leaving the badge blank.
-if (document.getElementById("version")) {
+// On failure (e.g. network issue, no releases yet), say so and keep the buttons
+// pointing at the GitHub releases page instead of leaving the badge blank.
+if (byId("version")) {
+  showMatchingInstallSteps();
   loadLatest().then(showRelease).catch(() => {
-    document.getElementById("version").textContent = "see GitHub Releases";
+    byId("version").textContent = "see GitHub Releases";
+    const meta = byId("release-meta");
+    if (meta) meta.textContent = "We couldn't check for the latest version. The buttons below open the GitHub Releases page.";
   });
 }
 
