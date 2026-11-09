@@ -100,6 +100,7 @@ if (form) {
     btn.disabled = true; status.textContent = "Sending…";
     const res = await FeedbackService.submit(data, FIREBASE);
     btn.disabled = false;
+    status.className = res.ok ? "ok" : "err";        // colors the message (see style.css)
     if (res.ok) { form.reset(); status.textContent = "Thanks! Your feedback was sent."; }
     else if (res.reason === "invalid") status.textContent = Object.values(res.errors)[0];
     else if (res.reason === "not-configured") status.textContent = "Feedback backend not connected yet.";
