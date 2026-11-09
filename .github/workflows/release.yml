@@ -4,7 +4,7 @@ name: Release
 #   1. builds the installers with the scripts in code/packaging/, in parallel:
 #        Windows  .msi        (build-windows-msi.ps1)
 #        Ubuntu   .deb        (build-deb.sh)
-#        macOS    .pkg, .dmg  (build-macos.sh)
+#        macOS    .pkg, .dmg  (build-macos.sh), once for Apple Silicon and once for Intel
 #   2. installs each one on a clean runner and checks the app + ExifTool start
 #   3. publishes the files to a GitHub Release, with SHA256SUMS.txt
 #   4. starts website.yml so the website image shows the new download links
@@ -210,9 +210,53 @@ jobs:
             code/dist/*.dmg
           if-no-files-found: error
 
+  macos-intel:
+    name: macOS .pkg and .dmg (Intel)
+    runs-on: macos-15-intel # x86_64; build-macos.sh builds for the machine it runs on
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Install build tools (Packaging-macOS.md)
+        run: brew install cmake ninja qt
+
+      - name: Build the .app, .dmg and .pkg
+        working-directory: code
+        run: bash packaging/build-macos.sh "${{ steps.v.outputs.version }}"
+
+      - name: Check the .dmg and the .pkg
+        run: |
+          set -euo pipefail
+          dmg=$(ls code/dist/*.dmg)
+          pkg=$(ls code/dist/*.pkg)
+          # .dmg: mount it and look inside
+          hdiutil attach "$dmg" -mountpoint /tmp/quadm-dmg -nobrowse -quiet
+          test -x /tmp/quadm-dmg/QuadM.app/Contents/MacOS/QuadM
+          /tmp/quadm-dmg/QuadM.app/Contents/Resources/exiftool/exiftool -ver
+          codesign --verify --deep /tmp/quadm-dmg/QuadM.app
+          hdiutil detach /tmp/quadm-dmg -quiet
+          # .pkg: install it for real, then remove it again
+          sudo installer -pkg "$pkg" -target /
+          test -x /Applications/QuadM.app/Contents/MacOS/QuadM
+          /Applications/QuadM.app/Contents/Resources/exiftool/exiftool -ver
+          sudo rm -rf /Applications/QuadM.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-intel-installers
+          path: |
+            code/dist/*.pkg
+            code/dist/*.dmg
+          if-no-files-found: error
+
   publish:
     name: Publish GitHub Release
-    needs: [windows, linux, macos]
+    needs: [windows, linux, macos, macos-intel]
     # Windows decides: a failed Linux or Mac build only leaves its files out of the release (see the warning step).
     if: ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') && needs.windows.result == 'success' }}
     runs-on: ubuntu-latest
@@ -221,9 +265,10 @@ jobs:
     steps:
       - name: Warn about builds that failed
         run: |
-          echo "linux: ${{ needs.linux.result }}, macos: ${{ needs.macos.result }}"
+          echo "linux: ${{ needs.linux.result }}, macos: ${{ needs.macos.result }}, macos-intel: ${{ needs.macos-intel.result }}"
           if [ "${{ needs.linux.result }}" != success ]; then echo "::warning::The Linux .deb is missing from this release"; fi
-          if [ "${{ needs.macos.result }}" != success ]; then echo "::warning::The macOS .pkg/.dmg are missing from this release"; fi
+          if [ "${{ needs.macos.result }}" != success ]; then echo "::warning::The macOS (Apple Silicon) .pkg/.dmg are missing from this release"; fi
+          if [ "${{ needs.macos-intel.result }}" != success ]; then echo "::warning::The macOS (Intel) .pkg/.dmg are missing from this release"; fi
 
       - uses: actions/download-artifact@v4
         with:
