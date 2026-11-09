@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Feedback · MultiMedia Metadata Manager (QuadM)</title>
 <meta name="description" content="Report a bug, request a feature or ask a question about QuadM.">
-<!-- Apply the shared site styles. -->
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -24,31 +23,46 @@
     </nav>
   </div>
 </header>
-<!-- The feedback form collects reports and suggestions from visitors. -->
 <main>
 <section class="wrap narrow" id="content">
   <h1>Feedback</h1>
   <p class="lead">Found a bug or have an idea? Tell us.</p>
-  <!-- JavaScript validates the message and submits it when a feedback endpoint is configured. -->
+  <p class="muted small">Fields marked <span class="req" aria-hidden="true">*</span><span class="sr-only"> (required)</span> are required.</p>
+  <!-- JavaScript validates each field as you type and shows the result in the status box below the button. -->
   <form id="feedback-form" novalidate>
-    <!-- Capture the feedback category, optional contact, message, and app version. -->
-    <label>Type
-      <select name="type"><option value="bug">Bug</option><option value="feature">Feature request</option><option value="question">Question</option><option value="other">Other</option></select>
-    </label>
-    <label>Your email (optional)
-      <input type="email" name="email" autocomplete="email">
-    </label>
-    <label>Message
-      <textarea name="message" rows="6" required maxlength="2000"></textarea>
-    </label>
-    <label>App version (optional)
-      <input type="text" name="version" placeholder="e.g. 0.1.0">
-    </label>
+    <div class="field">
+      <label for="f-type">Type <span class="req" aria-hidden="true">*</span></label>
+      <span class="hint" id="hint-type">What kind of message is this?</span>
+      <select id="f-type" name="type" aria-describedby="hint-type err-type"><option value="bug">Bug</option><option value="feature">Feature request</option><option value="question">Question</option><option value="other">Other</option></select>
+      <p class="field-error" id="err-type" role="alert" hidden></p>
+    </div>
+    <div class="field">
+      <label for="f-email">Your email <span class="opt">(optional)</span></label>
+      <span class="hint" id="hint-email">Only if you want a reply. Example: name@example.com</span>
+      <input id="f-email" type="email" name="email" autocomplete="email" aria-describedby="hint-email err-email">
+      <p class="field-error" id="err-email" role="alert" hidden></p>
+    </div>
+    <div class="field">
+      <label for="f-message">Message <span class="req" aria-hidden="true">*</span></label>
+      <span class="hint" id="hint-message">Describe what happened or what you would like. For a bug, tell us what you clicked and what you expected.</span>
+      <textarea id="f-message" name="message" rows="6" required maxlength="2000" aria-describedby="hint-message err-message message-count"></textarea>
+      <p class="field-error" id="err-message" role="alert" hidden></p>
+      <p class="counter" id="message-count">0 / 2000</p>
+    </div>
+    <div class="field">
+      <label for="f-version">App version <span class="opt">(optional)</span></label>
+      <span class="hint" id="hint-version">Example: 0.1.0</span>
+      <input id="f-version" type="text" name="version" placeholder="e.g. 0.1.0" aria-describedby="hint-version err-version">
+      <p class="field-error" id="err-version" role="alert" hidden></p>
+    </div>
     <!-- Hidden honeypot field helps filter automated spam submissions. -->
     <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <button class="btn primary" type="submit">Send feedback</button>
-    <!-- JavaScript writes validation, success, or error messages here. -->
-    <p id="form-status" role="status" aria-live="polite"></p>
+    <div class="form-actions">
+      <button class="btn primary btn-lg" type="submit">Send feedback</button>
+      <span class="muted small">Tip: press Ctrl+Enter (&#8984;+Enter on Mac) in the message box to send.</span>
+    </div>
+    <!-- JavaScript writes progress, success, or error messages here. -->
+    <div id="form-status" class="status" role="status" aria-live="polite"></div>
   </form>
 </section>
 </main>
@@ -64,9 +78,7 @@
     </nav>
   </div>
 </footer>
-<!-- Shared scripts: feedback-service.js validates and sends the form, main.js wires it to the page. -->
 <script src="js/feedback-service.js"></script>
 <script src="js/main.js"></script>
-
 </body>
 </html>

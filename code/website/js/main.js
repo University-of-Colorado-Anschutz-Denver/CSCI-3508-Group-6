@@ -135,27 +135,108 @@ if (byId("version")) {
   });
 }
 
+
 // ---------------------------------------------------------------------------
 // Feedback form
-// Intercepts the form submit, does basic validation/spam-filtering, and
-// stores the message in Cloud Firestore through FeedbackService
-// (js/feedback-service.js). Runs only if the form exists on the current page.
+// Validates each field while the visitor types (using the same rules as the
+// server-side check in js/feedback-service.js), shows clear messages, and
+// stores the message in Cloud Firestore through FeedbackService. Runs only if
+// the form exists on the current page.
 // ---------------------------------------------------------------------------
-const form = document.getElementById("feedback-form");
-if (form) {
+const form = byId("feedback-form");
+if (form) initFeedbackForm(form);
+
+function initFeedbackForm(form) {
+  const status = byId("form-status");
+  const submitBtn = form.querySelector("button[type=submit]");
+  const counter = byId("message-count");
+  const FIELDS = ["type", "email", "message", "version"];
+  const MAX = 2000;
+  const touched = new Set();      // fields the visitor has already left once
+  let sent = false;               // true right after a successful send
+
+  const values = () => Object.fromEntries(new FormData(form));
+
+  // Show or clear the inline error under one field.
+  function showFieldError(name, message) {
+    const input = form.elements[name], err = byId("err-" + name);
+    if (message) { err.textContent = message; err.hidden = false; input.setAttribute("aria-invalid", "true"); }
+    else { err.textContent = ""; err.hidden = true; input.removeAttribute("aria-invalid"); }
+  }
+  function validateField(name) {
+    const message = FeedbackService.validate(values()).errors[name];
+    showFieldError(name, message);
+    return !message;
+  }
+  function updateCounter() {
+    const n = form.elements.message.value.length;
+    counter.textContent = `${n} / ${MAX}`;
+    counter.classList.toggle("warn", n > MAX * 0.9);
+  }
+  function setBusy(busy) {
+    submitBtn.disabled = busy;
+    submitBtn.classList.toggle("loading", busy);
+    submitBtn.textContent = busy ? "Sending…" : "Send feedback";
+    form.setAttribute("aria-busy", String(busy));
+  }
+  const hasUnsentText = () => !sent && form.elements.message.value.trim().length > 0;
+
+  // Real-time validation: check a field when the visitor leaves it, then keep
+  // re-checking as they edit it (so the error disappears as soon as it is fixed).
+  for (const name of FIELDS) {
+    const el = form.elements[name];
+    el.addEventListener("blur", () => { touched.add(name); validateField(name); });
+    el.addEventListener("input", () => {
+      sent = false;
+      if (name === "message") updateCounter();
+      if (touched.has(name)) validateField(name);
+    });
+  }
+  updateCounter();
+
+  // Expert shortcut: Ctrl+Enter (or Cmd+Enter) in the message box sends the form.
+  form.elements.message.addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); form.requestSubmit(); }
+  });
+
+  // Warn before leaving the page with a message that was not sent.
+  window.addEventListener("beforeunload", e => {
+    if (hasUnsentText()) { e.preventDefault(); e.returnValue = ""; }
+  });
+
   form.addEventListener("submit", async e => {
     e.preventDefault();                              // handle the submit ourselves via fetch
-    const status = document.getElementById("form-status");
-    const data = Object.fromEntries(new FormData(form));
+    const data = values();
     if (data.website) return;                        // honeypot: bots fill this
-    const btn = form.querySelector("button[type=submit]");
-    btn.disabled = true; status.textContent = "Sending…";
+    clearStatus(status);
+
+    // Check every field first and point at the first problem.
+    const errors = FeedbackService.validate(data).errors;
+    FIELDS.forEach(name => { touched.add(name); showFieldError(name, errors[name]); });
+    const firstBad = FIELDS.find(name => errors[name]);
+    if (firstBad) {
+      setStatus(status, "err", "Please fix the highlighted field" + (Object.keys(errors).length > 1 ? "s" : "") + " and try again.");
+      form.elements[firstBad].focus();
+      return;
+    }
+
+    setBusy(true);
+    setStatus(status, "info", "Sending your feedback…");
     const res = await FeedbackService.submit(data, FIREBASE);
-    btn.disabled = false;
-    status.className = res.ok ? "ok" : "err";        // colors the message (see style.css)
-    if (res.ok) { form.reset(); status.textContent = "Thanks! Your feedback was sent."; }
-    else if (res.reason === "invalid") status.textContent = Object.values(res.errors)[0];
-    else if (res.reason === "not-configured") status.textContent = "Feedback backend not connected yet.";
-    else status.textContent = "Could not send. Please try again later.";
+    setBusy(false);
+
+    if (res.ok) {
+      form.reset(); touched.clear(); sent = true; updateCounter();
+      FIELDS.forEach(name => showFieldError(name, ""));
+      setStatus(status, "ok", "Thanks! Your feedback was sent.");
+    } else if (res.reason === "invalid") {
+      setStatus(status, "err", Object.values(res.errors)[0]);
+    } else if (res.reason === "not-configured") {
+      setStatus(status, "warn", "Feedback isn't available right now. Please try again later, or contact a team member from the About page.");
+    } else if (res.reason === "network") {
+      setStatus(status, "err", "We couldn't reach the server. Check your internet connection and try again. Your message is still here.");
+    } else {
+      setStatus(status, "err", "Something went wrong on our side (" + res.reason + "). Your message is still here, so you can try again in a moment.");
+    }
   });
 }

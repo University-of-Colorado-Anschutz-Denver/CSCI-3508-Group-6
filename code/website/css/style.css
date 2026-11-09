@@ -187,7 +187,3 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* Visually hidden text for screen readers. */
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-
-/* --- Legacy rules: keep pages not yet migrated looking right; removed in later steps --- */
-#form-status.ok{color:var(--ok-fg)}
-#form-status.err{color:var(--err-fg)}
