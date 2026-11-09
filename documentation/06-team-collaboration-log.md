@@ -95,13 +95,22 @@ Explain how the assignments are fair and how all members will participate in res
 | 2026-09-09, 2026-09-11 | Project selection (media metadata editor and search program, website for distribution and documentation) | <ul><li>Financial assistant and analyzer with chatbot integration</li><li>Family budget planner allowing multiple users and one year of budget planning</li><li>Metadata manager for media files [SELECTED]</li></ul> | Selected project had interested clients already; EK is familiar with the project domain; general team interest in subject matter | All |
 | 2026-10-09 | GUI development toolkit | <ul><li>Qt [SELECTED]</li><li>FLTK</li><li>Dear ImGUI</li></ul> | Qt has it's own design studio and looks very polished, plus had easy to follow documentation and tutorials available | TK |
 | 2026-10-17 | ExifTool implementation method | <ul><li>Custom calls to Perl implementation [SELECTED]</li><li>ExifTool C++ Interface</li></ul> | Interface required Windows users to install and run through Cygwin; creating custom implementation with Qt calls wasn't complicated and allowed more control | HJ, EK |
-| 2026-11-06 | App icon | <ul><li>HJ</li><li>EK</li></ul> | IN PROGRESS | All |
+| 2026-11-09 | App icon | <ul><li>HJ</li><li>EK</li></ul> | IN PROGRESS | All |
 
 ## Feedback and Communication Issues
 
 | Date | Issue or feedback | Effect on project | Resolution and follow-up |
 | --- | --- | --- | --- |
 | 2026-09-09 | Misunderstanding of project domain | Slow start on developing project proposal and uncertain scope, as EK's explanation of problem to be solved was unclear | Problem was demonstrated in meeting on 2026-09-11 and made clear to team members, goals for development and scope adjusted to better reflect the solution desired |
+
+## Next Steps
+
+| Team member | Work status | Estimated completion date |
+| --- | --- | --- | --- |
+| Yannick Kuete | Firestone implementation, refine website GUI | 2026-11-10 (Firestone), 2026-11-13 (website GUI) |
+| Emelie Kronquist | Documentation finalization, user acceptance testing | 2026-11-15 (docs), 2026-11-11 (testing) |
+| Harrison Julius | Mac Intel installer, UI test cases | 2026-11-09 (installer), 2026-11-10 (tests) |
+| Teja Kandimalla | GUI styling, user feedback adjustments | 2026-11-10 (styling), 2026-11-13 (feedback) |
 
 ## Final Contribution Summary
 
