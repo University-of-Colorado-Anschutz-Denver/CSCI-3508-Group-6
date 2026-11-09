@@ -5,7 +5,8 @@
 const REPO = "YOUR-USERNAME/YOUR-REPO";            // owner/name on GitHub
 // Firebase project that holds the "feedback" collection (Firebase console -> Project settings).
 // The web API key is meant to be public; firebase/firestore.rules is what protects the data.
-const FIREBASE = { projectId: "", apiKey: "" };
+const FIREBASE = { projectId: 
+quadmdatabase, apiKey: AIzaSyBEJ8hqkAfUM4wEWumKLhwnccG6hhm0-Q4 };
 
 // ---------------------------------------------------------------------------
 // Download page
