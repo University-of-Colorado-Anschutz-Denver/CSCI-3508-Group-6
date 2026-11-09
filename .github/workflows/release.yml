@@ -43,6 +43,12 @@ jobs:
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
           echo "version=$v" >> "$GITHUB_OUTPUT"
 
+      # install-qt-action runs aqtinstall with whatever Python the runner has; the runner's newest
+      # (3.15) made it fail with exit code 1, so pin a Python that aqtinstall supports.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       # The script is written for the Qt MinGW kit (same as CMakePresets.json), so install that kit.
       - name: Install Qt (MinGW kit) and the MinGW compiler
         uses: jurplel/install-qt-action@v4
