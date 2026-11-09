@@ -5,6 +5,48 @@ const REPO = "University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6";   // ow
 const FIREBASE = { projectId: "quadmdatabase", apiKey: "AIzaSyBEJ8hqkAfUM4wEWumKLhwnccG6hhm0-Q4" };
 
 // ---------------------------------------------------------------------------
+// Shared helpers
+// ---------------------------------------------------------------------------
+const byId = id => document.getElementById(id);
+
+// Which operating system is the visitor on? Returns "win", "mac", "linux" or null.
+// Used to recommend the right download and open the matching install steps.
+function detectOS() {
+  const plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  return /mac/i.test(plat) ? "mac" : /win/i.test(plat) ? "win" : /linux/i.test(plat) ? "linux" : null;
+}
+
+// Small inline icons for status messages (static markup, same style as the pages).
+const STATUS_ICONS = {
+  ok:   '<circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/>',
+  err:  '<circle cx="12" cy="12" r="10"/><path d="M9 9l6 6M15 9l-6 6"/>',
+  warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/>'
+};
+
+// Show a message in a status box: colored by meaning (ok/err/warn/info) and
+// always with an icon and text, so color is never the only signal.
+function setStatus(el, kind, text) {
+  el.className = "status " + kind;
+  el.innerHTML = `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24">${STATUS_ICONS[kind]}</svg>`;
+  const span = document.createElement("span");
+  span.textContent = text;                          // text only: never inject markup
+  el.appendChild(span);
+}
+function clearStatus(el) { el.className = "status"; el.textContent = ""; }
+
+// ---------------------------------------------------------------------------
+// Home page
+// Make the main button match the visitor's computer ("Download for macOS").
+// ---------------------------------------------------------------------------
+(function personalizeHomeButton() {
+  const cta = byId("cta-download");
+  if (!cta) return;
+  const label = { win: "Download for Windows", mac: "Download for macOS", linux: "Download for Linux" }[detectOS()];
+  if (label) cta.textContent = label;
+})();
+
+// ---------------------------------------------------------------------------
 // Download page
 // Fetches the latest release and renders its version/assets/metadata into the
 // page. Runs only when a #version element exists (i.e. on the download page),
@@ -81,7 +123,6 @@ if (document.getElementById("version")) {
     document.getElementById("version").textContent = "see GitHub Releases";
   });
 }
-
 
 // ---------------------------------------------------------------------------
 // Feedback form

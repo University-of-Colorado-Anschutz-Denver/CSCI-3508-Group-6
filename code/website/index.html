@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Home · MultiMedia Metadata Manager (QuadM)</title>
 <meta name="description" content="View and edit hidden metadata, tag files, and search by tag across your media folders.">
-<!-- Apply the shared styles used across the project website. -->
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -25,35 +24,59 @@
   </div>
 </header>
 <main>
-<!-- Introduce the app's purpose and direct visitors to downloads or instructions. -->
+<!-- Hero: one clear promise and one primary action (download), one secondary (guide). -->
 <section class="hero" id="content">
   <div class="wrap">
+    <p class="eyebrow">Desktop app for Windows, macOS and Linux</p>
     <h1>See and edit everything hidden inside your media files.</h1>
     <p class="lead">MultiMedia Metadata Manager (QuadM) is a focused desktop file explorer for images, audio and video. Edit title, author and comments, tag your files, and search by tag across whole folders.</p>
     <p class="cta">
-      <a class="btn primary" href="download.html">Download QuadM</a>
-      <a class="btn" href="guide.html">Read the user guide</a>
+      <a class="btn primary btn-lg" id="cta-download" href="download.html">Download QuadM</a>
+      <a class="btn btn-lg" href="guide.html">Read the user guide</a>
     </p>
-    <!-- Display a visual preview of the app interface. Replace the mockup when a final screenshot is available. -->
-    <img class="shot" src="assets/screenshot-main.png" alt="MultiMedia Metadata Manager (QuadM) main window (design mockup)">
+    <p class="muted small">Your original files are only changed when you press Save.</p>
+    <!-- The numbered circles in the picture are explained by the legend, so the labels are real text, not part of the image. -->
+    <figure class="shot-fig">
+      <img class="shot" src="assets/screenshot-main.png" width="1680" height="1034" alt="QuadM main window (design preview): a file list on the left, a preview in the middle, and metadata fields and tags on the right.">
+      <figcaption>
+        Preview of the main window:
+        <ol class="legend">
+          <li>Search by tag</li>
+          <li>Browse files</li>
+          <li>View and edit metadata</li>
+          <li>Add tags</li>
+        </ol>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
-<!-- Summarize the app's core metadata, tagging, and search capabilities. -->
+<!-- Features: four cards, same structure, same icon style. -->
 <section class="wrap">
   <h2>What it does</h2>
   <div class="cards">
-    <article class="card"><h3>View all metadata</h3><p>Common fields plus the hidden ones: camera, GPS, codec, software, and more.</p></article>
-    <article class="card"><h3>Edit common fields</h3><p>Change title, author and comments. Nothing is written until you press Save.</p></article>
-    <article class="card"><h3>Tag your files</h3><p>Tags are stored in the file itself (XMP), or in a sidecar .xmp file for video and audio.</p></article>
-    <article class="card"><h3>Search by tag</h3><p>Find every file with a tag across a folder and its subfolders.</p></article>
+    <article class="card"><h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>View all metadata</h3><p>Common fields plus the hidden ones: camera, GPS, codec, software, and more.</p></article>
+    <article class="card"><h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>Edit common fields</h3><p>Change title, author and comments. Nothing is written until you press Save.</p></article>
+    <article class="card"><h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L2 12V2h10l8.6 8.6a2 2 0 010 2.8z"/><circle cx="7" cy="7" r="1.5"/></svg>Tag your files</h3><p>Tags are stored in the file itself (XMP), or in a sidecar .xmp file for video and audio.</p></article>
+    <article class="card"><h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search by tag</h3><p>Find every file with a tag across a folder and its subfolders.</p></article>
   </div>
+</section>
+
+<!-- The three steps a user actually takes (task flow), so a new visitor knows what using it looks like. -->
+<section class="wrap">
+  <h2>How it works</h2>
+  <ol class="how">
+    <li><strong>Open a folder</strong>QuadM scans it and its subfolders and lists your media files.</li>
+    <li><strong>Edit or tag</strong>Select a file, change its fields or add tags, then press Save.</li>
+    <li><strong>Search by tag</strong>Type a tag and see every matching file in seconds.</li>
+  </ol>
+  <p style="margin-top:var(--s4)"><a href="guide.html">Read the full user guide &rarr;</a></p>
 </section>
 
 <!-- List the media formats currently supported by the app. -->
 <section class="wrap">
   <h2>Supported formats</h2>
-  <p class="formats"><span>PNG</span><span>JPG</span><span>WAV</span><span>MP3</span><span>MP4</span></p>
+  <ul class="formats"><li>PNG</li><li>JPG</li><li>WAV</li><li>MP3</li><li>MP4</li></ul>
   <p class="muted">Built for media editors and anyone with a large collection of photos, music and video.</p>
 </section>
 </main>
@@ -69,8 +92,6 @@
     </nav>
   </div>
 </footer>
-<!-- Load shared JavaScript for interactive features used by site pages. -->
 <script src="js/main.js"></script>
-
 </body>
 </html>
