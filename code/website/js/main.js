@@ -1,6 +1,5 @@
 // ---------------------------------------------------------------------------
 // Configuration
-// Set these once the repo and the Firebase project exist.
 // ---------------------------------------------------------------------------
 const REPO = University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6;            // owner/name on GitHub
 // Firebase project that holds the "feedback" collection (Firebase console -> Project settings).
