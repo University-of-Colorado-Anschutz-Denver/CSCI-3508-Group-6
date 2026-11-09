@@ -10,10 +10,11 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<!-- Shared header and navigation let visitors move between site pages. -->
+<a class="skip" href="#content">Skip to main content</a>
+<!-- Shared header: same brand and navigation on every page; the current page is marked. -->
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="index.html">MultiMedia&nbsp;Metadata&nbsp;Manager&nbsp;(QuadM)</a>
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="28" height="28"><span>MultiMedia Metadata Manager (QuadM)</span></a>
     <nav aria-label="Main">
       <a href="index.html">Home</a>
       <a href="download.html">Download</a>
@@ -25,7 +26,7 @@
 </header>
 <!-- Main content introduces the project, team, and related links. -->
 <main>
-<section class="wrap narrow">
+<section class="wrap narrow" id="content">
   <h1>About</h1>
   <p>MultiMedia Metadata Manager (QuadM) started as a course project. Media files hide lots of useful metadata, and file explorers make it hard to see or edit. We built one focused tool for it.</p>
   <!-- List team members, their roles, responsibilities, and contact emails. -->
@@ -69,10 +70,16 @@
   </ul>
 </section>
 </main>
-<!-- Shared footer includes release status and a repository shortcut. -->
+<!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
 <footer class="site-footer">
-  <div class="wrap">
-    <p>MultiMedia Metadata Manager (QuadM) &middot; course project &middot; <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a></p>
+  <div class="wrap footer-grid">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project</p>
+    <nav aria-label="Footer">
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Send feedback</a>
+      <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a>
+    </nav>
   </div>
 </footer>
 <!-- Load shared JavaScript for interactive site features. -->
