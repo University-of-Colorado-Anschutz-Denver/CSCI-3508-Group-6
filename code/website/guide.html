@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>User guide · MultiMedia Metadata Manager (QuadM)</title>
 <meta name="description" content="Step-by-step guide to QuadM: open a folder, edit metadata, tag files and search by tag.">
-<!-- Apply the shared styles used throughout the site. -->
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -24,47 +23,57 @@
     </nav>
   </div>
 </header>
-<!-- Step-by-step instructions for the app's main workflows. -->
 <main>
-<section class="wrap narrow" id="content">
+<section class="wrap" id="content">
   <h1>User guide</h1>
-  <!-- Jump links navigate to each topic on this page. -->
-  <nav class="toc" aria-label="On this page">
-    <a href="#open">Open a folder</a> <a href="#edit">Edit metadata</a> <a href="#tags">Tag files</a> <a href="#search">Search by tag</a> <a href="#formats">Where tags are stored</a> <a href="#faq">FAQ</a>
-  </nav>
+  <p class="lead">Four steps cover everything: open a folder, edit, tag, search. Not installed yet? <a href="download.html">Download QuadM</a>.</p>
+  <div class="guide">
+    <!-- Jump links stay visible beside the text on wide screens (recognition over recall). -->
+    <nav class="toc" aria-label="On this page">
+      <strong>On this page</strong>
+      <a href="#open">1. Open a folder</a>
+      <a href="#edit">2. Edit metadata</a>
+      <a href="#tags">3. Tag files</a>
+      <a href="#search">4. Search by tag</a>
+      <a href="#formats">Where tags are stored</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <article>
+      <!-- Explain how to select a folder for scanning. -->
+      <h2 id="open">1. Open a folder</h2>
+      <p>Click <em>Open folder</em>. The app scans the folder and subfolders and lists supported files. <!-- TODO: screenshot --></p>
 
-  <!-- Explain how to select a folder for scanning. -->
-  <h2 id="open">1. Open a folder</h2>
-  <p>Click <em>Open folder</em>. The app scans the folder and subfolders and lists supported files. <!-- TODO: screenshot --></p>
+      <!-- Describe editing and saving supported metadata fields. -->
+      <h2 id="edit">2. Edit metadata</h2>
+      <p>Select a file. Edit Title, Author or Comments, then press <em>Save</em>. Use the <em>All fields</em> tab to see hidden fields (read-only).</p>
+      <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>Your file is only changed when you press <em>Save</em>.</span></p>
 
-  <!-- Describe editing and saving supported metadata fields. -->
-  <h2 id="edit">2. Edit metadata</h2>
-  <p>Select a file. Edit Title, Author or Comments, then press <em>Save</em>. Use the <em>All fields</em> tab to see hidden fields (read-only).</p>
+      <!-- Describe adding and removing tags before saving. -->
+      <h2 id="tags">3. Tag files</h2>
+      <p>In the Tags box, type a tag and press Enter. Remove a tag with its &times;. Tags are written when you Save.</p>
 
-  <!-- Describe adding and removing tags before saving. -->
-  <h2 id="tags">3. Tag files</h2>
-  <p>In the Tags box, type a tag and press Enter. Remove a tag with its &times;. Tags are written when you Save.</p>
+      <!-- Explain how to search tags within a chosen folder scope. -->
+      <h2 id="search">4. Search by tag</h2>
+      <p>Type a tag in the search bar, choose the folder scope, and press <em>Search</em>.</p>
 
-  <!-- Explain how to search tags within a chosen folder scope. -->
-  <h2 id="search">4. Search by tag</h2>
-  <p>Type a tag in the search bar, choose the folder scope, and press <em>Search</em>.</p>
+      <!-- Show where tags are stored for each supported media format. -->
+      <h2 id="formats">Where tags are stored</h2>
+      <table>
+        <thead><tr><th scope="col">Format</th><th scope="col">Tag storage</th></tr></thead>
+        <tbody>
+          <tr><td>PNG, JPG</td><td>Embedded XMP in the file</td></tr>
+          <tr><td>MP4, WAV, MP3</td><td>Sidecar file, e.g. <code>clip.mp4.xmp</code></td></tr>
+        </tbody>
+      </table>
+      <p class="note warn"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></svg><span>Keep the .xmp sidecar next to the media file when you move or copy it.</span></p>
 
-  <!-- Show where tags are stored for each supported media format. -->
-  <h2 id="formats">Where tags are stored</h2>
-  <table>
-    <thead><tr><th>Format</th><th>Tag storage</th></tr></thead>
-    <tbody>
-      <tr><td>PNG, JPG</td><td>Embedded XMP in the file</td></tr>
-      <tr><td>MP4, WAV, MP3</td><td>Sidecar file, e.g. <code>clip.mp4.xmp</code></td></tr>
-    </tbody>
-  </table>
-  <p class="muted">Keep the .xmp sidecar next to the media file when you move or copy it.</p>
-
-  <!-- Answer common questions about file changes, indexing, and support. -->
-  <h2 id="faq">FAQ</h2>
-  <details><summary>Does the app change my original files?</summary><p>Only when you press Save.</p></details>
-  <details><summary>Do I need to create a database?</summary><p>No. Tags live in your files; the app rebuilds its search index by scanning.</p></details>
-  <details><summary>Something is wrong. Where do I report it?</summary><p>Use the <a href="feedback.html">feedback form</a>.</p></details>
+      <!-- Answer common questions about file changes, indexing, and support. -->
+      <h2 id="faq">FAQ</h2>
+      <details><summary>Does the app change my original files?</summary><p>Only when you press Save.</p></details>
+      <details><summary>Do I need to create a database?</summary><p>No. Tags live in your files; the app rebuilds its search index by scanning.</p></details>
+      <details><summary>Something is wrong. Where do I report it?</summary><p>Use the <a href="feedback.html">feedback form</a>.</p></details>
+    </article>
+  </div>
 </section>
 </main>
 <!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
@@ -79,8 +88,6 @@
     </nav>
   </div>
 </footer>
-<!-- Load shared JavaScript for features used by site pages. -->
 <script src="js/main.js"></script>
-
 </body>
 </html>
