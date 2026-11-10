@@ -78,7 +78,7 @@ test("each file type can be missing on its own", () => {
 
 test("buildLatest handles a release with no assets, and no release at all", () => {
   const d = buildLatest({ tag_name: "v0.0.1", assets: [] });
-  for (const k of ["windows", "linux", "macPkg", "macDmg", "checksums"]) assert.strictEqual(d.assets[k], null);
+  for (const k of ["windows", "linux", "macPkg", "macDmg", "macIntelPkg", "macIntelDmg", "checksums"]) assert.strictEqual(d.assets[k], null);
   assert.strictEqual(buildLatest(null), null);
   assert.strictEqual(buildLatest({}), null);
 });
@@ -120,4 +120,21 @@ test("fetch-release survives a network failure without failing the build", async
 
 test("fetch-release refuses to run without a repository", async () => {
   await assert.rejects(run({ outPath: "x", fsImpl: fakeFs() }), /GITHUB_REPOSITORY/);
+});
+
+test("buildLatest tells the Intel Mac build from the Apple Silicon one", () => {
+  const d = buildLatest({ tag_name: "v1", assets: [
+    asset("QuadM-1-arm64.pkg"), asset("QuadM-1-arm64.dmg"),
+    asset("QuadM-1-x86_64.pkg"), asset("QuadM-1-x86_64.dmg")
+  ] });
+  assert.strictEqual(d.assets.macPkg.name, "QuadM-1-arm64.pkg");
+  assert.strictEqual(d.assets.macDmg.name, "QuadM-1-arm64.dmg");
+  assert.strictEqual(d.assets.macIntelPkg.name, "QuadM-1-x86_64.pkg");
+  assert.strictEqual(d.assets.macIntelDmg.name, "QuadM-1-x86_64.dmg");
+});
+
+test("an Intel-only release does not fill the Apple Silicon slots", () => {
+  const d = buildLatest({ tag_name: "v1", assets: [asset("QuadM-1-intel.pkg")] });
+  assert.strictEqual(d.assets.macPkg, null);
+  assert.strictEqual(d.assets.macIntelPkg.name, "QuadM-1-intel.pkg");
 });

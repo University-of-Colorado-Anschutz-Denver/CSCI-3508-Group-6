@@ -235,6 +235,18 @@ jobs:
         working-directory: code
         run: bash packaging/build-macos.sh "${{ steps.v.outputs.version }}"
 
+      - name: Put the architecture in the file names
+        working-directory: code/dist
+        run: |
+          arch=x86_64        # use arm64 in the "macos" job
+          for f in *.pkg *.dmg; do
+            case "$f" in
+              *arm64*|*x86_64*|*intel*) ;;
+              *) mv "$f" "${f%.*}-$arch.${f##*.}" ;;
+            esac
+          done
+          ls -l
+
       - name: Check the .dmg and the .pkg
         run: |
           set -euo pipefail

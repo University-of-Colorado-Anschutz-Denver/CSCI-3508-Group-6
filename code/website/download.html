@@ -39,10 +39,16 @@
     </div>
     <div class="card">
       <h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 20h20"/></svg>macOS</h3>
-      <p>macOS 12 or later, Apple Silicon (M1 or newer).</p>
-      <p>
+      <p>macOS 12 or later. Pick the build for your Mac (Apple menu → About This Mac → Chip).</p>
+      <p id="mac-arm">
+        <strong>Apple Silicon (M1 or newer)</strong><br>
         <a class="btn primary" id="dl-mac-pkg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Installer (.pkg)</a>
         <a class="btn" id="dl-mac-dmg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Disk image (.dmg)</a>
+      </p>
+      <p id="mac-intel">
+        <strong>Intel</strong><br>
+        <a class="btn primary" id="dl-mac-intel-pkg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Installer (.pkg)</a>
+        <a class="btn" id="dl-mac-intel-dmg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Disk image (.dmg)</a>
       </p>
       <p class="muted small">The .pkg is the graphical installer. The .dmg is the non-graphical option.</p>
     </div>
