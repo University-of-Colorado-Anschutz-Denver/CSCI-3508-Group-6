@@ -109,17 +109,17 @@ function showRelease(d) {
   const macCard = byId("mac-arm") && byId("mac-arm").closest(".card");
   if (macCard && !macLinks.some(([, asset]) => asset)) macCard.hidden = true;   // no Mac build in this release
 
+  // Linux download: link to the asset if present; the card stays hidden otherwise
+  // rather than show a broken/irrelevant link.
+  const linux = byId("dl-linux");
+  const linuxCard = byId("linux-row")  /* the whole Linux card */;
+  if (linux && d.assets.linux) { linux.href = d.assets.linux.url; if (linuxCard) linuxCard.hidden = false; }
+
   // Highlight the download that matches the visitor's computer.
   const mine = { mac: "dl-mac-pkg", win: "dl-win", linux: "dl-linux" }[detectOS()];
   const mineEl = mine && byId(mine);
   const mineCard = mineEl && mineEl.closest(".card");
   if (mineCard && !mineCard.hidden) mineCard.classList.add("recommended");
-
-  // Linux download: link to the asset if present; the row stays hidden otherwise
-  // rather than show a broken/irrelevant link.
-  const linux = byId("dl-linux");
-  const linuxRow = byId("linux-row");
-  if (linux && d.assets.linux) { linux.href = d.assets.linux.url; if (linuxRow) linuxRow.hidden = false; }
 
   // Optional metadata line: publish date, Windows asset size, and whether
   // checksums are available. Only the pieces that exist are shown.
