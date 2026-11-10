@@ -30,22 +30,50 @@
     <property name="bottomMargin">
      <number>12</number>
     </property>
+
     <item>
-     <widget class="QLineEdit" name="filePathSearchBar">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>36</height>
-       </size>
-      </property>
-      <property name="placeholderText">
-       <string>Enter file path</string>
-      </property>
-      <property name="clearButtonEnabled">
-       <bool>true</bool>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="searchHeaderLayout">
+      <item>
+       <widget class="QLineEdit" name="filePathSearchBar">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>500</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="placeholderText">
+         <string>Enter file path</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="searchHeaderSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Policy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
+
     <item>
      <widget class="QWidget" name="contentWidget" native="true">
       <layout class="QHBoxLayout" name="contentLayout">
@@ -64,6 +92,7 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
+
        <item>
         <widget class="QWidget" name="rootPanel" native="true">
          <property name="sizePolicy">
@@ -120,6 +149,7 @@
          </layout>
         </widget>
        </item>
+
        <item>
         <widget class="QWidget" name="contentsPanel" native="true">
          <property name="sizePolicy">
@@ -197,6 +227,7 @@
          </layout>
         </widget>
        </item>
+
        <item>
         <widget class="QWidget" name="metadataPanel" native="true">
          <property name="sizePolicy">
@@ -352,11 +383,13 @@
          </layout>
         </widget>
        </item>
+
       </layout>
      </widget>
     </item>
    </layout>
   </widget>
+
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -373,8 +406,10 @@
    </widget>
    <addaction name="menuQuadM"/>
   </widget>
+
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+
  <resources/>
  <connections/>
 </ui>

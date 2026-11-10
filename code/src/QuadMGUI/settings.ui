@@ -8,9 +8,10 @@
   <property name="minimumSize">
    <size>
     <width>500</width>
-    <height>350</height>
+    <height>430</height>
    </size>
   </property>
+
   <layout class="QVBoxLayout" name="mainLayout">
    <property name="spacing">
     <number>18</number>
@@ -28,6 +29,7 @@
     <number>20</number>
    </property>
 
+   <!-- Main heading -->
    <item>
     <widget class="QLabel" name="titleLabel">
      <property name="text">
@@ -39,6 +41,7 @@
     </widget>
    </item>
 
+   <!-- Storage Settings -->
    <item>
     <widget class="QFrame" name="storageFrame">
      <property name="frameShape">
@@ -47,6 +50,7 @@
      <property name="frameShadow">
       <enum>QFrame::Shadow::Plain</enum>
      </property>
+
      <layout class="QVBoxLayout" name="storageLayout">
       <property name="spacing">
        <number>12</number>
@@ -97,6 +101,64 @@
     </widget>
    </item>
 
+   <!-- Appearance Settings -->
+   <item>
+    <widget class="QFrame" name="appearanceFrame">
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Plain</enum>
+     </property>
+
+     <layout class="QVBoxLayout" name="appearanceLayout">
+      <property name="spacing">
+       <number>12</number>
+      </property>
+
+      <item>
+       <widget class="QLabel" name="appearanceTitle">
+        <property name="text">
+         <string>Appearance</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 16px; font-weight: bold;</string>
+        </property>
+       </widget>
+      </item>
+
+      <item>
+       <widget class="QLabel" name="themeDescription">
+        <property name="text">
+         <string>Choose how QUADM looks.</string>
+        </property>
+       </widget>
+      </item>
+
+      <item>
+       <widget class="QLabel" name="themeLabel">
+        <property name="text">
+         <string>Application Theme</string>
+        </property>
+       </widget>
+      </item>
+
+      <item>
+       <widget class="QComboBox" name="themeComboBox">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>34</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+
+     </layout>
+    </widget>
+   </item>
+
+   <!-- Flexible space -->
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
@@ -105,12 +167,13 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
 
+   <!-- Save Button -->
    <item>
     <layout class="QHBoxLayout" name="buttonLayout">
      <item>
@@ -148,6 +211,7 @@
 
   </layout>
  </widget>
+
  <resources/>
  <connections/>
 </ui>

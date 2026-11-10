@@ -66,6 +66,7 @@ private:
     QString formatMetadataKey(const QString& key);
 
     void handleOpenWindow();
+    void applyTheme(const QString& theme);
 
     MetadataEditor* metadataEditor = nullptr;
 
