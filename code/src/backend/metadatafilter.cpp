@@ -84,6 +84,7 @@ namespace {
 
 bool isIgnoredTag(const QString& key)
 {
+    // A tag is ignored if it's listed individually, or its whole group is ignored
     return kIgnoredTags.contains(key) || kIgnoredGroups.contains(key.section(':', 0, 0));
 }
 
@@ -94,11 +95,14 @@ bool isReadOnlyTag(const QString& key)
 
 void addExpectedTags(QMap<QString, QString>& fields, const QString& fileType)
 {
+    // Only touches keys that aren't already present, so real values are never overwritten
     for (const QString& key : kExpectedTagsByFileType.value(fileType.toUpper()))
         if (!fields.contains(key))
             fields.insert(key, QString());
 }
 
+// Walks every key ExifTool returned, drops the ignored ones and binary placeholders, and
+// converts every remaining JSON value to plain text.
 QMap<QString, QString> filterMetadata(const QJsonObject& raw)
 {
     QMap<QString, QString> result;

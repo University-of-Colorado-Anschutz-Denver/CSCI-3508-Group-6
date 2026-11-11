@@ -11,8 +11,9 @@ class MetadataHandler
 public:
     virtual ~MetadataHandler() = default;
 
-    virtual bool canHandle(const QString &path) const = 0;
+    // Whether this handler knows how to write this file (usually checked by extension).
+    virtual bool canHandle(const QString& path) const = 0;
 
     // Writes data.changes() to the file. On failure returns false and fills `error`.
-    virtual bool write(const QString &path, const Metadata &data, QString &error) = 0;
+    virtual bool write(const QString& path, const Metadata& data, QString& error) = 0;
 };

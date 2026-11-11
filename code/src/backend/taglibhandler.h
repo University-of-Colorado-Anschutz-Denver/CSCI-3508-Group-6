@@ -13,6 +13,9 @@
 class TagLibHandler : public MetadataHandler
 {
 public:
-    bool canHandle(const QString &path) const override;
-    bool write(const QString &path, const Metadata &data, QString &error) override;
+    // True only for .mp3/.wav; ExifTool handles reading these but can't reliably write them.
+    bool canHandle(const QString& path) const override;
+    // Opens the file with TagLib, applies every changed field/tag to the ID3v2 (and WAV INFO)
+    // tag, then saves.
+    bool write(const QString& path, const Metadata& data, QString& error) override;
 };

@@ -4,12 +4,12 @@
 
 #include <QFileInfo>
 
-bool ExifToolHandler::canHandle(const QString &path) const
+bool ExifToolHandler::canHandle(const QString& path) const
 {
     return ExifTool::writableExtensions().contains(QFileInfo(path).suffix().toLower());
 }
 
-bool ExifToolHandler::write(const QString &path, const Metadata &data, QString &error)
+bool ExifToolHandler::write(const QString& path, const Metadata& data, QString& error)
 {
     // The tags are stored as the file's keyword list; only rewrite it if the tags changed
     std::optional<QStringList> keywords;
