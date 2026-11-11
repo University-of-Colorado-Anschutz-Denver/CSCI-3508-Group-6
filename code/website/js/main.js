@@ -91,25 +91,35 @@ function showRelease(d) {
   const win = byId("dl-win");
   win.href = d.assets.windows ? d.assets.windows.url : releasesUrl;
 
-  // macOS has two files: a graphical installer (.pkg) and a disk image (.dmg).
-  const macPkg = byId("dl-mac-pkg");
-  const macDmg = byId("dl-mac-dmg");
-  if (macPkg) { if (d.assets.macPkg) macPkg.href = d.assets.macPkg.url; else macPkg.hidden = true; }
-  if (macDmg) { if (d.assets.macDmg) macDmg.href = d.assets.macDmg.url; else macDmg.hidden = true; }
-  const macCard = (macPkg || macDmg) && (macPkg || macDmg).closest(".card");
-  if (macCard && !d.assets.macPkg && !d.assets.macDmg) macCard.hidden = true;   // no Mac build in this release
+  // macOS has two builds (Apple Silicon, Intel), each with a graphical installer (.pkg) and a disk image (.dmg).
+  const macLinks = [
+    ["dl-mac-pkg", d.assets.macPkg], ["dl-mac-dmg", d.assets.macDmg],
+    ["dl-mac-intel-pkg", d.assets.macIntelPkg], ["dl-mac-intel-dmg", d.assets.macIntelDmg]
+  ];
+  for (const [id, asset] of macLinks) {
+    const el = byId(id);
+    if (!el) continue;
+    if (asset) el.href = asset.url; else el.hidden = true;
+  }
+  // Hide a whole architecture block (and its heading) when that build is not in the release.
+  for (const [blockId, a, b] of [["mac-arm", d.assets.macPkg, d.assets.macDmg], ["mac-intel", d.assets.macIntelPkg, d.assets.macIntelDmg]]) {
+    const block = byId(blockId);
+    if (block && !a && !b) block.hidden = true;
+  }
+  const macCard = byId("mac-arm") && byId("mac-arm").closest(".card");
+  if (macCard && !macLinks.some(([, asset]) => asset)) macCard.hidden = true;   // no Mac build in this release
+
+  // Linux download: link to the asset if present; the card stays hidden otherwise
+  // rather than show a broken/irrelevant link.
+  const linux = byId("dl-linux");
+  const linuxCard = byId("linux-row")  /* the whole Linux card */;
+  if (linux && d.assets.linux) { linux.href = d.assets.linux.url; if (linuxCard) linuxCard.hidden = false; }
 
   // Highlight the download that matches the visitor's computer.
   const mine = { mac: "dl-mac-pkg", win: "dl-win", linux: "dl-linux" }[detectOS()];
   const mineEl = mine && byId(mine);
   const mineCard = mineEl && mineEl.closest(".card");
   if (mineCard && !mineCard.hidden) mineCard.classList.add("recommended");
-
-  // Linux download: link to the asset if present; the row stays hidden otherwise
-  // rather than show a broken/irrelevant link.
-  const linux = byId("dl-linux");
-  const linuxRow = byId("linux-row");
-  if (linux && d.assets.linux) { linux.href = d.assets.linux.url; if (linuxRow) linuxRow.hidden = false; }
 
   // Optional metadata line: publish date, Windows asset size, and whether
   // checksums are available. Only the pieces that exist are shown.

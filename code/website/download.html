@@ -24,32 +24,65 @@
   </div>
 </header>
 <main>
-<section class="wrap narrow" id="content">
-  <h1>Download</h1>
-  <!-- Status: JavaScript replaces "loading…" with the latest release version. -->
-  <p class="lead">Latest version: <strong id="version" role="status">loading…</strong></p>
-  <p class="muted" id="release-meta"></p>
+<section class="wrap" id="content">
+  <div class="dl-hero">
+    <h1>Download QuadM</h1>
+    <!-- Status: JavaScript replaces "loading…" with the latest release version. -->
+    <p class="lead">Free for Windows, macOS and Linux. Pick your system below.</p>
+    <p class="dl-status"><span class="pill">Latest version <strong id="version" role="status">loading…</strong></span> <span class="muted" id="release-meta"></span></p>
+  </div>
   <!-- Download buttons link to matching files attached to a GitHub release; a card hides itself if its file is missing. -->
   <h2 class="sr-only">Choose your download</h2>
-  <div class="cards" id="downloads">
-    <div class="card">
-      <h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Windows</h3>
-      <p>Windows 10 or later, 64-bit.</p>
-      <p><a class="btn primary" id="dl-win" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Download for Windows</a></p>
+  <div class="dl-grid" id="downloads">
+    <div class="card dl-card">
+      <div class="dl-head">
+        <span class="dl-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+        <div><h3>Windows</h3><p class="muted small">Windows 10 or later, 64-bit</p></div>
+      </div>
+      <ul class="dl-list">
+        <li>Installs to Program Files\QuadM</li>
+        <li>ExifTool is bundled, nothing else to install</li>
+        <li>Remove it any time from Settings &rarr; Apps</li>
+      </ul>
+      <p class="dl-actions"><a class="btn primary" id="dl-win" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Download for Windows</a></p>
+      <p class="muted small">.msi installer</p>
     </div>
-    <div class="card">
-      <h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 20h20"/></svg>macOS</h3>
-      <p>macOS 12 or later, Apple Silicon (M1 or newer).</p>
-      <p>
+    <div class="card dl-card">
+      <div class="dl-head">
+        <span class="dl-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 20h20"/></svg></span>
+        <div><h3>macOS</h3><p class="muted small">macOS 12 or later</p></div>
+      </div>
+      <p class="muted small">Not sure which Mac you have? Apple menu &rarr; About This Mac &rarr; Chip.</p>
+      <div class="dl-variant" id="mac-arm">
+        <p class="dl-variant-title">Apple Silicon <span class="muted">(M1 or newer)</span></p>
         <a class="btn primary" id="dl-mac-pkg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Installer (.pkg)</a>
         <a class="btn" id="dl-mac-dmg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Disk image (.dmg)</a>
-      </p>
+      </div>
+      <div class="dl-variant" id="mac-intel">
+        <p class="dl-variant-title">Intel</p>
+        <a class="btn primary" id="dl-mac-intel-pkg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Installer (.pkg)</a>
+        <a class="btn" id="dl-mac-intel-dmg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Disk image (.dmg)</a>
+      </div>
       <p class="muted small">The .pkg is the graphical installer. The .dmg is the non-graphical option.</p>
     </div>
+    <div class="card dl-card" id="linux-row" hidden>
+      <div class="dl-head">
+        <span class="dl-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></span>
+        <div><h3>Linux</h3><p class="muted small">Ubuntu / Debian, amd64</p></div>
+      </div>
+      <ul class="dl-list">
+        <li>Installs to /opt/quadm</li>
+        <li>ExifTool is bundled, nothing else to install</li>
+        <li>Remove it with <code>sudo apt remove quadm</code></li>
+      </ul>
+      <p class="dl-actions"><a class="btn primary" id="dl-linux" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Download the .deb</a></p>
+      <p class="muted small">Then install it with:</p>
+      <pre class="cmd"><code>sudo apt install ./&lt;file&gt;.deb</code></pre>
+    </div>
   </div>
-  <p class="muted" id="linux-row" hidden>Ubuntu / Debian (amd64): <a id="dl-linux" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">download the .deb</a>, then run <code>sudo apt install ./&lt;file&gt;.deb</code></p>
-  <p class="muted small">Builds are made automatically by our CI pipeline and published on GitHub Releases. Checksums (<code>SHA256SUMS.txt</code>) are on the release page.</p>
-
+  <p class="dl-note muted small"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8.2-8 9-4.8-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Builds are made automatically by our CI pipeline and published on GitHub Releases. Checksums (<code>SHA256SUMS.txt</code>) are on the release page.</p>
+</section>
+<section class="wrap narrow">
   <!-- Help right where it is needed: install steps per system; JavaScript opens the one that matches your computer. -->
   <h2>How to install</h2>
   <details id="steps-win" open>

@@ -5,8 +5,8 @@
 // Files it looks for in a release:
 //   .msi  Windows installer   (falls back to a Setup .exe until the pipeline builds an .msi)
 //   .deb  Ubuntu/Debian installer, amd64
-//   .pkg  macOS graphical installer
-//   .dmg  macOS non-graphical installer
+//   .pkg  macOS graphical installer      (Apple Silicon, and Intel if its name says x86_64 / intel)
+//   .dmg  macOS non-graphical installer  (same rule)
 (function (root, factory) {
   if (typeof module === "object" && module.exports) module.exports = factory();
   else root.ReleaseData = factory();
@@ -31,8 +31,15 @@
     const debs = assets.filter(a => ext(a, ".deb") && !/arm64|aarch64/i.test(a.name));
     const linux = debs.find(a => /amd64|x86[_-]64/i.test(a.name)) || debs[0] || null;
 
-    const macPkg = assets.find(a => ext(a, ".pkg")) || null;
-    const macDmg = assets.find(a => ext(a, ".dmg")) || null;
+    // Two Mac builds. A name with x86_64 / intel / amd64 is the Intel build; anything else
+    // (arm64, or no architecture in the name) is Apple Silicon.
+    const isIntel = a => /x86[_-]?64|intel|amd64/i.test(a.name);
+    const macPkgs = assets.filter(a => ext(a, ".pkg"));
+    const macDmgs = assets.filter(a => ext(a, ".dmg"));
+    const macPkg = macPkgs.find(a => !isIntel(a)) || null;
+    const macDmg = macDmgs.find(a => !isIntel(a)) || null;
+    const macIntelPkg = macPkgs.find(isIntel) || null;
+    const macIntelDmg = macDmgs.find(isIntel) || null;
     const checksums = assets.find(a => /sha-?256/i.test(a.name)) || null;
 
     return {
@@ -46,6 +53,8 @@
         linux: asset(linux),
         macPkg: asset(macPkg),
         macDmg: asset(macDmg),
+        macIntelPkg: asset(macIntelPkg),
+        macIntelDmg: asset(macIntelDmg),
         checksums: asset(checksums)
       }
     };
