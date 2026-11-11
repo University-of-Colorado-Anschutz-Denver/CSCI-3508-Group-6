@@ -7,6 +7,7 @@
 
 
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QFileIconProvider>
 #include <QListWidgetItem>
@@ -285,8 +286,14 @@ void MainWindow::metadataPopulate(const QString& filePath)
         html += "Could not extract metadata.<br>";
         html += error.toHtmlEscaped();
 
-        qDebug() << "ExifTool metadata error:" << error;
+        //qDebug() << "ExifTool metadata error:" << error;
     }
+
+    ui->metadataPlaceholderLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    
+    ui->metadataPlaceholderLabel->setText(html);
+    ui->metadataPlaceholderLabel->setTextFormat(Qt::RichText);
+    ui->metadataPlaceholderLabel->setWordWrap(true);
 
     ui->metadataPlaceholderLabel->setText(html);
     ui->metadataPlaceholderLabel->setTextFormat(Qt::RichText);
@@ -295,7 +302,7 @@ void MainWindow::metadataPopulate(const QString& filePath)
         Qt::TextSelectableByMouse
     );
 
-    qDebug() << "Metadata displayed for:" << filePath;
+    //qDebug() << "Metadata displayed for:" << filePath;
 }
 
 
@@ -327,15 +334,62 @@ void MainWindow::handleOpenWindow() {
     connect(subWindow, &Settings::settingsSave, this, [this]() {
         loadDefaultDrive();
         loadRootFolders();
+        QSettings settings("QuadM", "QUADM");
+
+        QString theme =settings.value("theme", "Dark").toString();
+    
+        applyTheme(theme);
     });
     
     subWindow->setAttribute(Qt::WA_DeleteOnClose); 
     subWindow->show();
 }
 
+
+void MainWindow::applyTheme(const QString& theme)
+{
+    QString cssPath = QDir::currentPath() + "/src/QuadMGUI/" + theme.toLower() + ".css";
+
+    QFile file(cssPath); // Declare the QFile object
+
+    if (file.open(QFile::ReadOnly | QFile::Text)) {
+        QString css = QString::fromUtf8(file.readAll());
+        qApp->setStyleSheet(css);
+        //qDebug() << "Applied theme:" << theme;
+        file.close();
+    }
+    else {
+        qDebug() << "Could not load theme:" << cssPath;
+        qDebug() << file.errorString();
+    }
+}
+
+
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QSettings settings("QuadM", "QUADM");
+
+    QString theme =settings.value("theme", "Dark").toString();
+
+    applyTheme(theme);
+
+
+    // qDebug() << "Working directory:" << QDir::currentPath();
+    // qDebug() << "CSS path:" << cssPath;
+    // qDebug() << "CSS exists:" << file.exists();
+    
+    // if (file.open(QFile::ReadOnly | QFile::Text)) {
+    //     QString css = QString::fromUtf8(file.readAll());
+    
+    //     qApp->setStyleSheet(css);
+    
+    //     // qDebug() << "CSS loaded successfully. Size:" << css.size();
+    // }
+    // else {
+    //    // qDebug() << "CSS loading failed:" << file.errorString();
+    // }
 
     filterDebounceTimer.setSingleShot(true);
     filterDebounceTimer.setInterval(250);
@@ -395,6 +449,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     QMovie* catMovie = new QMovie(":/icons/oiia_cat.gif", QByteArray(), this);
 
     ui->metadataPlaceholderLabel->setMovie(catMovie);
+    catMovie->setScaledSize(QSize(180, 180));
+    ui->metadataPlaceholderLabel->setAlignment(Qt::AlignCenter);
     catMovie->start();
 
     getDrives();

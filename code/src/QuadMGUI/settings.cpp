@@ -11,6 +11,10 @@ Settings::Settings(QWidget *parent)
     resize(500, 350);
 
     populateDrives();
+    ui->themeComboBox->clear();
+    ui->themeComboBox->addItem("Dark", "Dark");
+    ui->themeComboBox->addItem("Light", "Light");
+
     loadSettings();
 
     connect(ui->saveButton, &QPushButton::clicked,
@@ -51,16 +55,26 @@ void Settings::loadSettings()
 
     if (index != -1)
         ui->defaultDriveComboBox->setCurrentIndex(index);
+
+    QString theme =settings.value("theme", "Dark").toString();
+
+    int themeIndex = ui->themeComboBox->findData(theme);
+
+    if (themeIndex != -1)
+        ui->themeComboBox->setCurrentIndex(themeIndex);
 }
 
 void Settings::saveSettings()
 {
     QSettings settings("QUADM", "QUADM");
 
-    QString selectedDrive =
-        ui->defaultDriveComboBox->currentData().toString();
+    QString selectedDrive = ui->defaultDriveComboBox->currentData().toString();
+
+    
+    QString selectedTheme = ui->themeComboBox->currentData().toString();
 
     settings.setValue("defaultDrive", selectedDrive);
+    settings.setValue("theme", selectedTheme);
     settings.sync();
 
     close();
