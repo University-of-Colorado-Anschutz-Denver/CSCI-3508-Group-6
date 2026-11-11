@@ -1,0 +1,294 @@
+
+/* =================================
+   QuadM - Website Inspired Light Theme
+================================= */
+
+* {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+QMainWindow {
+    background-color: #F1F3F5;
+    color: #20252B;
+    font-size: 13px;
+}
+
+QWidget#centralwidget {
+    background-color: #F1F3F5;
+}
+
+
+/* =================================
+   Search Bars
+================================= */
+
+QLineEdit#filePathSearchBar,
+QLineEdit#tagFilterBar {
+    background-color: #FFFFFF;
+    border: 1px solid #D9DEE3;
+    border-radius: 7px;
+    padding: 8px 12px;
+    color: #20252B;
+    font-size: 13px;
+    selection-background-color: #159889;
+    selection-color: #FFFFFF;
+}
+
+QLineEdit#filePathSearchBar:focus,
+QLineEdit#tagFilterBar:focus {
+    background-color: #FFFFFF;
+    border: 1px solid #159889;
+}
+
+QLineEdit::placeholder {
+    color: #89939D;
+}
+
+
+/* =================================
+   Main Panels
+================================= */
+
+QWidget#rootPanel,
+QWidget#contentsPanel,
+QWidget#metadataPanel {
+    background-color: #FFFFFF;
+    border: 1px solid #DDE1E5;
+    border-radius: 9px;
+}
+
+
+/* =================================
+   Headings
+================================= */
+
+QLabel#rootHeadingLabel,
+QLabel#metadataHeadingLabel {
+    color: #20252B;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 4px;
+}
+
+QLabel#currentPathLabel {
+    color: #69737D;
+    font-size: 12px;
+}
+
+
+/* =================================
+   Lists
+================================= */
+
+QListWidget {
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    color: #252B32;
+    outline: none;
+    padding: 4px;
+}
+
+QListWidget::item {
+    padding: 8px;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+QListWidget::item:hover {
+    background-color: #F0F5F4;
+}
+
+QListWidget::item:selected {
+    background-color: #DDF0EC;
+    color: #087F72;
+}
+
+
+/* =================================
+   Buttons
+================================= */
+
+QPushButton {
+    background-color: #E9ECEF;
+    color: #252B32;
+    border: 1px solid #DDE1E5;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+QPushButton:hover {
+    background-color: #DDF0EC;
+    color: #087F72;
+    border-color: #B8DDD5;
+}
+
+QPushButton:pressed {
+    background-color: #C8E6DF;
+}
+
+QPushButton:disabled {
+    background-color: #F0F1F2;
+    color: #A0A7AE;
+}
+
+
+/* Primary Metadata Button */
+
+QPushButton#expandMetadataButton {
+    background-color: #159889;
+    color: #FFFFFF;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 12px;
+}
+
+QPushButton#expandMetadataButton:hover {
+    background-color: #087F72;
+}
+
+QPushButton#expandMetadataButton:pressed {
+    background-color: #06695F;
+}
+
+
+/* =================================
+   Drive Selector
+================================= */
+
+QComboBox {
+    background-color: #FFFFFF;
+    color: #252B32;
+    border: 1px solid #D9DEE3;
+    border-radius: 6px;
+    padding: 7px 10px;
+    min-height: 24px;
+}
+
+QComboBox:hover {
+    border-color: #159889;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 25px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #FFFFFF;
+    color: #252B32;
+    border: 1px solid #D9DEE3;
+    selection-background-color: #DDF0EC;
+    selection-color: #087F72;
+    outline: none;
+}
+
+
+/* =================================
+   Metadata
+================================= */
+
+QFrame#metadataFrame {
+    background-color: #FFFFFF;
+    border: 1px solid #DDE1E5;
+    border-radius: 7px;
+}
+
+QScrollArea {
+    background-color: #FFFFFF;
+    border: none;
+}
+
+QWidget#metadataScrollContents {
+    background-color: #FFFFFF;
+}
+
+QLabel#metadataPlaceholderLabel {
+    color: #424C55;
+}
+
+
+/* =================================
+   Scrollbars
+================================= */
+
+QScrollBar:vertical {
+    background-color: transparent;
+    width: 8px;
+    margin: 2px;
+    border: none;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #C5CDD3;
+    border-radius: 4px;
+    min-height: 25px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #159889;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+    border: none;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+
+/* =================================
+   Menu Bar
+================================= */
+
+QMenuBar {
+    background-color: #FFFFFF;
+    color: #252B32;
+    border-bottom: 1px solid #DDE1E5;
+    padding: 3px;
+}
+
+QMenuBar::item {
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+
+QMenuBar::item:selected {
+    background-color: #DDF0EC;
+    color: #087F72;
+}
+
+QMenu {
+    background-color: #FFFFFF;
+    color: #252B32;
+    border: 1px solid #DDE1E5;
+    padding: 5px;
+}
+
+QMenu::item {
+    padding: 6px 20px;
+    border-radius: 4px;
+}
+
+QMenu::item:selected {
+    background-color: #DDF0EC;
+    color: #087F72;
+}
+
+
+/* =================================
+   Status Bar
+================================= */
+
+QStatusBar {
+    background-color: #FFFFFF;
+    color: #69737D;
+    border-top: 1px solid #DDE1E5;
+}

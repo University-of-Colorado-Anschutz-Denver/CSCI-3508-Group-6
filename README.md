@@ -1,28 +1,15 @@
-# [Enter Project Name Here]
-
-> Intro to Software Engineering group project template
+# MultiMedia Metadata Manager (QuadM)
 
 Replace every bracketed placeholder in this repository with information about your project. Delete instructional text that does not belong in your final submission.
 
 ## Project Information
 
-| Field           | Enter your information                                                      |
-| --------------- | --------------------------------------------------------------------------- |
-| Course          | CSCI 3508                                                                   |
-| Instructor      | Dr. Salah Boukhris                                                          |
-| Semester        | FA2026                                                                      |
-| Project subject | Metadata Editing and Organization Application                               |
-| Approval status | [Pending / Approved on YYYY-MM-DD]                                          |
-| Repository URL  | https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6 |
-
-## Team Members
-
 | Name             | Role         | Primary responsibilities   | Contact                    |
 | ---------------- | ------------ | -------------------------- | -------------------------- |
-| Harrison Julius  | Group Leader | Project Management, (More) | juliuszharrison@gmail.com  |
-| Teja Kandimalla  | Team Member  | [Enter responsibilities]   | tejakandimalla20@gmail.com |
-| Emelie Kronquist | Team Member  | [Enter responsibilities]   | emelie.kronquist@gmail.com |
-| Yannick Kuete    | Team Member  | [Enter responsibilities]   | yankuete@gmail.com         |
+| Harrison Julius  | Group Leader | <ul><li>Project Management</li><li>Code Architect</li></ul> | juliuszharrison@gmail.com  |
+| Teja Kandimalla  | Team Member  | <ul><li>GUI Designer</li><li>WebDev</li></ul>   | tejakandimalla20@gmail.com |
+| Emelie Kronquist | Team Member  | <ul><li>Research and Communication</li><li>Client Outreach</li><li>Documentation Manager</li></ul>   | emelie.kronquist@gmail.com |
+| Yannick Kuete    | Team Member  | <ul><li>DevOps Management</li><li>WebDev</li></ul>   | yankuete@gmail.com         |
 
 ## Project Summary
 
