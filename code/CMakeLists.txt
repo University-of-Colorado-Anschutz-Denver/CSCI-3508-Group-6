@@ -76,6 +76,38 @@ if(WIN32)
     endif()
 endif()
 
+# UI tests (Qt Test). Not part of the normal build: they are only built on request, see tests/README.md.
+find_package(Qt6 QUIET COMPONENTS Test)
+if(Qt6Test_FOUND)
+    enable_testing()
+    set(QUADM_TEST_SOURCES ${QUADM_SOURCES})
+    list(FILTER QUADM_TEST_SOURCES EXCLUDE REGEX "/src/main\\.cpp$") # the tests have their own main()
+    add_executable(QuadMUiTests EXCLUDE_FROM_ALL tests/ui/tst_quadm_ui.cpp ${QUADM_TEST_SOURCES})
+    target_precompile_headers(QuadMUiTests PRIVATE <QtWidgets>) # same as QuadM: some sources rely on it for includes
+    target_include_directories(QuadMUiTests PRIVATE include src
+        "${taglib_SOURCE_DIR}" "${taglib_SOURCE_DIR}/taglib"
+        "${taglib_SOURCE_DIR}/taglib/toolkit" "${taglib_SOURCE_DIR}/taglib/mpeg"
+        "${taglib_SOURCE_DIR}/taglib/mpeg/id3v2" "${taglib_SOURCE_DIR}/taglib/mpeg/id3v2/frames"
+        "${taglib_SOURCE_DIR}/taglib/riff"
+        "${taglib_SOURCE_DIR}/taglib/riff/wav" "${taglib_SOURCE_DIR}/taglib/riff/info"
+        "${taglib_BINARY_DIR}")
+    target_link_libraries(QuadMUiTests PRIVATE Qt6::Widgets Qt6::Test tag)
+    target_compile_definitions(QuadMUiTests PRIVATE TAGLIB_STATIC)
+    add_dependencies(QuadMUiTests copy_exiftool)
+    if(WIN32 AND WINDEPLOYQT_EXE)
+        add_custom_command(TARGET QuadMUiTests POST_BUILD
+            COMMAND "${WINDEPLOYQT_EXE}" --no-translations --no-system-d3d-compiler
+                    --no-opengl-sw "$<TARGET_FILE:QuadMUiTests>"
+        )
+    endif()
+    # Run from the code folder (the app loads its theme CSS relative to it). Windows uses the
+    # real window system; Linux/macOS use Qt's offscreen platform so no display is needed.
+    add_test(NAME QuadMUiTests COMMAND QuadMUiTests WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+    if(NOT WIN32)
+        set_tests_properties(QuadMUiTests PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    endif()
+endif()
+
 # Library example:
 # add_library(mylib src/lib.cpp)
 # target_link_libraries(QuadM PRIVATE mylib)
