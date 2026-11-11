@@ -33,6 +33,9 @@ namespace ExifTool {
         return {};
     }
 
+    // Spawns "exiftool -json -G -- file" and parses its one-object JSON array into `out`.
+    // "-G" prefixes each key with its group (e.g. "EXIF:Make"), which is what lets the rest of
+    // the app tell apart same-named tags from different formats.
     bool readMetadata(const QString& file, QJsonObject& out, QString& error)
     {
         const QString exe = executablePath();
@@ -59,10 +62,13 @@ namespace ExifTool {
             error = QStringLiteral("Could not read ExifTool output.");
             return false;
         }
+        // ExifTool always returns a JSON array, one object per input file; we only ever pass one file.
         out = doc.array().first().toObject();
         return true;
     }
 
+    // Runs "exiftool -listwf" once (lazily, via the static initializer) and caches the result for
+    // the rest of the program's life, since the writable-extensions list never changes at runtime.
     const QSet<QString>& writableExtensions()
     {
         static const QSet<QString> extensions = [] {
@@ -109,6 +115,7 @@ namespace ExifTool {
                 argFile.write(line.toUtf8() + "\n");
             argFile.close();
 
+            // "-@ argfile" tells ExifTool to read its arguments from the file instead of argv
             QProcess process;
             process.start(exe, { "-charset", "utf8", "-charset", "filename=utf8", "-@", argFile.fileName() });
             if (!process.waitForFinished(timeoutMs)) {
@@ -121,6 +128,7 @@ namespace ExifTool {
             return true;
         }
 
+        // ExifTool argument files can't contain literal line breaks, so collapse any into spaces.
         QString oneLine(QString text)
         {
             return text.replace('\r', ' ').replace('\n', ' ');
@@ -142,6 +150,8 @@ namespace ExifTool {
 
     } // namespace
 
+    // Writes `tags` as "-Group:Tag=value" arguments (an empty value deletes that tag), and
+    // optionally replaces the keyword list (our tags) with `keywords`.
     bool writeTags(const QString& file, const QMap<QString, QString>& tags,
         const std::optional<QStringList>& keywords, QString& error)
     {
@@ -162,6 +172,8 @@ namespace ExifTool {
         if (!runWithArgFile(lines, 30000, output, problems, error))
             return false;
 
+        // ExifTool can exit 0 even when some tags failed to write, so also check its own
+        // "N image files updated" summary line and anything printed to stderr.
         if (!problems.isEmpty() || !output.contains(QLatin1String("1 image files updated"))) {
             error = problems.isEmpty() ? output.trimmed() : problems;
             error += QStringLiteral("\n(Other changes may have been saved.)");
@@ -175,6 +187,8 @@ namespace ExifTool {
         return writeTags(file, tags, std::nullopt, error);
     }
 
+    // Finds every tagged file in `folder` in one ExifTool call ("-if" filters to files that have
+    // either tag field set), instead of reading each file individually.
     bool scanTags(const QString& folder, bool recursive, QMap<QString, QStringList>& out, QString& error)
     {
         out.clear();
@@ -202,6 +216,7 @@ namespace ExifTool {
         }
         for (const QJsonValue& entry : doc.array()) {
             const QJsonObject object = entry.toObject();
+            // XMP tags come back as a JSON array ("Subject"); ID3 tags as one ';'-joined string
             QStringList tags = toStringList(object.value("Subject"));
             for (const QString& id3Tag : toStringList(object.value(TagStorage::Id3Name)).join(';').split(';', Qt::SkipEmptyParts))
                 tags << id3Tag;
@@ -211,6 +226,8 @@ namespace ExifTool {
         return true;
     }
 
+    // Reads every supported file's full metadata in one ExifTool call, instead of spawning a
+    // process per file; used by the GUI's folder-wide metadata filter.
     bool readFolderMetadata(const QString& folder, bool recursive, QMap<QString, QJsonObject>& out,
         QString& error)
     {

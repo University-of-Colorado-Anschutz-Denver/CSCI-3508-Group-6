@@ -43,6 +43,7 @@ public:
         QMap<QString, QMap<QString, QString>>& out, QString& error) const;
 
 private:
+    // Picks the first handler (in registration order) whose canHandle() accepts this file.
     MetadataHandler* getHandler(const QString& path) const;
 
     // Checked in order; the first handler that can handle the file wins.
