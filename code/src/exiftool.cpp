@@ -7,6 +7,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QProcess>
+#include <QRegularExpression>
+#include <QSet>
 #include <QStringList>
 #include <QTemporaryFile>
 
@@ -97,8 +99,9 @@ namespace ExifTool {
 
         // Runs ExifTool with the given arguments, one per line in a UTF-8 argument file, so accents and
         // symbols in values and paths survive on Windows. Line breaks inside an argument are not possible.
+        // `configFile` (optional) is an ExifTool config; it has to come before every other option.
         bool runWithArgFile(const QStringList& lines, int timeoutMs, QString& standardOutput,
-            QString& standardError, QString& error)
+            QString& standardError, QString& error, const QString& configFile = QString())
         {
             const QString exe = executablePath();
             if (exe.isEmpty()) {
@@ -116,8 +119,13 @@ namespace ExifTool {
             argFile.close();
 
             // "-@ argfile" tells ExifTool to read its arguments from the file instead of argv
+            QStringList arguments;
+            if (!configFile.isEmpty())
+                arguments << "-config" << configFile;
+            arguments << "-charset" << "utf8" << "-charset" << "filename=utf8" << "-@" << argFile.fileName();
+
             QProcess process;
-            process.start(exe, { "-charset", "utf8", "-charset", "filename=utf8", "-@", argFile.fileName() });
+            process.start(exe, arguments);
             if (!process.waitForFinished(timeoutMs)) {
                 process.kill();
                 error = QStringLiteral("ExifTool did not finish: ") + process.errorString();
@@ -148,6 +156,48 @@ namespace ExifTool {
             return result;
         }
 
+        // XMP tags ExifTool doesn't know (like "XMP:Hello") can't be written as they are. They are
+        // stored instead in QuadM's own XMP namespace, which ExifTool still reads back as "XMP:Hello".
+        const QString kCustomXmpGroup = QStringLiteral("XMP-quadm");
+
+        // The keys ExifTool reported as "Tag 'X' is not defined" that we can store that way
+        QSet<QString> customXmpKeys(const QString& problems, const QMap<QString, QString>& tags)
+        {
+            static const QRegularExpression undefinedTag("Tag '([^']+)' is not defined");
+            static const QRegularExpression validName("^[A-Za-z][A-Za-z0-9]*$");
+            QSet<QString> keys;
+            for (auto match = undefinedTag.globalMatch(problems); match.hasNext();) {
+                const QString key = match.next().captured(1);
+                const bool hasGroup = key.contains(':');
+                const QString group = key.section(':', 0, 0);
+                const QString name = key.section(':', hasGroup ? 1 : 0);
+                if (tags.contains(key) && validName.match(name).hasMatch()
+                    && (!hasGroup || group.compare(QLatin1String("XMP"), Qt::CaseInsensitive) == 0))
+                    keys.insert(key);
+            }
+            return keys;
+        }
+
+        // An ExifTool config file that declares `names` as writable text tags in the custom namespace
+        bool writeCustomXmpConfig(QTemporaryFile& file, const QStringList& names)
+        {
+            if (!file.open())
+                return false;
+            QString text = QStringLiteral(
+                "%Image::ExifTool::UserDefined = ('Image::ExifTool::XMP::Main' => "
+                "{ quadm => { SubDirectory => { TagTable => 'Image::ExifTool::UserDefined::quadm' } } });\n"
+                "%Image::ExifTool::UserDefined::quadm = (\n"
+                "  GROUPS => { 0 => 'XMP', 1 => '%1', 2 => 'Other' },\n"
+                "  NAMESPACE => { 'quadm' => 'https://quadm.app/ns/1.0/' },\n"
+                "  WRITABLE => 'string',\n").arg(kCustomXmpGroup);
+            for (const QString& name : names)
+                text += "  " + name + " => { },\n";
+            text += QStringLiteral(");\n1;\n");
+            file.write(text.toUtf8());
+            file.close();
+            return true;
+        }
+
     } // namespace
 
     // Writes `tags` as "-Group:Tag=value" arguments (an empty value deletes that tag), and
@@ -155,23 +205,47 @@ namespace ExifTool {
     bool writeTags(const QString& file, const QMap<QString, QString>& tags,
         const std::optional<QStringList>& keywords, QString& error)
     {
-        QStringList lines = { QStringLiteral("-overwrite_original") };
-        for (auto it = tags.begin(); it != tags.end(); ++it)
-            lines << "-" + it.key() + "=" + oneLine(it.value());
-        if (keywords) {
-            // "=" replaces the whole list (and with no value empties it); "+=" adds to it.
-            // Emptying and adding in one go doesn't work, so the first tag uses "=".
-            if (keywords->isEmpty())
-                lines << "-" + TagStorage::XmpWriteTag + "=";
-            for (int i = 0; i < keywords->size(); ++i)
-                lines << "-" + TagStorage::XmpWriteTag + (i == 0 ? "=" : "+=") + oneLine(keywords->at(i));
-        }
-        lines << file;
+        // `custom` = keys to store in the QuadM XMP namespace instead of under their own name
+        auto buildLines = [&](const QSet<QString>& custom) {
+            QStringList lines = { QStringLiteral("-overwrite_original") };
+            for (auto it = tags.begin(); it != tags.end(); ++it) {
+                const QString name = custom.contains(it.key()) ? kCustomXmpGroup + ":" + it.key().section(':', -1)
+                                                               : it.key();
+                lines << "-" + name + "=" + oneLine(it.value());
+            }
+            if (keywords) {
+                // "=" replaces the whole list (and with no value empties it); "+=" adds to it.
+                // Emptying and adding in one go doesn't work, so the first tag uses "=".
+                if (keywords->isEmpty())
+                    lines << "-" + TagStorage::XmpWriteTag + "=";
+                for (int i = 0; i < keywords->size(); ++i)
+                    lines << "-" + TagStorage::XmpWriteTag + (i == 0 ? "=" : "+=") + oneLine(keywords->at(i));
+            }
+            lines << file;
+            return lines;
+        };
 
         QString output, problems;
-        if (!runWithArgFile(lines, 30000, output, problems, error))
+        if (!runWithArgFile(buildLines({}), 30000, output, problems, error))
             return false;
 
+        // Some tags are unknown to ExifTool: write those again through a temporary config
+        // (everything else is simply rewritten with the same values)
+        const QSet<QString> custom = customXmpKeys(problems, tags);
+        if (!custom.isEmpty()) {
+            QStringList names;
+            for (const QString& key : custom)
+                names << key.section(':', -1);
+            QTemporaryFile config;
+            if (!writeCustomXmpConfig(config, names)) {
+                error = QStringLiteral("Could not create a temporary file.");
+                return false;
+            }
+            output.clear();
+            problems.clear();
+            if (!runWithArgFile(buildLines(custom), 30000, output, problems, error, config.fileName()))
+                return false;
+        }
         // ExifTool can exit 0 even when some tags failed to write, so also check its own
         // "N image files updated" summary line and anything printed to stderr.
         if (!problems.isEmpty() || !output.contains(QLatin1String("1 image files updated"))) {
