@@ -75,6 +75,7 @@ void MetadataEditor::populateData()
 
     metadataFields.clear();
     metadataRows.clear();
+    categoryHeaders.clear();
     originalMetadata.clear();
     deletedMetadata.clear();
 
@@ -97,26 +98,9 @@ void MetadataEditor::populateData()
         originalMetadata[it.key()] = it.value();
     }
 
-    // Populate metadata fields
-    QSet<QString> categories;
-
+    // Populate metadata fields (addMetadataField adds the group headings)
     for (auto it = originalMetadata.constBegin();
          it != originalMetadata.constEnd(); ++it) {
-
-        QString category = it.key().contains(':')
-            ? it.key().section(':', 0, 0)
-            : "Other";
-
-        if (!categories.contains(category)) {
-            auto *categoryLabel = new QLabel(category);
-            categoryLabel->setStyleSheet(
-                "font-size: 16px; font-weight: bold;"
-            );
-
-            ui->metadataLayout->addWidget(categoryLabel);
-            categories.insert(category);
-        }
-
         // Display every field, including ignored and empty fields
         addMetadataField(it.key(), it.value());
     }
@@ -164,7 +148,25 @@ void MetadataEditor::addMetadataField(const QString &key, const QString &value)
     metadataFields[key] = valueEdit;
     metadataRows[key] = row;
 
-    ui->metadataLayout->addWidget(row); // label line
+    // Put the row under its group heading (creating the heading if it is new), not at the very bottom
+    QVBoxLayout *layout = ui->metadataLayout;
+    const QString category = key.contains(':') ? key.section(':', 0, 0) : "Other";
+    int index;
+    if (QLabel *existingHeader = categoryHeaders.value(category)) {
+        index = layout->indexOf(existingHeader) + 1;
+        while (index < layout->count() && layout->itemAt(index)->widget()
+               && metadataRows.values().contains(layout->itemAt(index)->widget()))
+            ++index;
+    } else {
+        auto *header = new QLabel(category);
+        header->setStyleSheet("font-size: 16px; font-weight: bold;");
+        categoryHeaders[category] = header;
+        index = layout->count();
+        if (index > 0 && layout->itemAt(index - 1)->spacerItem()) // stay above the trailing stretch
+            --index;
+        layout->insertWidget(index++, header);
+    }
+    layout->insertWidget(index, row);
 
     // delte only if not read-only
     if (!readOnly) {
@@ -181,6 +183,13 @@ void MetadataEditor::addMetadata()
 
     if (!ok || key.isEmpty())
         return;
+
+    // MP3/WAV keep every kind of ID3 tag in one place and ExifTool shows it as "ID3", so file
+    // "ID3v2:Hello" under the ID3 group right away instead of after the next save
+    const QString suffix = QFileInfo(path).suffix().toLower();
+    if ((suffix == "mp3" || suffix == "wav") && key.contains(':')
+        && key.section(':', 0, 0).startsWith("ID3", Qt::CaseInsensitive))
+        key = "ID3:" + key.section(':', 1);
 
     if (metadataFields.contains(key)) {
         QMessageBox::warning(this, "Duplicate Metadata", "This metadata tag already exists.");
@@ -235,17 +244,12 @@ void MetadataEditor::saveMetadata()
 
     const bool nameChanged = newName != QFileInfo(path).fileName();
 
-    if (!metadata.hasChanges() && deletedMetadata.isEmpty() && !nameChanged) {
-        QMessageBox::information(this, "Metadata Editor", "No changes to save.");
-        return;
-    }
-
-    if (!deletedMetadata.isEmpty()) {
-        QMessageBox::warning(this, "Deletion Not Supported", "Deleted fields have been removed from the editor, but your current ExifTool writeTags() function does not support deleting tags from the file.");
-    }
+    // Deleting a tag = saving it with an empty value; every handler removes the tag for that
+    for (const QString &key : deletedMetadata)
+        metadata.set(key, QString());
 
     if (!metadata.hasChanges() && !nameChanged) {
-        QMessageBox::information(this, "Metadata Editor", "There are no additions or edits to save.");
+        QMessageBox::information(this, "Metadata Editor", "No changes to save.");
         return;
     }
 

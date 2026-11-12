@@ -232,8 +232,9 @@ namespace ExifTool {
         QString& error)
     {
         out.clear();
-        // -fast skips scanning to the end of the file for trailer info; much quicker for a folder scan.
-        QStringList lines = { "-json", "-G", "-fast" };
+        // No -fast: it skips the end of the file, where WAV files keep their ID3 chunk (and MP3s
+        // their ID3v1 tag), so the filter would never see those tags.
+        QStringList lines = { "-json", "-G" };
         if (recursive)
             lines << "-r";
         lines << folder;
