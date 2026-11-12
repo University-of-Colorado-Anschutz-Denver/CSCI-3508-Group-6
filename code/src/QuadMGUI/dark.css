@@ -292,3 +292,325 @@ QStatusBar {
     color: #A0AAB4;
     border-top: 1px solid #30363E;
 }
+
+/* =================================
+   Welcome Screen
+================================= */
+
+QWidget#welcomeWidget {
+    background-color: transparent;
+}
+
+QLabel#welcomeBrandLabel {
+    color: #F0F2F4;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+QLabel#welcomeDescription {
+    color: #A0AAB4;
+    font-size: 14px;
+}
+
+QLabel#welcomeInstruction {
+    color: #29B6A5;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =================================
+   Welcome Cards
+================================= */
+
+QFrame#viewCard,
+QFrame#editCard,
+QFrame#tagCard {
+    background-color: #24282E;
+    border: 1px solid #353B43;
+    border-radius: 10px;
+}
+
+QFrame#viewCard:hover,
+QFrame#editCard:hover,
+QFrame#tagCard:hover {
+    background-color: #292F35;
+    border: 1px solid #267D72;
+}
+
+
+/* =================================
+   Welcome Card Icons
+================================= */
+
+QLabel#viewCardIcon,
+QLabel#editCardIcon,
+QLabel#tagCardIcon {
+    background-color: transparent;
+    border: none;
+}
+
+
+/* =================================
+   Welcome Card Text
+================================= */
+
+QLabel#viewCardTitle,
+QLabel#editCardTitle,
+QLabel#tagCardTitle {
+    color: #F0F2F4;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+QLabel#viewCardDescription,
+QLabel#editCardDescription,
+QLabel#tagCardDescription {
+    color: #A0AAB4;
+    font-size: 12px;
+}
+
+
+/* =================================
+   QuadM - Metadata Editor
+================================= */
+
+QMainWindow#MetadataEditor,
+QWidget#centralwidget {
+    background-color: #15171B;
+    color: #E8ECEF;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 13px;
+}
+
+/* =================================
+   File Information
+================================= */
+
+QLabel#fileNameLabel {
+    color: #F0F2F4;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+QLabel#fileTypeLabel {
+    background-color: #173F3A;
+    color: #55C8B7;
+    border: 1px solid #267D72;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* =================================
+   Metadata Heading
+================================= */
+
+QLabel#metadataHeadingLabel {
+    color: #F0F2F4;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* =================================
+   Metadata Scroll Area
+================================= */
+
+QScrollArea#metadataScrollArea {
+    background-color: #202329;
+    border: 1px solid #30363E;
+    border-radius: 9px;
+}
+
+QWidget#metadataScrollContents {
+    background-color: #202329;
+}
+
+QLabel#placeholderLabel {
+    color: #929BA5;
+    font-size: 13px;
+}
+
+/* =================================
+   Buttons
+================================= */
+
+QPushButton {
+    background-color: #292E35;
+    color: #E1E6EA;
+    border: 1px solid #3A414A;
+    border-radius: 6px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+QPushButton:hover {
+    background-color: #173F3A;
+    color: #65D2C2;
+    border-color: #267D72;
+}
+
+QPushButton:pressed {
+    background-color: #125047;
+}
+
+QPushButton:disabled {
+    background-color: #25292E;
+    color: #737D87;
+}
+
+/* Add Metadata - Primary Action */
+
+QPushButton#addMetadataButton {
+    background-color: #159889;
+    color: #FFFFFF;
+    border: none;
+    font-weight: 600;
+}
+
+QPushButton#addMetadataButton:hover {
+    background-color: #20AA99;
+}
+
+QPushButton#addMetadataButton:pressed {
+    background-color: #087F72;
+}
+
+/* Save Changes - Primary Action */
+
+QPushButton#saveMetadataButton {
+    background-color: #159889;
+    color: #FFFFFF;
+    border: none;
+    font-weight: 600;
+}
+
+QPushButton#saveMetadataButton:hover {
+    background-color: #20AA99;
+}
+
+QPushButton#saveMetadataButton:pressed {
+    background-color: #087F72;
+}
+
+/* Cancel */
+
+QPushButton#cancelButton {
+    background-color: #292E35;
+    color: #C3CBD2;
+}
+
+/* =================================
+   Scrollbars
+================================= */
+
+QScrollBar:vertical {
+    background-color: transparent;
+    width: 8px;
+    margin: 2px;
+    border: none;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #454E57;
+    border-radius: 4px;
+    min-height: 25px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #159889;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+    border: none;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+QScrollBar:horizontal {
+    background-color: transparent;
+    height: 8px;
+    margin: 2px;
+    border: none;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #454E57;
+    border-radius: 4px;
+    min-width: 25px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color: #159889;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0px;
+    border: none;
+}
+
+/* =================================
+   Metadata Editor - Force Light Text
+================================= */
+
+QMainWindow#MetadataEditor,
+QMainWindow#MetadataEditor QWidget {
+    color: #E8ECEF;
+}
+
+/* All labels */
+QMainWindow#MetadataEditor QLabel {
+    color: #F0F2F4;
+}
+
+/* Metadata input fields */
+QMainWindow#MetadataEditor QLineEdit,
+QMainWindow#MetadataEditor QTextEdit,
+QMainWindow#MetadataEditor QPlainTextEdit,
+QMainWindow#MetadataEditor QComboBox,
+QMainWindow#MetadataEditor QSpinBox,
+QMainWindow#MetadataEditor QDoubleSpinBox {
+    color: #FFFFFF;
+    background-color: #24282E;
+    selection-background-color: #159889;
+    selection-color: #FFFFFF;
+}
+
+/* Buttons */
+QMainWindow#MetadataEditor QPushButton {
+    color: #FFFFFF;
+}
+
+/* Checkboxes and radio buttons */
+QMainWindow#MetadataEditor QCheckBox,
+QMainWindow#MetadataEditor QRadioButton {
+    color: #FFFFFF;
+}
+
+/* Table contents, if used */
+QMainWindow#MetadataEditor QTableWidget,
+QMainWindow#MetadataEditor QTableView {
+    color: #FFFFFF;
+    background-color: #202329;
+    gridline-color: #353B43;
+}
+
+QMainWindow#MetadataEditor QHeaderView::section {
+    color: #FFFFFF;
+    background-color: #292E35;
+    border: 1px solid #353B43;
+    padding: 6px;
+}
+
+/* Disabled controls */
+QMainWindow#MetadataEditor QWidget:disabled {
+    color: #929BA5;
+}

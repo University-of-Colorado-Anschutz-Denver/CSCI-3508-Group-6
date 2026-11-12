@@ -84,12 +84,12 @@ void MetadataEditor::populateData()
     }
 
     //TEMPORARY DEBUG
-    qDebug() << "Fields returned by service:" << metadata.fields().size();
+    // qDebug() << "Fields returned by service:" << metadata.fields().size();
 
-    for (auto it = metadata.fields().constBegin();
-        it != metadata.fields().constEnd(); ++it) {
-        qDebug() << it.key() << "=" << it.value();
-    }
+    // for (auto it = metadata.fields().constBegin();
+    //     it != metadata.fields().constEnd(); ++it) {
+    //     qDebug() << it.key() << "=" << it.value();
+    // }
 
     // Store original metadata, including empty and ignored fields
     for (auto it = metadata.fields().constBegin();
