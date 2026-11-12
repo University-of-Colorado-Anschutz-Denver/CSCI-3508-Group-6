@@ -3,4 +3,8 @@
         <file alias="oiia_cat.gif">resources/oiia_cat.gif</file>
         <file alias="testdata.txt">resources/testdata.txt</file>
     </qresource>
+    <qresource prefix="/themes">
+        <file alias="dark.css">dark.css</file>
+        <file alias="light.css">light.css</file>
+    </qresource>
 </RCC>
