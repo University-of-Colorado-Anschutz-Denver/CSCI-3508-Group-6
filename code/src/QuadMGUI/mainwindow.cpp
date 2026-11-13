@@ -351,7 +351,12 @@ void MainWindow::handleOpenWindow() {
 
 void MainWindow::applyTheme(const QString& theme)
 {
-    QString cssPath = QDir::currentPath() + "/src/QuadMGUI/" + theme.toLower() + ".css";
+    // A loose src/QuadMGUI/<theme>.css next to the working folder wins, so the CSS can be edited
+    // while developing without a rebuild. Installed copies use the one built into the executable.
+    const QString name = theme.toLower() + ".css";
+    QString cssPath = QDir::currentPath() + "/src/QuadMGUI/" + name;
+    if (!QFile::exists(cssPath))
+        cssPath = ":/themes/" + name;
 
     QFile file(cssPath); // Declare the QFile object
 
