@@ -82,6 +82,8 @@ namespace {
             const bool hasGroup = it.key().contains(':');
             const QString group = hasGroup ? it.key().section(':', 0, 0).toUpper() : QStringLiteral("ID3");
             const QString name = it.key().section(':', hasGroup ? 1 : 0);
+            // "ID3", "ID3v2", "ID3v2_3", ... all mean the file's ID3v2 tag
+            const bool isId3Group = group.startsWith(QLatin1String("ID3"));
 
             if (isStandardName(name.toLower())) {
                 // Standard fields go on both the ID3v2 tag and, for WAV, the RIFF INFO chunk too
@@ -89,7 +91,7 @@ namespace {
                 if (info)
                     setStandardField(info, name.toLower(), it.value());
             }
-            else if (group == "ID3") {
+            else if (isId3Group) {
                 // Anything else under the ID3 group becomes a custom TXXX frame
                 setCustomField(id3, name, it.value());
             }

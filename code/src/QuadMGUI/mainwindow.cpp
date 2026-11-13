@@ -23,6 +23,7 @@
 
 #include "metadataeditor.h"
 #include <QSettings>
+#include <QPixmap>
 
 
 void MainWindow::loadDefaultDrive()
@@ -104,6 +105,8 @@ void MainWindow::loadDirectory(const QString& path)
     }
 
     currentPath = absolutePath;
+
+    ui->welcomeWidget->hide();
 
     ui->contentsListWidget->clear();
     ui->currentPathLabel->setText(currentPath);
@@ -348,7 +351,12 @@ void MainWindow::handleOpenWindow() {
 
 void MainWindow::applyTheme(const QString& theme)
 {
-    QString cssPath = QDir::currentPath() + "/src/QuadMGUI/" + theme.toLower() + ".css";
+    // A loose src/QuadMGUI/<theme>.css next to the working folder wins, so the CSS can be edited
+    // while developing without a rebuild. Installed copies use the one built into the executable.
+    const QString name = theme.toLower() + ".css";
+    QString cssPath = QDir::currentPath() + "/src/QuadMGUI/" + name;
+    if (!QFile::exists(cssPath))
+        cssPath = ":/themes/" + name;
 
     QFile file(cssPath); // Declare the QFile object
 
@@ -368,6 +376,31 @@ void MainWindow::applyTheme(const QString& theme)
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QApplication::setWindowIcon(QIcon(":/icons/quadm-logo.svg"));
+    setWindowIcon(QIcon(":/icons/quadm-logo.svg"));
+
+
+    QPixmap logo(":/icons/quadm-logo.svg");
+
+    ui->welcomeLogoLabel->setPixmap(logo.scaled(100, 100,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+
+    QPixmap editIcon(":/icons/quadm-logo-b-file.svg");
+    ui->editCardIcon->setPixmap(
+        editIcon.scaled(40, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation)
+    );
+
+    QPixmap tagIcon(":/icons/quadm-logo-c-q.svg");
+    ui->tagCardIcon->setPixmap(
+        tagIcon.scaled(40, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation)
+    );
+
+    QPixmap viewIcon(":/icons/quadm-logo-view.svg");
+    ui->viewCardIcon->setPixmap(
+        viewIcon.scaled(40, 40, Qt::KeepAspectRatio, Qt::SmoothTransformation)
+    );
+    ui->welcomeWidget->show();
+
 
     QSettings settings("QuadM", "QUADM");
 
@@ -487,7 +520,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
         //reset the path history and current path when a root folder is clicked to avoid confusion in back navigation
         pathHistory.clear();
         currentPath.clear();
-
+       
 
         loadDirectory(item->data(Qt::UserRole).toString());
         });

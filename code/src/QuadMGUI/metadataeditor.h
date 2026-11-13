@@ -5,6 +5,7 @@
 #include <QString>
 #include <QMap>
 #include <QSet>
+#include <QLabel>
 #include <QLineEdit>
 #include <QWidget>
 
@@ -41,6 +42,7 @@ private:
     QMap<QString, QString> originalMetadata;
     QMap<QString, QLineEdit*> metadataFields;
     QMap<QString, QWidget*> metadataRows;
+    QMap<QString, QLabel*> categoryHeaders; // group heading label for each group in the list
     QSet<QString> deletedMetadata;
 
     void populateData();

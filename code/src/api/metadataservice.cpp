@@ -95,8 +95,13 @@ bool MetadataService::scanFolderMetadata(const QString& folder, bool recursive,
     if (!ExifTool::readFolderMetadata(folder, recursive, raw, error))
         return false;
 
-    for (auto it = raw.begin(); it != raw.end(); ++it)
-        out.insert(it.key(), filterMetadata(it.value()));
+    for (auto it = raw.begin(); it != raw.end(); ++it) {
+        QMap<QString, QString> fields = filterMetadata(it.value());
+        // Same blank "expected" tags the editor shows, so filtering by a tag name (e.g. "Artist")
+        // also matches files of that type that don't have a value for it yet
+        addExpectedTags(fields, it.value().value(QStringLiteral("File:FileType")).toString());
+        out.insert(it.key(), fields);
+    }
     return true;
 }
 
