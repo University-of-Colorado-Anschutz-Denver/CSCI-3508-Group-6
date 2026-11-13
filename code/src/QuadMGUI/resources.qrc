@@ -2,5 +2,9 @@
     <qresource prefix="/icons">
         <file alias="oiia_cat.gif">resources/oiia_cat.gif</file>
         <file alias="testdata.txt">resources/testdata.txt</file>
+        <file alias="quadm-logo.svg">resources/quadm-logo.svg</file>
+        <file alias="quadm-logo-c-q.svg">resources/quadm-logo-c-q.svg</file>
+        <file alias="quadm-logo-b-file.svg">resources/quadm-logo-b-file.svg</file>
+        <file alias="quadm-logo-view.svg">resources/quadm-logo-view.svg</file>
     </qresource>
 </RCC>
