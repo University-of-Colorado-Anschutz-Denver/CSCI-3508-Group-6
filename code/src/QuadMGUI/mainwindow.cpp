@@ -43,11 +43,12 @@ void MainWindow::loadDefaultDrive()
 
 void MainWindow::getDrives() {
 
-
+    // Populate the drive combo box with mounted drives.
     ui->driveComboBox->clear();
     for (const QStorageInfo &drive : QStorageInfo::mountedVolumes()) {
         QString driveInfo;
         if (drive.isReady()) {
+            // Display the drive's display name and root path, or just the root path if the display name is empty or generic.
             if (drive.displayName().isEmpty() || drive.displayName() == "Local Disk" || drive.displayName() == drive.rootPath()) {
                 driveInfo = QString("%1").arg(drive.rootPath());
             }
@@ -59,6 +60,7 @@ void MainWindow::getDrives() {
     }
 }
 
+// Load the root folders of the selected drive into the rootListWidget.
 void MainWindow::loadRootFolders()
 {
     currentPath.clear();
@@ -77,6 +79,7 @@ void MainWindow::loadRootFolders()
         QDir::Name
     );
 
+    // Populate the rootListWidget with the folders.
     for (const QFileInfo& folder : folders) {
         auto* item = new QListWidgetItem(iconProvider.icon(folder), folder.fileName());
 
@@ -87,7 +90,7 @@ void MainWindow::loadRootFolders()
     }
 }
 
-
+// Load the contents of a directory into the contentsListWidget.
 void MainWindow::loadDirectory(const QString& path)
 {
     QDir dir(path);
@@ -144,9 +147,9 @@ void MainWindow::loadDirectory(const QString& path)
     directoryMetadataScanned = false;
     applyTagFilter(ui->tagFilterBar->text());
 
-    qDebug() << "Loaded directory:" << currentPath
-        << "| Displayed items:" << ui->contentsListWidget->count();
+    //qDebug() << "Loaded directory:" << currentPath<< "| Displayed items:" << ui->contentsListWidget->count();
 }
+
 
 void MainWindow::ensureDirectoryMetadataScanned()
 {
@@ -188,6 +191,7 @@ void MainWindow::applyTagFilter(const QString& query)
     }
 }
 
+// Format metadata keys for display by inserting spaces before uppercase letters.
 QString MainWindow::formatMetadataKey(const QString& key)
 {
     QString result;
@@ -203,6 +207,7 @@ QString MainWindow::formatMetadataKey(const QString& key)
     return result;
 }
 
+// Populate the metadata panel with information about the selected file.
 void MainWindow::metadataPopulate(const QString& filePath)
 {
     QFileInfo fileInfo(filePath);
@@ -309,11 +314,12 @@ void MainWindow::metadataPopulate(const QString& filePath)
 }
 
 
+// Open the metadata editor for the specified file path.
 void MainWindow::openMetadataEditor(const QString& filePath)
 {
     if (!metadataEditor) {
         metadataEditor = new MetadataEditor(filePath, this);
-
+        // Ensure the the panels are updated when the user saves metadata in the editor.
         connect(metadataEditor, &MetadataEditor::metadataSaved, this, [this](const QString& savedPath) {
             qDebug() << "Metadata saved:" << savedPath;
             metadataPopulate(savedPath);
@@ -330,6 +336,7 @@ void MainWindow::openMetadataEditor(const QString& filePath)
 }
 
 
+// Open the settings window and connect its save signal to update the theme and reload drives.
 void MainWindow::handleOpenWindow() {
 
     Settings *subWindow = new Settings(); 
@@ -348,7 +355,7 @@ void MainWindow::handleOpenWindow() {
     subWindow->show();
 }
 
-
+// Apply the selected theme by loading the corresponding CSS file and setting it as the application's stylesheet.
 void MainWindow::applyTheme(const QString& theme)
 {
     QString cssPath = QDir::currentPath() + "/src/QuadMGUI/" + theme.toLower() + ".css";
@@ -403,22 +410,6 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     applyTheme(theme);
 
-
-    // qDebug() << "Working directory:" << QDir::currentPath();
-    // qDebug() << "CSS path:" << cssPath;
-    // qDebug() << "CSS exists:" << file.exists();
-    
-    // if (file.open(QFile::ReadOnly | QFile::Text)) {
-    //     QString css = QString::fromUtf8(file.readAll());
-    
-    //     qApp->setStyleSheet(css);
-    
-    //     // qDebug() << "CSS loaded successfully. Size:" << css.size();
-    // }
-    // else {
-    //    // qDebug() << "CSS loading failed:" << file.errorString();
-    // }
-
     filterDebounceTimer.setSingleShot(true);
     filterDebounceTimer.setInterval(250);
     connect(&filterDebounceTimer, &QTimer::timeout, this, [this]() {
@@ -443,36 +434,9 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->metadataPanelLayout->setStretch(1, 1);
 
-    // back button debug statements
-    // qDebug() << ui->backButton;
-    // qDebug() << ui->backButton->isEnabled();
-    // qDebug() << ui->backButton->isVisible();
-    // qDebug() << ui->backButton->geometry();
-
     // Scroll logic
     QLabel* metadataLabel = ui->metadataPlaceholderLabel;
     QWidget* metadataParent = metadataLabel->parentWidget();
-
-    // QScrollArea *metadataScrollArea = new QScrollArea(metadataParent);
-    // metadataScrollArea->setWidgetResizable(true);
-    // metadataScrollArea->setFrameShape(QFrame::NoFrame);
-    // metadataScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    // metadataScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
-    // if (metadataParent->layout()) {
-    //     metadataParent->layout()->replaceWidget(
-    //         metadataLabel,
-    //         metadataScrollArea
-    //     );
-    // } else {
-    //     metadataScrollArea->setGeometry(metadataLabel->geometry());
-    // }
-
-    // metadataScrollArea->setWidget(metadataLabel);
-
-    // metadataLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    // metadataLabel->setWordWrap(true);
-    // //________________________________________________________________________________
 
     QMovie* catMovie = new QMovie(":/icons/oiia_cat.gif", QByteArray(), this);
 
@@ -633,12 +597,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
         loadDirectory(previousPath);
     
     });
-
-    // connect(ui->backButton, &QPushButton::clicked, this, []() {
-    //     qDebug() << "click";
-    // });
 }
-
 
 MainWindow::~MainWindow()
 {
