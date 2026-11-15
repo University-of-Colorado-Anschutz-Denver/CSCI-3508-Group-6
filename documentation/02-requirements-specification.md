@@ -35,10 +35,11 @@
     - Do tools support multiple file formats?
     - Custom tagging to support searching
     - GUI designs and ease of use
-- User acceptance testing to update requirements *(testing reports in [04-testing-report.md](04-testing-report.md))*
+- User acceptance testing to update requirements *(testing reports in Testing and Quality Assurance submission document)*
     - Prototype 1: Wireframe UI
     - Prototype 2: Read and Edit Standard Metadata
-    - v0.3.0: IN PROGRESS
+    - v0.3.0: GUI updates
+    - v1.0.0: Major feature requests
 
 **Interview participants and dates:**
 | Participant | Role | Topic | Date |
@@ -55,11 +56,11 @@
 
 | ID | Date | Method/source | Description | Location or citation | Related finding/requirement |
 | --- | --- | --- | --- | --- | --- |
-| EL-01 | 2026-09-11 | Research (Metadata management libraries) | Audio files | <li>[Mutagen](https://github.com/quodlibet/mutagen)</li> | [Finding, US-01, FR-01] |
-| EL-02 | 2026-09-11 | Research (Metadata management libraries) | XMP metadata type | <li>[XMP on Wikipedia](https://en.wikipedia.org/wiki/Extensible_Metadata_Platform)</li><li>[XMP SDK and Specifications from Adobe](https://developer.adobe.com/xmp/docs/)</li> | [Finding, US-01, FR-01] |
-| EL-03 | 2026-09-11 | Research (General metadata information) | Metadata basics | <li>[Metadata on Wikipedia](https://en.wikipedia.org/wiki/Metadata)</li> | [Finding, US-01, FR-01] |
-| EL-04 | 2026-09-11 | Research (Metadata management libraries) | Reading and writing metadata | <li>[ExifTool by Phil Harvey](https://exiftool.org)</li> | KF-01,  |
-| EL-05 | 2026-10-02 | Research (Metadata management libraries) | Image files | <li>[Exiv2](https://exiv2.org/index.html)</li> | [Finding, US-01, FR-01] |
+| EL-01 | 2026-09-11 | Research (Metadata management libraries) | Audio files | <li>[Mutagen](https://github.com/quodlibet/mutagen)</li> | KF-02, KF-03, US-01 |
+| EL-02 | 2026-09-11 | Research (Metadata management libraries) | XMP metadata type | <li>[XMP on Wikipedia](https://en.wikipedia.org/wiki/Extensible_Metadata_Platform)</li><li>[XMP SDK and Specifications from Adobe](https://developer.adobe.com/xmp/docs/)</li> | US-02 |
+| EL-03 | 2026-09-11 | Research (General metadata information) | Metadata basics | <li>[Metadata on Wikipedia](https://en.wikipedia.org/wiki/Metadata)</li> | US-01, US-02 |
+| EL-04 | 2026-09-11 | Research (Metadata management libraries) | Reading and writing metadata | <li>[ExifTool by Phil Harvey](https://exiftool.org)</li> | KF-01, KF-02 |
+| EL-05 | 2026-10-02 | Research (Metadata management libraries) | Image files | <li>[Exiv2](https://exiv2.org/index.html)</li> | KF-02, KF-03, US-01 |
 
 **Assumptions and constraints:**
 
@@ -96,6 +97,7 @@
 | NFR-01 | Performance | The system shall search a folder less than 1gb in 5 seconds or less. | Manual testing |
 | NFR-02 | Usability | The system shall allow non-technical users to easily view metadata information. | User acceptance testing |
 | NFR-03 | Compatibility | The system shall store metadata within the file so users can access the tags on other devices. | Manual testing |
+| NFR-04 | Security | The system shall store metadata within the file and not save additional identifying information or require hidden files. | Manual testing |
 
 ## 8. External Interface Requirements
 
@@ -127,28 +129,26 @@ Not Applicable: No network connections or external device requirements. Uses loc
 
 ## 10. Requirements Traceability Matrix
 
-This is the project's canonical end-to-end traceability record. Update the design, implementation, and test references as work progresses; other documents should link back here rather than create a conflicting source of truth.
-
-| Requirement ID | Design component | Implementation location | Test case(s) or method | Status |
+| Requirement ID | Design component | Implementation location / decision | Test case(s) or method | Status |
 | --- | --- | --- | --- | --- |
-| FR-01 | [./design-assets/web-mockup-1](Web Mockup 1), [./design-assets/web-mockup-2](Web Mockup 2) | [`../code/src/QuadMGUI/mainwindow.cpp`] | [TC-01] | Verified |
-| FR-02 | [Diagram/module] | [`../code/path`] | [TC-01] | [Planned/Complete/Verified] |
-| FR-03 | [Diagram/module] | [`../code/path`] | [TC-01] | [Planned/Complete/Verified] |
-| FR-04 | [Diagram/module] | [`../code/path`] | [TC-01] | [Planned/Complete/Verified] |
-| FR-05 | [Diagram/module] | [`../code/path`] | [TC-01] | [Planned/Complete/Verified] |
-| FR-06 | [Diagram/module] | [`../code/path`] | [TC-01] | [Planned/Complete/Verified] |
-| FR-07 | [Diagram/module] | [`../code/path`] | [TC-01] | [Planned/Complete/Verified] |
-| FR-08 | [Diagram/module] | [`../code/path`] | [TC-01] | [Planned/Complete/Verified] |
-| FR-09 | [Diagram/module] | [`../code/path`] | [TC-01] | [Planned/Complete/Verified] |
-| NFR-01 | [Design decision] | [`../code/path`] | [TC-02] | [Planned/Complete/Verified] |
-| NFR-02 | [Design decision] | [`../code/path`] | [TC-02] | [Planned/Complete/Verified] |
-| NFR-03 | [Design decision] | [`../code/path`] | [TC-02] | [Planned/Complete/Verified] |
+| FR-01 | [APP-01-class.png](design-assets/APP-01-class.png), [APP-02-architecture.png](design-assets/APP-02-architecture.png) | [mainwindow.cpp](../code/src/QuadMGUI/mainwindow.cpp) | UI-01 - UI-10 | Verified |
+| FR-02 | https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases | N/A | WEB-04, WEB-05, WEB-07 | Verified |
+| FR-03 | [APP-01-class.png](design-assets/APP-01-class.png) | [mainwindow.cpp](../code/src/backend/metadata.cpp) | UI-11, UI-12 | Verified |
+| FR-04 | [APP-02-architecture.png](design-assets/APP-02-architecture.png) | [taglibhandler.cpp](../code/src/backend/taglibhandler.cpp), [exiftoolhandler.cpp](../code/src/backend/exiftoolhandler.cpp)| UI-20 - UI-28 | Verified |
+| FR-05 | [APP-03-DFD.png](design-assets/APP-03-DFD.png) | [taglibhandler.cpp](../code/src/backend/taglibhandler.cpp), [exiftoolhandler.cpp](../code/src/backend/exiftoolhandler.cpp) | UI-20 - UI-28 | Verified |
+| FR-06 | [APP-02-architecture.png](design-assets/APP-02-architecture.png) | [mainwindow.cpp](../code/src/QuadMGUI/mainwindow.cpp) | UI-10 - UI-12 | Verified |
+| FR-07 | N/A | N/A | N/A | Not Planned |
+| FR-08 | [APP-02-architecture.png](design-assets/APP-02-architecture.png) | [taglibhandler.cpp](../code/src/backend/taglibhandler.cpp), [exiftoolhandler.cpp](../code/src/backend/exiftoolhandler.cpp) | Manual testing | Verified |
+| FR-09 | [APP-02-architecture.png](design-assets/APP-02-architecture.png) | [taglibhandler.cpp](../code/src/backend/taglibhandler.cpp), [exiftoolhandler.cpp](../code/src/backend/exiftoolhandler.cpp) | Manual testing | Verified |
+| NFR-01 | N/A | [exiftoolhandler.cpp](../code/src/backend/exiftoolhandler.cpp), C++/ExifTool for reading data | Manual testing | Verified |
+| NFR-02 | [WEB-01-use-case-diagram.png](design-assets/WEB-01-use-case-diagram.png), [APP-04-use-case.png](design-assets/APP-04-use-case.png) | [GUI Folder](../code/src/QuadMGUI), Qt GUI, web installer | User acceptance testing | Verified |
+| NFR-03 | [APP-03-DFD.png](design-assets/APP-03-DFD.png) | Add tags directly to files using ExifTool/TagLib metadata editing tools | Manual testing | Verified |
+| NFR-04 | [APP-03-DFD.png](design-assets/APP-03-DFD.png) | Add tags directly to files using ExifTool/TagLib metadata editing tools | Manual testing | Verified |
 
 ## 11. Requirements Change Log
 
 | Date | Source | Change or open question | Affected IDs | Decision and reason | Approved by |
 | --- | --- | --- | --- | --- | --- |
-| [YYYY-MM-DD] | [Stakeholder/feedback/test] | [Added, changed, removed, or unresolved item] | [FR-01] | [Decision/rationale] | [Name or Pending] |
 | 2026-09-11 | Meeting | Base requirements added | FR-01, FR-03, FR-04, FR-05, FR-06, FR-08, NFR-02 | Brainstorming base requirements | HJ |
 | 2026-10-02 | Research | Added requirement for supporting more file types | FR-09 | ExifTool and TagLib decided for handling metadata, which both handle multiple types of files similarly | HJ, EK |
 | 2026-10-25 | Research | Added installer requirement | FR-02 | Likely difficulties for users needing to install separate tools to make QuadM function | All |
@@ -156,17 +156,11 @@ This is the project's canonical end-to-end traceability record. Update the desig
 
 *Changes initially logged in a separate document, transferred here on 2026-11-07*
 
-## 12. Review and Approval
-
-| Reviewer | Role | Review date | Result or comments |
-| --- | --- | --- | --- |
-| [Enter name] | [Stakeholder/team role] | [YYYY-MM-DD] | [Approved or changes requested] |
-
 ### Requirements Quality Checklist
 
-- [ ] Every requirement has a unique ID.
-- [ ] Requirements are clear, feasible, necessary, and testable.
-- [ ] Acceptance criteria are measurable.
-- [ ] Functional and non-functional requirements are both included.
-- [ ] Conflicts, assumptions, constraints, and scope exclusions are documented.
+- [x] Every requirement has a unique ID.
+- [x] Requirements are clear, feasible, necessary, and testable.
+- [x] Acceptance criteria are measurable.
+- [x] Functional and non-functional requirements are both included.
+- [x] Conflicts, assumptions, constraints, and scope exclusions are documented.
 - [ ] Every implemented requirement maps to design, code, and one or more tests.
