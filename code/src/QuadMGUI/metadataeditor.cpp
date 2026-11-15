@@ -126,9 +126,7 @@ void MetadataEditor::addMetadataField(const QString &key, const QString &value)
     if (readOnly) {
         valueEdit->setReadOnly(true);
 
-        qDebug() << "Read-only metadata field:" << key;
-
-
+        //qDebug() << "Read-only metadata field:" << key;
         valueEdit->setStyleSheet("QLineEdit {"
             "background-color: #e0e0e0;"
             "color: #777777;"
@@ -179,7 +177,12 @@ void MetadataEditor::addMetadataField(const QString &key, const QString &value)
 void MetadataEditor::addMetadata()
 {
     bool ok;
-    QString key = QInputDialog::getText(this, "Add Metadata", "Tag name (e.g. XMP:Description):", QLineEdit::Normal, "", &ok).trimmed();
+
+    QString key = QInputDialog::getText(
+        this, "Add Metadata",
+        "Tag name (e.g. XMP:Description):",
+        QLineEdit::Normal, "", &ok
+    ).trimmed();
 
     if (!ok || key.isEmpty())
         return;
@@ -192,16 +195,43 @@ void MetadataEditor::addMetadata()
         key = "ID3:" + key.section(':', 1);
 
     if (metadataFields.contains(key)) {
-        QMessageBox::warning(this, "Duplicate Metadata", "This metadata tag already exists.");
+        QMessageBox::warning(this, "Duplicate Metadata","This metadata tag already exists.");
         return;
     }
 
-    if (key.startsWith('-') || key.contains('=') || key.contains('\n') || key.contains('\r')) {
-        QMessageBox::warning(this, "Invalid Tag", "Please enter a valid metadata tag name.");
+    if (key.startsWith('-') || key.contains('=') ||key.contains('\n') || key.contains('\r')) {
+        QMessageBox::warning(this, "Invalid Tag","Please enter a valid metadata tag name.");
         return;
     }
 
-    QString value = QInputDialog::getText(this, "Add Metadata", "Value:", QLineEdit::Normal, "", &ok);
+    // Create a temporary copy
+    QFileInfo info(path);
+    QString tempPath = info.dir().filePath(
+        info.completeBaseName() + "_temp." + info.suffix()
+    );
+
+    if (!QFile::copy(path, tempPath)) {
+        QMessageBox::critical(this, "Validation Error","Could not create a temporary file for validation.");
+        return;
+    }
+
+    // Attempt a dummy write
+    QMap<QString, QString> testTags;
+    testTags.insert(key, "QuadM_Test");
+
+    QString error;
+    bool valid = ExifTool::writeTags(tempPath, testTags, error);
+
+    // Delete temporary copy
+    QFile::remove(tempPath);
+
+    if (!valid) {
+        QMessageBox::warning(this, "Invalid Metadata",error);
+        return;
+    }
+
+    // Collect actual value
+    QString value = QInputDialog::getText(this, "Add Metadata", "Value:",QLineEdit::Normal, "", &ok);
 
     if (!ok)
         return;
