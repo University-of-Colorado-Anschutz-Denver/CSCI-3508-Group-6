@@ -1,3 +1,8 @@
+PROJECT: QuadM (Multimedia Metadata Manager) - APPLICATION
+VERSION OR COMMIT: v1.0.2
+GENERATED/UPDATED: 2026-11-15
+
+===============================================================================
 FILE: code/src/exiftool.h
 LANGUAGE: C++
 PURPOSE: Class definition for the ExifTools class, used for basic metadata read-write operations.
@@ -2236,7 +2241,6 @@ PURPOSE: Markup design for the main window. It defines the welcome layout seen b
  <resources/>
  <connections/>
 </ui>
-
 
 ===============================================================================
 FILE: code/src/QuadMGUI/metadataeditor.h
