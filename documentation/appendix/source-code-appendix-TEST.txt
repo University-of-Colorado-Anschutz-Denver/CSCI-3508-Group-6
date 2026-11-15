@@ -3,7 +3,7 @@ VERSION OR COMMIT: v1.0.2
 GENERATED/UPDATED: 2026-11-15
 
 ===============================================================================
-FILE: code/tests/us/tst_quadm_ui.cpp
+FILE: code/tests/ui/tst_quadm_ui.cpp
 LANGUAGE: C++
 PURPOSE: UI automated tests.
 ===============================================================================
@@ -621,3 +621,585 @@ int main(int argc, char *argv[])
 }
 
 #include "tst_quadm_ui.moc"
+
+===============================================================================
+FILE: .github/workflows/release.yml
+LANGUAGE: YAML
+PURPOSE: Website installer tests
+===============================================================================
+
+name: Release
+
+# Push a version tag (git tag v0.4.0 && git push origin v0.4.0) and this workflow:
+#   1. builds the installers with the scripts in code/packaging/, in parallel:
+#        Windows  .msi        (build-windows-msi.ps1)
+#        Ubuntu   .deb        (build-deb.sh)
+#        macOS    .pkg, .dmg  (build-macos.sh), once for Apple Silicon and once for Intel
+#   2. installs each one on a clean runner and checks the app + ExifTool start
+#   3. publishes the files to a GitHub Release, with SHA256SUMS.txt
+#   4. starts website.yml so the website image shows the new download links
+# Running it by hand (Actions tab -> Run workflow) builds and tests, nothing is published.
+#
+# The packaging scripts are the ones in code/packaging/ - the same commands a
+# developer runs locally - so CI and a laptop produce the same installers.
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  QT_VERSION: "6.8.2"        # Qt used on the runners (the presets on a laptop may use another version)
+  EXIFTOOL_VERSION: "13.60"  # Linux and macOS: build-deb.sh / build-macos.sh download this exact version (Windows uses the newest, see below)
+
+jobs:
+  windows:
+    name: Windows .msi
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag (0.0.0 for a manual run)
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      # install-qt-action runs aqtinstall with whatever Python the runner has; the runner's newest
+      # (3.15) made it fail with exit code 1, so pin a Python that aqtinstall supports.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The script is written for the Qt MinGW kit (same as CMakePresets.json), so install that kit.
+      - name: Install Qt (MinGW kit) and the MinGW compiler
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: windows
+          target: desktop
+          arch: win64_mingw
+          tools: tools_mingw1310
+          cache: true
+
+      # build-windows-msi.ps1 refuses to run without code/third_party/exiftool/exiftool.exe.
+      # Both public hosts refuse GitHub's runners (SourceForge answers 403, exiftool.org has no direct
+      # file), so the Windows zip comes from our own repo: first the copy committed in
+      # code/packaging/windows-deps/, then a pre-release tagged "tools-exiftool" (see .github/CICD.md).
+      # The public hosts are only a last resort.
+      - name: Get the Windows ExifTool
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          dest=code/third_party/exiftool
+          ok=0
+          mkdir -p "$RUNNER_TEMP/dl"
+          committed=$(ls code/packaging/windows-deps/exiftool-*_64.zip 2>/dev/null | sort | tail -n1 || true)
+          if [ -n "$committed" ] && unzip -tq "$committed" >/dev/null 2>&1; then
+            echo "Using the committed copy: $committed"
+            cp "$committed" "$RUNNER_TEMP/exiftool.zip"; ok=1
+          fi
+          if [ "$ok" != 1 ] && gh release download tools-exiftool --repo "$GITHUB_REPOSITORY" --pattern 'exiftool-*_64.zip' --dir "$RUNNER_TEMP/dl" --clobber 2>/dev/null; then
+            f=$(ls "$RUNNER_TEMP"/dl/exiftool-*_64.zip | head -n1)
+            echo "Using our copy: $(basename "$f")"
+            if unzip -tq "$f" >/dev/null 2>&1; then cp "$f" "$RUNNER_TEMP/exiftool.zip"; ok=1; fi
+          fi
+          if [ "$ok" != 1 ]; then
+            zip=$(curl -fsSL https://exiftool.org/ | grep -oE 'exiftool-[0-9]+\.[0-9]+_64\.zip' | head -n1 || true)
+            [ -n "$zip" ] || zip="exiftool-$(curl -fsSL https://exiftool.org/ver.txt | tr -d '[:space:]')_64.zip"
+            echo "No usable tools-exiftool release; trying the public hosts for $zip"
+            for url in "https://downloads.sourceforge.net/project/exiftool/$zip" "https://sourceforge.net/projects/exiftool/files/$zip/download" "https://exiftool.org/$zip"; do
+              echo "Trying $url"
+              if curl -fsSL --retry 2 -A "Mozilla/5.0" -o "$RUNNER_TEMP/exiftool.zip" "$url" && unzip -tq "$RUNNER_TEMP/exiftool.zip" >/dev/null 2>&1; then ok=1; break; fi
+            done
+          fi
+          [ "$ok" = 1 ] || { echo "::error::No ExifTool zip. Commit exiftool-XX.XX_64.zip to code/packaging/windows-deps/ (see .github/CICD.md)."; exit 1; }
+          unzip -q "$RUNNER_TEMP/exiftool.zip" -d "$RUNNER_TEMP/exiftool"
+          src=$(find "$RUNNER_TEMP/exiftool" -maxdepth 1 -mindepth 1 -type d | head -n1)
+          cp -R "$src"/. "$dest"/
+          [ -f "$dest/exiftool(-k).exe" ] && mv "$dest/exiftool(-k).exe" "$dest/exiftool.exe"
+          test -f "$dest/exiftool.exe" && test -d "$dest/exiftool_files"
+          "$dest/exiftool.exe" -ver
+
+      - name: Build the MSI
+        shell: pwsh
+        working-directory: code
+        run: |
+          $qtRoot = Split-Path -Parent (Split-Path -Parent $env:QT_ROOT_DIR)   # ...\Qt
+          $mingw = Join-Path $qtRoot "Tools\mingw1310_64"
+          if (-not (Test-Path "$mingw\bin\g++.exe")) { throw "MinGW not found at $mingw" }
+          $ninja = Split-Path -Parent (Get-Command ninja).Source
+          .\packaging\build-windows-msi.ps1 -Version "${{ steps.v.outputs.version }}" `
+            -QtDir $env:QT_ROOT_DIR -MinGwDir $mingw -NinjaDir $ninja
+
+      - name: Install the MSI on this runner and check it
+        shell: pwsh
+        run: |
+          $msi = (Get-ChildItem code\dist\*.msi).FullName
+          $p = Start-Process msiexec.exe -ArgumentList "/i `"$msi`" /qn /l*v $env:RUNNER_TEMP\install.log" -Wait -PassThru
+          if ($p.ExitCode -ne 0) { Get-Content $env:RUNNER_TEMP\install.log -Tail 60; throw "msiexec exit code $($p.ExitCode)" }
+          $dir = "$env:ProgramFiles\QuadM"
+          foreach ($f in "QuadM.exe", "exiftool\exiftool.exe", "Qt6Widgets.dll") {
+            if (-not (Test-Path "$dir\$f")) { throw "Missing after install: $dir\$f" }
+          }
+          & "$dir\exiftool\exiftool.exe" -ver
+          $app = Start-Process "$dir\QuadM.exe" -PassThru
+          Start-Sleep -Seconds 8
+          if ($app.HasExited) { throw "QuadM exited right after start (code $($app.ExitCode))" }
+          Stop-Process $app
+          $u = Start-Process msiexec.exe -ArgumentList "/x `"$msi`" /qn" -Wait -PassThru
+          if ($u.ExitCode -ne 0) { throw "uninstall exit code $($u.ExitCode)" }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-msi
+          path: code/dist/*.msi
+          if-no-files-found: error
+
+  linux:
+    name: Linux .deb (amd64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Install build tools (see the header of build-deb.sh)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build git curl perl qt6-base-dev libgl1-mesa-dev
+
+      - name: Build the .deb
+        working-directory: code
+        run: bash packaging/build-deb.sh "${{ steps.v.outputs.version }}"
+
+      - name: Install the .deb and check it
+        run: |
+          sudo apt-get install -y ./code/dist/quadm_*_amd64.deb
+          /opt/quadm/exiftool/exiftool -ver
+          # No screen on the runner: the offscreen platform lets the window open. timeout's code 124 = still running after 8 s = good.
+          set +e
+          QT_QPA_PLATFORM=offscreen timeout 8 /opt/quadm/QuadM
+          code=$?
+          set -e
+          if [ "$code" -ne 124 ]; then echo "QuadM exited early with code $code"; exit 1; fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-deb
+          path: code/dist/*.deb
+          if-no-files-found: error
+
+  macos:
+    name: macOS .pkg and .dmg (Apple Silicon)
+    runs-on: macos-latest # arm64; build-macos.sh builds for the machine it runs on
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Install build tools (Packaging-macOS.md)
+        run: brew install cmake ninja qt
+
+      - name: Build the .app, .dmg and .pkg
+        working-directory: code
+        run: bash packaging/build-macos.sh "${{ steps.v.outputs.version }}"
+
+      - name: Check the .dmg and the .pkg
+        run: |
+          set -euo pipefail
+          dmg=$(ls code/dist/*.dmg)
+          pkg=$(ls code/dist/*.pkg)
+          # .dmg: mount it and look inside
+          hdiutil attach "$dmg" -mountpoint /tmp/quadm-dmg -nobrowse -quiet
+          test -x /tmp/quadm-dmg/QuadM.app/Contents/MacOS/QuadM
+          /tmp/quadm-dmg/QuadM.app/Contents/Resources/exiftool/exiftool -ver
+          codesign --verify --deep /tmp/quadm-dmg/QuadM.app
+          hdiutil detach /tmp/quadm-dmg -quiet
+          # .pkg: install it for real, then remove it again
+          sudo installer -pkg "$pkg" -target /
+          test -x /Applications/QuadM.app/Contents/MacOS/QuadM
+          /Applications/QuadM.app/Contents/Resources/exiftool/exiftool -ver
+          sudo rm -rf /Applications/QuadM.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-installers
+          path: |
+            code/dist/*.pkg
+            code/dist/*.dmg
+          if-no-files-found: error
+
+  macos-intel:
+    name: macOS .pkg and .dmg (Intel)
+    runs-on: macos-15-intel # x86_64; build-macos.sh builds for the machine it runs on
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then v="${GITHUB_REF_NAME#v}"; else v="0.0.0"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Install build tools (Packaging-macOS.md)
+        run: brew install cmake ninja qt
+
+      - name: Build the .app, .dmg and .pkg
+        working-directory: code
+        run: bash packaging/build-macos.sh "${{ steps.v.outputs.version }}"
+
+      - name: Put the architecture in the file names
+        working-directory: code/dist
+        run: |
+          arch=x86_64        # use arm64 in the "macos" job
+          for f in *.pkg *.dmg; do
+            case "$f" in
+              *arm64*|*x86_64*|*intel*) ;;
+              *) mv "$f" "${f%.*}-$arch.${f##*.}" ;;
+            esac
+          done
+          ls -l
+
+      - name: Check the .dmg and the .pkg
+        run: |
+          set -euo pipefail
+          dmg=$(ls code/dist/*.dmg)
+          pkg=$(ls code/dist/*.pkg)
+          # .dmg: mount it and look inside
+          hdiutil attach "$dmg" -mountpoint /tmp/quadm-dmg -nobrowse -quiet
+          test -x /tmp/quadm-dmg/QuadM.app/Contents/MacOS/QuadM
+          /tmp/quadm-dmg/QuadM.app/Contents/Resources/exiftool/exiftool -ver
+          codesign --verify --deep /tmp/quadm-dmg/QuadM.app
+          hdiutil detach /tmp/quadm-dmg -quiet
+          # .pkg: install it for real, then remove it again
+          sudo installer -pkg "$pkg" -target /
+          test -x /Applications/QuadM.app/Contents/MacOS/QuadM
+          /Applications/QuadM.app/Contents/Resources/exiftool/exiftool -ver
+          sudo rm -rf /Applications/QuadM.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-intel-installers
+          path: |
+            code/dist/*.pkg
+            code/dist/*.dmg
+          if-no-files-found: error
+
+  publish:
+    name: Publish GitHub Release
+    needs: [windows, linux, macos, macos-intel]
+    # Windows decides: a failed Linux or Mac build only leaves its files out of the release (see the warning step).
+    if: ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') && needs.windows.result == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the release and upload files
+    steps:
+      - name: Warn about builds that failed
+        run: |
+          echo "linux: ${{ needs.linux.result }}, macos: ${{ needs.macos.result }}, macos-intel: ${{ needs.macos-intel.result }}"
+          if [ "${{ needs.linux.result }}" != success ]; then echo "::warning::The Linux .deb is missing from this release"; fi
+          if [ "${{ needs.macos.result }}" != success ]; then echo "::warning::The macOS (Apple Silicon) .pkg/.dmg are missing from this release"; fi
+          if [ "${{ needs.macos-intel.result }}" != success ]; then echo "::warning::The macOS (Intel) .pkg/.dmg are missing from this release"; fi
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: files
+          merge-multiple: true
+
+      - name: Checksums
+        working-directory: files
+        run: |
+          ls -l
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          # Safe to re-run: if the release exists, the files are replaced.
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" files/* --clobber
+          else
+            gh release create "$TAG" files/* --title "QuadM ${TAG#v}" --generate-notes --latest
+          fi
+
+  refresh-website:
+    name: Rebuild the website image with the new links
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # start website.yml
+    steps:
+      # website.yml writes data/latest.json from the newest release and publishes a new image.
+      # (Events created with GITHUB_TOKEN do not start other workflows, but workflow_dispatch is allowed.)
+      - name: Start website.yml on the default branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          REF: ${{ github.event.repository.default_branch }}
+        run: gh workflow run website.yml --ref "$REF" -f reason="release ${{ github.ref_name }}"
+
+===============================================================================
+FILE: .github/workflows/website.yml
+LANGUAGE: YAML
+PURPOSE: Website usage tests
+===============================================================================
+
+# Display name in the GitHub Actions interface.
+name: Website checks
+
+# On every change to code/website:
+#   pull request -> lint + tests + image build and smoke test (nothing is published)
+#   push to a listed branch -> same, then the image is pushed to GitHub Container Registry
+#   run manually, or by release.yml after a new app release -> rebuild the
+#   image so its download page carries the new installer links
+#
+# Image: ghcr.io/<owner>/quadm-website   (tags: branch name, short commit hash, latest on main)
+
+# Events that trigger this workflow.
+on:
+  # Trigger on pushes to the testing branch.
+  push:
+    # Branches included in the push trigger.
+    branches: [main, testing, website_skeleton]
+    # Run only when website files or this workflow file change.
+    paths: ["code/website/**", ".github/workflows/website.yml"]
+  # Trigger on pull requests that modify matching paths.
+  pull_request:
+    # Files included in the pull-request trigger.
+    paths: ["code/website/**", ".github/workflows/website.yml"]
+  # Enable manual runs from the GitHub Actions interface (release.yml also starts it this way).
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why this run (shown in the log)"
+        required: false
+        default: "manual run"
+
+# Permissions granted to the workflow's GitHub token.
+permissions:
+  # Permit read-only access to repository files.
+  contents: read
+
+concurrency:
+  group: website-${{ github.ref }}
+  cancel-in-progress: true
+
+
+# Jobs executed by this workflow.
+jobs:
+  # Job identifier.
+  test:
+    # Display name in the workflow run.
+    name: Lint and test website
+    # Runner environment for this job.
+    runs-on: ubuntu-latest
+    # Default settings for shell commands in this job.
+    defaults:
+      # Settings applied to run steps.
+      run:
+        # Execute commands from the website project directory.
+        working-directory: code/website
+    # Steps executed sequentially by the job.
+    steps:
+      # Check out the repository contents.
+      - uses: actions/checkout@v4
+      # Set up Node.js for subsequent commands.
+      - uses: actions/setup-node@v4
+        # Configuration for the Node.js setup action.
+        with:
+          # Node.js version used by the job.
+          node-version: 20
+      # Validate HTML files.
+      - name: Lint HTML
+        # Invoke the HTML lint script from package.json.
+        run: npm run lint:html
+      # Execute the website test suite.
+      - name: Run tests
+        # Invoke the test script from package.json.
+        run: npm test
+
+  image:
+    name: Build, smoke-test and publish image
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # push to ghcr.io with the built-in token
+    # Publish only from the main branch; other runs build and test without pushing.
+    env:
+      PUBLISH: ${{ github.event_name != 'pull_request' && contains(fromJSON('["main","website_skeleton","testing"]'), github.ref_name) }}
+    steps:
+      # Check out the source needed to build the website image.
+      - uses: actions/checkout@v4
+
+      # Set up Node.js for any Node-based Docker build steps.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Create a lowercase GHCR image name from the repository owner.
+      - name: Name the image (registry names must be lowercase)
+        id: name
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quadm-website" >> "$GITHUB_OUTPUT"
+
+      # Bakes the newest release's download links into the site. A missing
+      # release is fine; the page then asks the GitHub API itself.
+      - name: Write data/latest.json from the newest release
+        working-directory: code/website
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/fetch-release.js
+
+      # Enable BuildKit features used by the Docker build actions.
+      - uses: docker/setup-buildx-action@v3
+
+      # Generate consistent image tags and OCI metadata labels.
+      - name: Image tags and labels
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.name.outputs.image }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=branch
+            type=sha,format=short
+            type=ref,event=pr
+
+      # Build and load the image locally, using the GitHub Actions cache.
+      - name: Build image (local only)
+        uses: docker/build-push-action@v6
+        with:
+          context: code/website
+          load: true
+          tags: quadm-website:ci
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Start the image and verify expected pages/assets work and build files stay private.
+      - name: Smoke-test the container
+        run: |
+          docker run -d --name site -p 8080:8080 quadm-website:ci
+          for i in $(seq 1 30); do curl -fs http://localhost:8080/healthz >/dev/null && break; sleep 1; done
+          for p in / /download.html /guide.html /feedback.html /about.html /css/style.css /js/main.js; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
+            echo "$p -> $code"; [ "$code" = 200 ] || { docker logs site; exit 1; }
+          done
+          # release data must be valid JSON
+          curl -fs http://localhost:8080/data/latest.json | node -e 'const d=JSON.parse(require("fs").readFileSync(0,"utf8")); console.log("latest.json:", d.tag ?? "no release yet")'
+          # test and build files must not be served
+          for p in /package.json /tests/site.test.js /scripts/fetch-release.js /Dockerfile /nginx.conf /security-headers.inc; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$p")
+            echo "$p -> $code"; [ "$code" = 404 ] || { echo "::error::$p is served by the image"; exit 1; }
+          done
+          docker rm -f site
+
+      # Authenticate to GHCR only when this run is allowed to publish.
+      - name: Log in to GitHub Container Registry
+        if: env.PUBLISH == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Push the image using the generated tags and labels on publishable runs.
+      - name: Push image
+        if: env.PUBLISH == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: code/website
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+
+      # Record whether the image was published and show a command to run it.
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Website image"
+            echo "Trigger: ${{ github.event_name }} ${{ github.event.inputs.reason }}"
+            if [ "$PUBLISH" = true ]; then
+              echo ""
+              echo "Published: \`${{ steps.name.outputs.image }}:latest\`"
+              echo ""
+              echo '```'
+              echo "docker run --rm -p 8080:8080 ${{ steps.name.outputs.image }}:latest"
+              echo '```'
+            else
+              echo "Built and tested only (not published from this ref)."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          # Publishes the same site on GitHub Pages. Only the default branch deploys.
+  pages:
+    name: Deploy to GitHub Pages
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write     # upload the site
+      id-token: write  # prove to Pages that the deploy comes from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Write data/latest.json from the newest release
+        working-directory: code/website
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/fetch-release.js
+
+      - name: Assemble the site folder
+        working-directory: code/website
+        run: |
+          mkdir -p "$RUNNER_TEMP/site"
+          rsync -a --exclude node_modules --exclude tests --exclude scripts --exclude firebase \
+            --exclude package.json --exclude package-lock.json --exclude .htmlhintrc \
+            --exclude Dockerfile --exclude nginx.conf --exclude security-headers.inc \
+            --exclude .dockerignore --exclude .gitignore --exclude README.md \
+            ./ "$RUNNER_TEMP/site/"
+          touch "$RUNNER_TEMP/site/.nojekyll"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/site
+
+      - name: Deploy
+        id: deploy
+        uses: actions/deploy-pages@v4
+
+      
+    
