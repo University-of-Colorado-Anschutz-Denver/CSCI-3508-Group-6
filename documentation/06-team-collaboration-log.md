@@ -44,7 +44,7 @@ Use this document throughout the project to demonstrate effective communication,
 | Em Kronquist | Research & Communication Head | <ul><li>Main contact for clients/testers</li><li>Documentation/research lead and final say</li><li>Software engineering</li></ul> | <ul><li>Programming/design support</li><li>User testing</li></ul> |
 | Yannick Kuete | WebDev Lead | <ul><li>Website creation and management</li><li>Testing and automation</li><li>Software engineering</li></ul> | <ul><li>DevOps Management</li><li>Back-end engineering</li></ul> |
 
-Explain how the assignments are fair and how all members will participate in research, development, testing, writing, and presenting: Each member is the "head" of a specific department and will be responsible for managing the rest of the team's contributions to their field. Each member will contribute to each area (for example, Em research metadata formats and Teja researched GUI development for C++ applications, or Yannick created the website visuals and Harrison implemented the download function), and those contributions will be collated by the department head for the final project release.
+**Explain how the assignments are fair and how all members will participate in research, development, testing, writing, and presenting:** Each member is the "head" of a specific department and will be responsible for managing the rest of the team's contributions to their field. Each member will contribute to each area (for example, Em researched metadata formats and Teja researched GUI development for C++ applications, or Yannick created the website visuals and Harrison implemented the download function), and those contributions will be collated by the department head for the final project release.
 
 ## Milestones
 
@@ -53,9 +53,9 @@ Explain how the assignments are fair and how all members will participate in res
 | Subject approval | All | 2026-09-21 | Approval recorded | DONE |
 | Requirements baseline | All (EK Lead) | 2026-10-02 | Requirements reviewed | DONE |
 | Design baseline | All (HJ Lead) | 2026-10-25 | Diagrams and schema reviewed | DONE |
-| Implementation complete | All (HJ Lead) | 2026-11-15 | Required features work | IN PROGRESS |
-| Testing complete | All (YK/EK Lead) | 2026-11-22 | Exit criteria met | IN PROGRESS |
-| Report and presentation | All | 2026-12-02 | Final files reviewed | NOT STARTED |
+| Implementation complete | All (HJ Lead) | 2026-11-15 | Required features work | DONE |
+| Testing complete | All (YK/EK Lead) | 2026-11-22 | Exit criteria met | DONE |
+| Report and presentation | All | 2026-11-18 | Final files reviewed | DONE |
 
 ## Meeting Log
 
@@ -70,6 +70,7 @@ Explain how the assignments are fair and how all members will participate in res
 | 2026-10-23 | HJ, TK, YK | Progress presentation prep | <ul><li>All - Presentation and submission prep</li></ul> | <ul><li>2026-10-25</li></ul> |
 | 2026-10-24 | HJ, EK | TA Meeting #1 (Proposal feedback, UML discussions) | <ul><li>N/A</li></ul> | <ul><li>N/A</li></ul> |
 | 2026-10-30 | HJ, EK, YK | V0.3.0 planning | <ul><li>EK - User testing for file explorer GUI</li><li>EK - Write user guides</li><li>HJ - Installers</li><li>TK - Frontend edit metadata display</li><li>YK - Website installer page prep</li></ul> | <ul><li>2026-11-06</li><li>2026-11-13</li><li>2026-11-06</li><li>2026-11-06</li><li>2026-11-06</li></li></ul> |
+| 2026-11-06 | All | v1.0.0 and testing discussion | <ul><li>EK - Continue user testing</li><li>HJ - Mac Intel installer</li><li>HJ - UI test cases</li><li>TK - User feedback adjustments</li><li>YK - Website GUI </li></ul> | <ul><li>2026-11-11</li><li>2026-11-10</li><li>2026-11-10</li><li>2026-11-15</li><li>2026-11-10</li></li></ul> |
 
 ## Task and Contribution Log
 
@@ -81,12 +82,11 @@ Explain how the assignments are fair and how all members will participate in res
 | 2026-09-25 - 2026-10-02 | YK | CI/CD pipeline structuring | Implemented through GitHub Action | HJ | Accepted |
 | 2026-10-16 | EK | Test implementation for ExifTool using ExifTool C++ Interface | Example files discussed in meeting (Interface not used in final version for various reasons, will be using custom implementation instead) | HJ | Accepted |
 | 2026-10-23 - 2026-10-25 | All | Progress presentation prep | Materials submitted in Canvas | EK | Accepted |
-| 2026-11-01 - 2026-11-11 | EK | User acceptance testing | Feedback presented to team, Kanban tasks adjusted/added | IN PROGRESS | IN PROGRESS |
-| 2026-11-04 - 2026-11-08 | EK | User guides | PDFs available on distribution website and in `documentation/` folder | IN PROGRESS | IN PROGRESS |
-| 2026-11-01 - 2026-11-07 | EK, HJ | App icon design | IN PROGRESS | IN PROGRESS | IN PROGRESS |
-| 2026-11-01 - 2026-11-07 | All | Progress report video | IN PROGRESS | IN PROGRESS | IN PROGRESS |
+| 2026-11-01 - 2026-11-11 | EK | User acceptance testing | Feedback presented to team, Kanban tasks adjusted/added, (04-testing-report.pdf)[/04-testing-report.pdf] | All | Accepted |
+| 2026-11-01 - 2026-11-07 | All | Progress report video | Canvas submission | All | Done |
+| 2026-11-12 - 2026-11-15 | All | Final report | Canvas submission | All | Done |
 
-*Programming contributions are not listed here for brevity, as they are easily viewed in Git commits*
+*Programming contributions are not listed here for brevity, as they are easily viewed in Git commits.*
 
 ## Decision Log
 
@@ -95,7 +95,6 @@ Explain how the assignments are fair and how all members will participate in res
 | 2026-09-09, 2026-09-11 | Project selection (media metadata editor and search program, website for distribution and documentation) | <ul><li>Financial assistant and analyzer with chatbot integration</li><li>Family budget planner allowing multiple users and one year of budget planning</li><li>Metadata manager for media files [SELECTED]</li></ul> | Selected project had interested clients already; EK is familiar with the project domain; general team interest in subject matter | All |
 | 2026-10-09 | GUI development toolkit | <ul><li>Qt [SELECTED]</li><li>FLTK</li><li>Dear ImGUI</li></ul> | Qt has it's own design studio and looks very polished, plus had easy to follow documentation and tutorials available | TK |
 | 2026-10-17 | ExifTool implementation method | <ul><li>Custom calls to Perl implementation [SELECTED]</li><li>ExifTool C++ Interface</li></ul> | Interface required Windows users to install and run through Cygwin; creating custom implementation with Qt calls wasn't complicated and allowed more control | HJ, EK |
-| 2026-11-09 | App icon | <ul><li>HJ</li><li>EK</li></ul> | IN PROGRESS | All |
 
 ## Feedback and Communication Issues
 
@@ -103,24 +102,17 @@ Explain how the assignments are fair and how all members will participate in res
 | --- | --- | --- | --- |
 | 2026-09-09 | Misunderstanding of project domain | Slow start on developing project proposal and uncertain scope, as EK's explanation of problem to be solved was unclear | Problem was demonstrated in meeting on 2026-09-11 and made clear to team members, goals for development and scope adjusted to better reflect the solution desired |
 
-## Next Steps
-
-| Team member | Work status | Estimated completion date |
-| --- | --- | --- | --- |
-| Yannick Kuete | Firestone implementation, refine website GUI | 2026-11-10 (Firestone), 2026-11-13 (website GUI) |
-| Emelie Kronquist | Documentation finalization, user acceptance testing | 2026-11-15 (docs), 2026-11-11 (testing) |
-| Harrison Julius | Mac Intel installer, UI test cases | 2026-11-09 (installer), 2026-11-10 (tests) |
-| Teja Kandimalla | GUI styling, user feedback adjustments | 2026-11-10 (styling), 2026-11-13 (feedback) |
-
 ## Final Contribution Summary
 
 Complete this section before submission.
 
 | Member | Research/requirements | Design | Code | Testing | Report/presentation | Overall contribution summary |
 | --- | --- | --- | --- | --- | --- | --- |
-| Harrison Julius | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
-| Teja Kandimalla | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
-| Em Kronquist | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
-| Yannick Kuete | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] | [Summary] |
+| Harrison Julius | TagLib research | Architecture, class diagrams | Backend programming, final ExifTool and TagLib implementation | UI test cases | Progress and final report skeleton, backend demo for video | Project Management, Code Architect |
+| Teja Kandimalla | GUI library research | Qt GUI choice, GUI layouts | Full GUI implementation | Manual GUI testing | GUI demo for video | GUI Designer |
+| Em Kronquist | Metadata general info/project idea, stakeholder interviews, ExifTool research | Use case diagram | Web user guide, initial ExifTool strategy | User acceptance testing | Checkpoint video editing, progress presentation design | Research and Documentation, User Outreach |
+| Yannick Kuete | Website requirements | Web UML diagrams | Full web implementation | GitHub Actions pipeline | Web demo for video | DevOps Management, WebDev |
+
+*All team members meaningfully contributed to all reports and presentations, through writing, design, and actively presenting. Contributions listed here under the Report/Presentation section are tasks that went above the general performed provided by all team members.*
 
 **Team confirmation:** [State that all members reviewed this summary, or document unresolved disagreements factually.]
