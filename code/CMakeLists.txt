@@ -9,7 +9,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Svg)
 
 # Pick up every .cpp/.h/.ui/.qrc under src/ and include/; CONFIGURE_DEPENDS re-checks on each build
 file(GLOB_RECURSE QUADM_SOURCES CONFIGURE_DEPENDS
@@ -54,7 +54,7 @@ FetchContent_MakeAvailable(taglib)
 
 # When built as a subproject TagLib has no TagLib::tag target and exports no include paths, so add them here.
 # Include headers directly, e.g. #include <mpegfile.h>, #include <wavfile.h>
-target_link_libraries(QuadM PRIVATE Qt6::Widgets tag)
+target_link_libraries(QuadM PRIVATE Qt6::Widgets Qt6::Svg tag)
 target_compile_definitions(QuadM PRIVATE TAGLIB_STATIC)
 target_include_directories(QuadM PRIVATE "${taglib_SOURCE_DIR}" "${taglib_SOURCE_DIR}/taglib"
     "${taglib_SOURCE_DIR}/taglib/toolkit" "${taglib_SOURCE_DIR}/taglib/mpeg"

@@ -1,4 +1,3 @@
-
 /* =================================
    QuadM - Website Inspired Light Theme
 ================================= */
@@ -291,4 +290,173 @@ QStatusBar {
     background-color: #FFFFFF;
     color: #69737D;
     border-top: 1px solid #DDE1E5;
+}
+
+
+/* =================================
+   Welcome Screen
+================================= */
+
+QWidget#welcomeWidget {
+    background-color: transparent;
+}
+
+QLabel {
+    color: #20252B;
+}
+
+QLabel#welcomeBrandLabel {
+    color: #20252B;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+QLabel#welcomeDescription {
+    color: #5A646E;
+    font-size: 14px;
+}
+
+QLabel#welcomeInstruction {
+    color: #087F72;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+QFrame#viewCard,
+QFrame#editCard,
+QFrame#tagCard {
+    background-color: #FFFFFF;
+    border: 1px solid #DDE1E5;
+    border-radius: 10px;
+}
+
+QFrame#viewCard:hover,
+QFrame#editCard:hover,
+QFrame#tagCard:hover {
+    background-color: #F5FAF9;
+    border: 1px solid #159889;
+}
+
+QLabel#viewCardIcon,
+QLabel#editCardIcon,
+QLabel#tagCardIcon {
+    background-color: transparent;
+    border: none;
+}
+
+QLabel#viewCardTitle,
+QLabel#editCardTitle,
+QLabel#tagCardTitle {
+    color: #20252B;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+QLabel#viewCardDescription,
+QLabel#editCardDescription,
+QLabel#tagCardDescription {
+    color: #5A646E;
+    font-size: 12px;
+}
+
+
+/* =================================
+   Metadata Editor
+================================= */
+
+QMainWindow#MetadataEditor {
+    background-color: #F1F3F5;
+    color: #20252B;
+    font-size: 13px;
+}
+
+QMainWindow#MetadataEditor QLabel {
+    color: #20252B;
+}
+
+QLabel#fileNameLabel {
+    color: #20252B;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+QLabel#fileTypeLabel {
+    background-color: #DDF0EC;
+    color: #087F72;
+    border: 1px solid #B8DDD5;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+QLabel#placeholderLabel {
+    color: #69737D;
+    font-size: 13px;
+}
+
+QScrollArea#metadataScrollArea {
+    background-color: #FFFFFF;
+    border: 1px solid #DDE1E5;
+    border-radius: 9px;
+}
+
+QLineEdit,
+QTextEdit,
+QPlainTextEdit,
+QSpinBox,
+QDoubleSpinBox {
+    background-color: #FFFFFF;
+    color: #20252B;
+    border: 1px solid #D9DEE3;
+    border-radius: 6px;
+    padding: 5px 8px;
+    selection-background-color: #159889;
+    selection-color: #FFFFFF;
+}
+
+QCheckBox,
+QRadioButton {
+    color: #20252B;
+}
+
+QPushButton#addMetadataButton,
+QPushButton#saveMetadataButton {
+    background-color: #159889;
+    color: #FFFFFF;
+    border: none;
+    font-weight: 600;
+}
+
+QPushButton#addMetadataButton:hover,
+QPushButton#saveMetadataButton:hover {
+    background-color: #087F72;
+}
+
+QPushButton#addMetadataButton:pressed,
+QPushButton#saveMetadataButton:pressed {
+    background-color: #06695F;
+}
+
+
+/* =================================
+   Settings
+================================= */
+
+QWidget#Settings {
+    background-color: #F1F3F5;
+    color: #20252B;
+}
+
+QFrame#storageFrame,
+QFrame#appearanceFrame {
+    background-color: #FFFFFF;
+    border: 1px solid #DDE1E5;
+    border-radius: 9px;
+}
+
+QFrame#storageFrame QLabel,
+QFrame#appearanceFrame QLabel {
+    background-color: transparent;
+    border: none;
 }
