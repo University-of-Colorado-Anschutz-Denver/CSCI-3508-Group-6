@@ -37,6 +37,14 @@
     return Array.from(bytes, b => chars[b % chars.length]).join("");
   }
 
+  // The Firebase console lists documents by ID, A to Z. This ID starts with a number that gets
+  // SMALLER as time passes (9999999999999 minus the time in ms), so the newest feedback sorts first.
+  // The random tail keeps two messages sent in the same millisecond apart.
+  function newestFirstId(now, cryptoImpl) {
+    const t = typeof now === "number" ? now : Date.now();
+    return String(9999999999999 - t).padStart(13, "0") + "-" + randomId(cryptoImpl).slice(0, 8);
+  }
+
   // Firestore REST "commit" with a server-side timestamp, so createdAt is never
   // chosen by the browser. currentDocument.exists=false makes it a create.
   function buildCommit(clean, projectId, id) {
@@ -69,7 +77,7 @@
       const r = await f(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(buildCommit(v.clean, cfg.projectId, (idFn || randomId)()))
+        body: JSON.stringify(buildCommit(v.clean, cfg.projectId, (idFn || newestFirstId)()))
       });
       return r.ok ? { ok: true } : { ok: false, reason: "http-" + r.status };
     } catch (e) {
@@ -77,5 +85,5 @@
     }
   }
 
-  return { TYPES, validate, buildCommit, submit, randomId };
+  return { TYPES, validate, buildCommit, submit, randomId, newestFirstId };
 });
