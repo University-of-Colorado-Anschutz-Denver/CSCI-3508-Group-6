@@ -41,7 +41,7 @@ Use this document throughout the project to demonstrate effective communication,
 | --- | --- | --- | --- |
 | Harrison Julius | Project Lead / Code Architect | <ul><li>Team management</li><li>GitHub management</li><li>Software engineering</li> | <ul><li>Research</li></ul> |
 | Teja Kandimalla | GUI Designer | <ul><li>Design and implement user interface</li><li>Final say on GUI-related decisions</li><li>Software engineering</li> | <ul><li>WebDev Support</li></ul> |
-| Em Kronquist | Research & Communication Head | <ul><li>Main contact for clients/testers</li><li>Documentation/research lead and final say</li><li>Software engineering</li></ul> | <ul><li>Programming/design support</li><li>User testing</li></ul> |
+| Em Kronquist | Research & Communication Head | <ul><li>Main contact for clients/testers</li><li>Documentation/research lead and final say</li><li>Software engineering</li></ul> | <ul><li>Programming/design support</li></ul> |
 | Yannick Kuete | WebDev Lead | <ul><li>Website creation and management</li><li>Testing and automation</li><li>Software engineering</li></ul> | <ul><li>DevOps Management</li><li>Back-end engineering</li></ul> |
 
 **Explain how the assignments are fair and how all members will participate in research, development, testing, writing, and presenting:** Each member is the "head" of a specific department and will be responsible for managing the rest of the team's contributions to their field. Each member will contribute to each area (for example, Em researched metadata formats and Teja researched GUI development for C++ applications, or Yannick created the website visuals and Harrison implemented the download function), and those contributions will be collated by the department head for the final project release.
