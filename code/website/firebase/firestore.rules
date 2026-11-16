@@ -1,0 +1,31 @@
+rules_version = '2';
+
+// Feedback collection: visitors may create a valid record and nothing else.
+// Nobody can read, change or delete through the website; the team does that
+// in the Firebase console (which bypasses these rules).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function valid(d) {
+      return d.keys().hasOnly(['type', 'message', 'email', 'appVersion', 'createdAt', 'status'])
+        && d.keys().hasAll(['type', 'message', 'createdAt', 'status'])
+        && d.type in ['bug', 'feature', 'question', 'other']
+        && d.message is string && d.message.size() >= 1 && d.message.size() <= 2000
+        && (!('email' in d) || (d.email is string && d.email.size() <= 254
+              && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')))
+        && (!('appVersion' in d) || (d.appVersion is string
+              && d.appVersion.matches('^[0-9A-Za-z.+-]{1,32}$')))
+        && d.createdAt == request.time      // set by the server, never the browser
+        && d.status == 'new';               // only the team moves it to read/resolved
+    }
+
+    match /feedback/{id} {
+      allow create: if valid(request.resource.data);
+      allow read, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,1252 @@
+PROJECT: QuadM (Multimedia Metadata Manager) - WEBSITE
+VERSION OR COMMIT: v1.0.2
+GENERATED/UPDATED: 2026-11-15
+
+===============================================================================
+FILE: code/website/about.html
+LANGUAGE: html
+PURPOSE: About Page structure
+===============================================================================
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="About the QuadM team and the course project behind the MultiMedia Metadata Manager.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to main content</a>
+<!-- Shared header: same brand and navigation on every page; the current page is marked. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="28" height="28"><span>MultiMedia Metadata Manager (QuadM)</span></a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="about.html" aria-current="page">About</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="wrap" id="content">
+  <h1>About</h1>
+  <p class="lead">MultiMedia Metadata Manager (QuadM) started as a course project. Media files hide lots of useful metadata, and file explorers make it hard to see or edit. We built one focused tool for it.</p>
+</section>
+<section class="wrap">
+  <h2>Team</h2>
+  <ul class="team">
+    <li class="card">
+      <h3>Harrison Julius</h3>
+      <p class="role">Group Leader</p>
+      <ul class="tags"><li>Project Management</li><li>Code Architect</li></ul>
+      <a class="person-mail" href="mailto:juliuszharrison@gmail.com"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>juliuszharrison@gmail.com</a>
+    </li>
+    <li class="card">
+      <h3>Teja Kandimalla</h3>
+      <p class="role">Team Member</p>
+      <ul class="tags"><li>GUI Designer</li><li>WebDev</li></ul>
+      <a class="person-mail" href="mailto:tejakandimalla20@gmail.com"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>tejakandimalla20@gmail.com</a>
+    </li>
+    <li class="card">
+      <h3>Emelie Kronquist</h3>
+      <p class="role">Team Member</p>
+      <ul class="tags"><li>Research and Communication</li><li>Client Outreach</li><li>Documentation Manager</li></ul>
+      <a class="person-mail" href="mailto:emelie.kronquist@gmail.com"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>emelie.kronquist@gmail.com</a>
+    </li>
+    <li class="card">
+      <h3>Yannick Kuete</h3>
+      <p class="role">Team Member</p>
+      <ul class="tags"><li>DevOps Management</li><li>WebDev</li></ul>
+      <a class="person-mail" href="mailto:yankuete@gmail.com"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>yankuete@gmail.com</a>
+    </li>
+  </ul>
+</section>
+<section class="wrap">
+  <h2>Project links</h2>
+  <ul>
+    <li><a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source code</a></li>
+    <li><a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases">All releases</a></li>
+  </ul>
+</section>
+</main>
+<!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project</p>
+    <nav aria-label="Footer">
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Send feedback</a>
+      <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
+
+===============================================================================
+FILE: code/website/download.html
+LANGUAGE: html
+PURPOSE: Feedback Page structure
+===============================================================================
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="Download QuadM for Windows, macOS or Linux. Builds published on GitHub Releases with checksums.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to main content</a>
+<!-- Shared header: same brand and navigation on every page; the current page is marked. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="28" height="28"><span>MultiMedia Metadata Manager (QuadM)</span></a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="download.html" aria-current="page">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="wrap" id="content">
+  <div class="dl-hero">
+    <h1>Download QuadM</h1>
+    <!-- Status: JavaScript replaces "loading…" with the latest release version. -->
+    <p class="lead">Free for Windows, macOS and Linux. Pick your system below.</p>
+    <p class="dl-status"><span class="pill">Latest version <strong id="version" role="status">loading…</strong></span> <span class="muted" id="release-meta"></span></p>
+  </div>
+  <!-- Download buttons link to matching files attached to a GitHub release; a card hides itself if its file is missing. -->
+  <h2 class="sr-only">Choose your download</h2>
+  <div class="dl-grid" id="downloads">
+    <div class="card dl-card">
+      <div class="dl-head">
+        <span class="dl-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+        <div><h3>Windows</h3><p class="muted small">Windows 10 or later, 64-bit</p></div>
+      </div>
+      <ul class="dl-list">
+        <li>Installs to Program Files\QuadM</li>
+        <li>ExifTool is bundled, nothing else to install</li>
+        <li>Remove it any time from Settings &rarr; Apps</li>
+      </ul>
+      <p class="dl-actions"><a class="btn primary" id="dl-win" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Download for Windows</a></p>
+      <p class="muted small">.msi installer</p>
+    </div>
+    <div class="card dl-card">
+      <div class="dl-head">
+        <span class="dl-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 20h20"/></svg></span>
+        <div><h3>macOS</h3><p class="muted small">macOS 12 or later</p></div>
+      </div>
+      <p class="muted small">Not sure which Mac you have? Apple menu &rarr; About This Mac &rarr; Chip.</p>
+      <div class="dl-variant" id="mac-arm">
+        <p class="dl-variant-title">Apple Silicon <span class="muted">(M1 or newer)</span></p>
+        <a class="btn primary" id="dl-mac-pkg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Installer (.pkg)</a>
+        <a class="btn" id="dl-mac-dmg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Disk image (.dmg)</a>
+      </div>
+      <div class="dl-variant" id="mac-intel">
+        <p class="dl-variant-title">Intel</p>
+        <a class="btn primary" id="dl-mac-intel-pkg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Installer (.pkg)</a>
+        <a class="btn" id="dl-mac-intel-dmg" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Disk image (.dmg)</a>
+      </div>
+      <p class="muted small">The .pkg is the graphical installer. The .dmg is the non-graphical option.</p>
+    </div>
+    <div class="card dl-card" id="linux-row" hidden>
+      <div class="dl-head">
+        <span class="dl-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></span>
+        <div><h3>Linux</h3><p class="muted small">Ubuntu / Debian, amd64</p></div>
+      </div>
+      <ul class="dl-list">
+        <li>Installs to /opt/quadm</li>
+        <li>ExifTool is bundled, nothing else to install</li>
+        <li>Remove it with <code>sudo apt remove quadm</code></li>
+      </ul>
+      <p class="dl-actions"><a class="btn primary" id="dl-linux" href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6/releases/latest">Download the .deb</a></p>
+      <p class="muted small">Then install it with:</p>
+      <pre class="cmd"><code>sudo apt install ./&lt;file&gt;.deb</code></pre>
+    </div>
+  </div>
+  <p class="dl-note muted small"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8.2-8 9-4.8-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Builds are made automatically by our CI pipeline and published on GitHub Releases. Checksums (<code>SHA256SUMS.txt</code>) are on the release page.</p>
+</section>
+<section class="wrap narrow">
+  <!-- Help right where it is needed: install steps per system; JavaScript opens the one that matches your computer. -->
+  <h2>How to install</h2>
+  <details id="steps-win" open>
+    <summary>Windows</summary>
+    <ol>
+      <li>Download and run the installer.</li>
+      <li>If Windows SmartScreen warns about an unknown publisher, choose <em>More info &rarr; Run anyway</em>.</li>
+      <li>Open <em>QuadM</em> from the Start menu and choose a folder.</li>
+    </ol>
+    <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>The app is not code-signed yet, which is why SmartScreen shows this warning.</span></p>
+  </details>
+  <details id="steps-mac" open>
+    <summary>macOS</summary>
+    <ol>
+      <li>Open the downloaded .pkg and follow the installer, or open the .dmg and drag <em>QuadM</em> into <em>Applications</em>.</li>
+      <li>On first launch, right-click the app, choose <em>Open</em>, then <em>Open</em> again (or allow it under System Settings &rarr; Privacy &amp; Security).</li>
+      <li>Choose a folder to start browsing metadata.</li>
+    </ol>
+    <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>The app is not notarized yet, which is why macOS asks you to confirm the first launch.</span></p>
+  </details>
+  <p>Need help? Read the <a href="guide.html">user guide</a> or <a href="feedback.html">send us feedback</a>.</p>
+</section>
+</main>
+<!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project</p>
+    <nav aria-label="Footer">
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Send feedback</a>
+      <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="js/release-data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
+
+===============================================================================
+FILE: code/website/feedback.html
+LANGUAGE: html
+PURPOSE: Feedback Page structure
+===============================================================================
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="Report a bug, request a feature or ask a question about QuadM.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to main content</a>
+<!-- Shared header: same brand and navigation on every page; the current page is marked. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="28" height="28"><span>MultiMedia Metadata Manager (QuadM)</span></a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html" aria-current="page">Feedback</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="wrap narrow" id="content">
+  <h1>Feedback</h1>
+  <p class="lead">Found a bug or have an idea? Tell us.</p>
+  <p class="muted small">Fields marked <span class="req" aria-hidden="true">*</span><span class="sr-only"> (required)</span> are required.</p>
+  <!-- JavaScript validates each field as you type and shows the result in the status box below the button. -->
+  <form id="feedback-form" novalidate>
+    <div class="field">
+      <label for="f-type">Type <span class="req" aria-hidden="true">*</span></label>
+      <span class="hint" id="hint-type">What kind of message is this?</span>
+      <select id="f-type" name="type" aria-describedby="hint-type err-type"><option value="bug">Bug</option><option value="feature">Feature request</option><option value="question">Question</option><option value="other">Other</option></select>
+      <p class="field-error" id="err-type" role="alert" hidden></p>
+    </div>
+    <div class="field">
+      <label for="f-email">Your email <span class="opt">(optional)</span></label>
+      <span class="hint" id="hint-email">Only if you want a reply. Example: name@example.com</span>
+      <input id="f-email" type="email" name="email" autocomplete="email" aria-describedby="hint-email err-email">
+      <p class="field-error" id="err-email" role="alert" hidden></p>
+    </div>
+    <div class="field">
+      <label for="f-message">Message <span class="req" aria-hidden="true">*</span></label>
+      <span class="hint" id="hint-message">Describe what happened or what you would like. For a bug, tell us what you clicked and what you expected.</span>
+      <textarea id="f-message" name="message" rows="6" required maxlength="2000" aria-describedby="hint-message err-message message-count"></textarea>
+      <p class="field-error" id="err-message" role="alert" hidden></p>
+      <p class="counter" id="message-count">0 / 2000</p>
+    </div>
+    <div class="field">
+      <label for="f-version">App version <span class="opt">(optional)</span></label>
+      <span class="hint" id="hint-version">Example: 0.1.0</span>
+      <input id="f-version" type="text" name="version" placeholder="e.g. 0.1.0" aria-describedby="hint-version err-version">
+      <p class="field-error" id="err-version" role="alert" hidden></p>
+    </div>
+    <!-- Hidden honeypot field helps filter automated spam submissions. -->
+    <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="form-actions">
+      <button class="btn primary btn-lg" type="submit">Send feedback</button>
+      <span class="muted small">Tip: press Ctrl+Enter (&#8984;+Enter on Mac) in the message box to send.</span>
+    </div>
+    <!-- JavaScript writes progress, success, or error messages here. -->
+    <div id="form-status" class="status" role="status" aria-live="polite"></div>
+  </form>
+</section>
+</main>
+<!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project</p>
+    <nav aria-label="Footer">
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Send feedback</a>
+      <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="js/feedback-service.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
+
+===============================================================================
+FILE: code/website/guide.html
+LANGUAGE: html
+PURPOSE: User Guide Page structure
+===============================================================================
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>User guide · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="Step-by-step guide to QuadM: open a folder, edit metadata, tag files and search by tag.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to main content</a>
+<!-- Shared header: same brand and navigation on every page; the current page is marked. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="28" height="28"><span>MultiMedia Metadata Manager (QuadM)</span></a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="download.html">Download</a>
+      <a href="guide.html" aria-current="page">User guide</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="wrap" id="content">
+  <h1>User guide</h1>
+  <p class="lead"><a href="download.html">Download QuadM</a>.</p>
+  <div class="guide">
+    <!-- Jump links stay visible beside the text on wide screens (recognition over recall). -->
+    <nav class="toc" aria-label="On this page">
+      <strong>On this page</strong>
+      <a href="#open">Find a file</a>
+      <a href="#view">View metadata</a>
+      <a href="#edit">Edit metadata</a>
+      <a href="#search">Search via metadata</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <article>
+      <!-- Explain how to select a folder for scanning. -->
+      <h2 id="open">Find a file</h2>
+      <h4>Option 1: Manually find the folder</h4>
+      <p>
+        <ol>
+          <li>Select the drive you want to navigate in the left-most panel through the top dropdown.</li>
+          <li>The middle panel will show files and folders contained in the drive. Double-click to open a folder.</li>
+          <li>Continue navigating through folders until you find your desired file.</li>
+        </ol>
+      </p>
+      <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>You can designate a default drive to open upon launching the app in the Settings menu.</span></p>
+      <h4>Option 2: Enter the file path</h4>
+      <p>
+        <ol>
+          <li>Find or copy the full file path for the file you want to find.</li>
+          <li>Enter it in the top search bar and hit Enter.</li>
+          <li>Entering a folder name will show all files in the folder. Entering a file name at the end will show only that file.</li>
+        </ol>
+      </p>
+
+      <!-- Describe viewing metadata info for supported files. -->
+      <h2 id="view">View metadata</h2>
+      <p>Single-click a file in the current directory in the center panel. The metadata information will be displayed in the right panel, organized into sections by metadata type.</p>
+
+      <!-- Describe adding and removing tags before saving. -->
+      <h2 id="edit">Edit metadata</h2>
+      <h4>Editing existing metadata fields</h4>
+      <p>
+        <ol>
+          <li>Once you've selected a file, press the <em>Edit Metadata</em> button at the top of the right panel.</li>
+          <li>A window will open displaying currently filled fields, as well as common fields for that file type.</li>
+          <li>Type in your new metadata information in the desired field, then press <em>Save Changes</em> in the bottom right corner. A notice will be displayed if changes were saved successfully or if an error was detected.</li>
+        </ol>
+      </p>
+      <h4>Adding custom tags</h4>
+      <p>
+        <ol>
+          <li>Once you've selected a file, press the <em>Edit Metadata</em> button at the top of the right panel.</li>
+          <li>A window will open displaying currently filled fields, as well as common fields for that file type.</li>
+          <li>Press the <em>+ Add Metadata</em> button in the top right corner.</li>
+          <li>In the first dialog box, type the name of the custom metadata field you would like to add.
+            <ul>
+              <li>Not all file types support editing all metadata types. A good rule of thumb is using <em>ID3</em> for audio files and <em>XMP</em> for other file types.</li>
+              <li>For example, to add a custom field named "Tag 1" with the value "good take", enter <em>XMP:Tag1</em>, press OK, then enter <em>good take</em> and press OK.</li>
+            </ul>
+          </li>
+          <li>Press <em>Save Changes</em> in the bottom right corner. A notice will be displayed if changes were saved successfully or if an error was detected.</li>
+        </ol>
+      </p>
+      <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>Custom field names can only contain letters and numbers with no spaces.</span></p>
+
+      <!-- Explain how to search tags within a chosen folder scope. -->
+      <h2 id="search">Search via metadata</h2>
+      <p>
+        <ol>
+          <li>Navigate to the folder you would like to search in.</li>
+          <li>In the top bar of the center panel, type in the value you would like to search for among all metadata fields.</li>
+          <li>When the search is complete, all files in the current folder that have the specified term in any metadata field will be displayed.</li>
+        </ol>
+      </p>
+      <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>Only files in the current folder, not sub-folders, will be displayed.</span></p>
+
+      <!-- Answer common questions about file changes, indexing, and support. -->
+      <h2 id="faq">FAQ</h2>
+      <details><summary>Does the app change my original files?</summary><p>Yes, but only when you press Save. The only data chnaged is metadata, so your file will still work the same in other applications.</p></details>
+      <details><summary>How is new metadata information stored?</summary><p>Metadata is embedded in all files, and your new tags are stored in the same data chunks as existing metadata.</p></details>
+      <details><summary>I've searched for a file in QuadM. How do I use it in another application?</summary><p>Right-click a file to copy its file path. Then, you can find it in your file explorer and use as normal.</p></details>
+      <details><summary>Something is wrong. Where do I report it?</summary><p>Use the <a href="feedback.html">feedback form</a>.</p></details>
+    </article>
+  </div>
+</section>
+</main>
+<!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project</p>
+    <nav aria-label="Footer">
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Send feedback</a>
+      <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
+
+===============================================================================
+FILE: code/website/index.html
+LANGUAGE: html
+PURPOSE: Index Page structure
+===============================================================================
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="View and edit hidden metadata, tag files, and search by tag across your media folders.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to main content</a>
+<!-- Shared header: same brand and navigation on every page; the current page is marked. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="28" height="28"><span>MultiMedia Metadata Manager (QuadM)</span></a>
+    <nav aria-label="Main">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+<main>
+<!-- Hero: one clear promise and one primary action (download), one secondary (guide). -->
+<section class="hero" id="content">
+  <div class="wrap">
+    <p class="eyebrow">Desktop app for Windows, macOS and Linux</p>
+    <h1>See and edit everything hidden inside your media files.</h1>
+    <p class="lead">MultiMedia Metadata Manager (QuadM) is a focused desktop file explorer for images, audio and video. Edit title, author and comments, tag your files, and search by tag across whole folders.</p>
+    <p class="cta">
+      <a class="btn primary btn-lg" id="cta-download" href="download.html">Download QuadM</a>
+      <a class="btn btn-lg" href="guide.html">Read the user guide</a>
+    </p>
+    <p class="muted small">Your original files are only changed when you press Save.</p>
+    <!-- The numbered circles in the picture are explained by the legend, so the labels are real text, not part of the image. -->
+    <figure class="shot-fig">
+      <img class="shot" src="assets/screenshot-main.png" width="1680" height="1034" alt="QuadM main window (design preview): a file list on the left, a preview in the middle, and metadata fields and tags on the right.">
+      <figcaption>
+        Preview of the main window:
+        <ol class="legend">
+          <li>Search by tag</li>
+          <li>Browse files</li>
+          <li>View and edit metadata</li>
+          <li>Add tags</li>
+        </ol>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- Features: four cards, same structure, same icon style. -->
+<section class="wrap">
+  <h2>What it does</h2>
+  <div class="cards">
+    <article class="card"><h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>View all metadata</h3><p>Common fields plus the hidden ones: camera, GPS, codec, software, and more.</p></article>
+    <article class="card"><h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>Edit common fields</h3><p>Change title, author and comments. Nothing is written until you press Save.</p></article>
+    <article class="card"><h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L2 12V2h10l8.6 8.6a2 2 0 010 2.8z"/><circle cx="7" cy="7" r="1.5"/></svg>Tag your files</h3><p>Tags are stored in the file itself so they'll travel with your file no matter where it goes.</p></article>
+    <article class="card"><h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search by tag</h3><p>Find every file with a tag within a folder.</p></article>
+  </div>
+</section>
+
+<!-- The three steps a user actually takes (task flow), so a new visitor knows what using it looks like. -->
+<section class="wrap">
+  <h2>How it works</h2>
+  <ol class="how">
+    <li><strong>Open a folder</strong>QuadM displays it and its subfolders and lists your media files.</li>
+    <li><strong>Edit or tag</strong>Select a file, change its fields or add tags, then press Save.</li>
+    <li><strong>Search by tag</strong>Type a tag and see every matching file in seconds.</li>
+  </ol>
+  <p style="margin-top:var(--s4)"><a href="guide.html">Read the full user guide &rarr;</a></p>
+</section>
+
+<!-- List the media formats currently supported by the app. -->
+<section class="wrap">
+  <h2>Supported formats</h2>
+  <ul class="formats"><li>PNG</li><li>JPG</li><li>WAV</li><li>MP3</li><li>MP4</li></ul>
+  <p class="muted">Other formats can be read and written to, but the team has verified the above file types.</p>
+</section>
+</main>
+<!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project</p>
+    <nav aria-label="Footer">
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Send feedback</a>
+      <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
+
+===============================================================================
+FILE: code/website/css/styles.html
+LANGUAGE: css
+PURPOSE: Web styling
+===============================================================================
+
+/* =========================================================================
+   QuadM website styles
+   Principles applied (GUI Interface Design deck): consistency (one set of
+   tokens), clarity + hierarchy (type scale), feedback (semantic colors),
+   accessibility (contrast >= WCAG AA, focus rings, 44px targets), grid layout
+   and spacing, responsive design, minimalism.
+   ========================================================================= */
+
+/* ---- 1. Design tokens -------------------------------------------------- */
+:root{
+  /* color: neutral surfaces + one accent */
+  --bg:#fff; --fg:#1c1e21; --muted:#566070; --card:#f4f6f8; --line:#dde1e6;
+  --field:#7a828d;                      /* input borders: >= 3:1 on --bg */
+  --accent:#0b6f64; --accent-fg:#fff;
+  /* color: semantic meaning (same meaning everywhere: red=error, green=success,
+     blue=information, orange=warning) */
+  --ok-fg:#17623a;   --ok-bg:#e8f5ec;
+  --err-fg:#b3261e;  --err-bg:#fdecea;
+  --info-fg:#0b4f99; --info-bg:#e8f1fb;
+  --warn-fg:#7a4a00; --warn-bg:#fff4e0;
+  /* spacing scale (4px base) */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px;
+  --radius:12px; --radius-sm:8px;
+  --shadow:0 10px 30px rgba(0,0,0,.14);
+  --header-h:64px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#14161a; --fg:#e8eaed; --muted:#a3abb6; --card:#1d2026; --line:#2c3037;
+  --field:#7d8591; --accent:#3cc5b2; --accent-fg:#0b1e1b;
+  --ok-fg:#86e0a3;   --ok-bg:#12281b;
+  --err-fg:#ff9f97;  --err-bg:#33191a;
+  --info-fg:#97c9ff; --info-bg:#14263b;
+  --warn-fg:#ffcc75; --warn-bg:#33260f;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+}}
+
+/* ---- 2. Base + typography (clear sans-serif, hierarchy, 16px+ body) ---- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + var(--s4))}
+body{margin:0;font:1rem/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1,h2,h3{line-height:1.2;margin:0 0 var(--s3);letter-spacing:-.01em}
+h1{font-size:clamp(1.9rem,4.6vw,2.8rem)}
+h2{font-size:clamp(1.35rem,2.6vw,1.75rem);margin-top:var(--s7)}
+h3{font-size:1.125rem}
+p,ul,ol{margin:0 0 var(--s4)}
+.lead{font-size:1.15rem;color:var(--muted);max-width:62ch}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+.eyebrow{margin:0 0 var(--s3);font-size:.85rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+a{color:var(--accent);text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+code{background:var(--card);padding:1px 6px;border-radius:4px;font-size:.92em;overflow-wrap:anywhere}
+.hp{position:absolute;left:-9999px}
+[hidden]{display:none !important}
+
+/* ---- 3. Layout grid + spacing ------------------------------------------ */
+.wrap{max-width:1040px;margin:0 auto;padding-inline:clamp(16px,4vw,24px)}
+.narrow{max-width:760px}
+main>section{padding-block:var(--s6)}
+main>section:first-child{padding-top:var(--s7)}
+main>section>h2:first-child{margin-top:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:var(--s4)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s5)}
+.card h3{display:flex;align-items:flex-start;gap:var(--s2)}
+.card h3 .icon{margin-top:.08em}
+.card>:last-child{margin-bottom:0}
+.card.recommended{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);position:relative}
+.card.recommended::before{content:"Recommended for your computer";position:absolute;top:calc(-1 * var(--s3));left:var(--s5);padding:2px 10px;border-radius:999px;background:var(--accent);color:var(--accent-fg);font-size:.78rem;font-weight:700}
+
+/* ---- 4. Skip link, header and navigation (always visible, consistent) -- */
+.skip{position:absolute;left:var(--s4);top:-60px;z-index:100;padding:var(--s2) var(--s4);background:var(--accent);color:var(--accent-fg);border-radius:var(--radius-sm);font-weight:700;text-decoration:none}
+.skip:focus{top:var(--s2)}
+.site-header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s2) var(--s4);flex-wrap:wrap;min-height:var(--header-h);padding-block:var(--s2)}
+.brand{display:inline-flex;align-items:center;gap:var(--s3);font-weight:700;text-decoration:none;color:var(--fg)}
+.brand img{width:28px;height:28px;flex:none}
+.site-header nav{display:flex;flex-wrap:wrap;gap:var(--s1)}
+.site-header nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s3);border-bottom:3px solid transparent;text-decoration:none;color:var(--muted);font-weight:600}
+.site-header nav a:hover{color:var(--fg)}
+.site-header nav a[aria-current]{color:var(--fg);border-bottom-color:var(--accent)}
+
+/* ---- 5. Buttons (one style per role, 44px targets, visible states) ----- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:44px;padding:0 var(--s5);border:1px solid var(--field);border-radius:var(--radius-sm);background:transparent;color:var(--fg);font:inherit;font-weight:600;text-decoration:none;cursor:pointer;transition:transform .08s,border-color .15s,filter .15s}
+.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn-lg{min-height:52px;font-size:1.05rem}
+.btn:disabled{opacity:.65;cursor:progress;transform:none}
+.btn.loading::before{content:"";width:1em;height:1em;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cta{display:flex;flex-wrap:wrap;gap:var(--s3);margin:var(--s5) 0 var(--s3)}
+.card .btn{margin:var(--s1) var(--s2) var(--s1) 0}
+
+/* ---- 6. Icons (all the same stroke style and size) --------------------- */
+.icon{width:1.35em;height:1.35em;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card h3 .icon{color:var(--accent)}
+
+/* ---- 7. Home ------------------------------------------------------------ */
+.hero{background:var(--card);border-bottom:1px solid var(--line)}
+main>section.hero{padding-block:var(--s7) var(--s6)}
+.shot-fig{margin:var(--s6) 0 0}
+.shot{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.shot-fig figcaption{margin-top:var(--s3);color:var(--muted);font-size:.92rem}
+.legend{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);margin:var(--s2) 0 0;padding:0;list-style:none;counter-reset:l}
+.legend li{counter-increment:l;display:flex;align-items:center;gap:var(--s2)}
+.legend li::before{content:counter(l);display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--fg);color:var(--bg);font-size:.8rem;font-weight:700}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:var(--s4);margin:0;padding:0;list-style:none;counter-reset:s}
+.how li{counter-increment:s;padding:var(--s5);border:1px solid var(--line);border-radius:var(--radius)}
+.how li::before{content:counter(s);display:grid;place-items:center;width:32px;height:32px;margin-bottom:var(--s3);border-radius:50%;background:var(--accent);color:var(--accent-fg);font-weight:700}
+.how strong{display:block;margin-bottom:var(--s1)}
+.formats{display:flex;flex-wrap:wrap;gap:var(--s2);margin:0 0 var(--s4);padding:0;list-style:none}
+.formats li{padding:4px 14px;border:1px solid var(--line);border-radius:999px;font-weight:600}
+
+/* ---- 8. Messages / callouts (semantic colors + icon + text, never color alone) */
+.status,.note{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3) var(--s4);border:1px solid;border-radius:var(--radius-sm);font-weight:600}
+.note{font-weight:400;margin:var(--s4) 0}
+.status:empty{display:none}
+.status .icon,.note .icon{margin-top:2px}
+.status.ok,.note.ok{background:var(--ok-bg);color:var(--ok-fg);border-color:var(--ok-fg)}
+.status.err,.note.err{background:var(--err-bg);color:var(--err-fg);border-color:var(--err-fg)}
+.status.info,.note.info{background:var(--info-bg);color:var(--info-fg);border-color:var(--info-fg)}
+.status.warn,.note.warn{background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-fg)}
+
+/* ---- 9. Forms (labels, hints, inline validation, counters) ------------- */
+.field{margin:0 0 var(--s5)}
+.field>label,.field>.label{display:block;font-weight:700;margin-bottom:var(--s1)}
+.req{color:var(--err-fg)}
+.opt{font-weight:400;color:var(--muted)}
+.hint{display:block;margin:0 0 var(--s2);color:var(--muted);font-size:.9rem}
+input,select,textarea{display:block;width:100%;min-height:44px;padding:10px var(--s3);border:1px solid var(--field);border-radius:var(--radius-sm);font:inherit;background:var(--bg);color:var(--fg)}
+textarea{resize:vertical;min-height:140px}
+input[aria-invalid],select[aria-invalid],textarea[aria-invalid]{border-color:var(--err-fg);border-width:2px}
+.field-error{display:flex;gap:var(--s2);align-items:center;margin:var(--s2) 0 0;color:var(--err-fg);font-size:.92rem;font-weight:600}
+.counter{margin:var(--s1) 0 0;text-align:right;color:var(--muted);font-size:.85rem}
+.counter.warn{color:var(--warn-fg);font-weight:700}
+.form-actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3) var(--s4);margin-bottom:var(--s4)}
+form .status{margin-top:var(--s4)}
+
+/* ---- 10. Guide ---------------------------------------------------------- */
+.guide{display:grid;gap:var(--s6)}
+.toc{padding:var(--s4);border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+.toc strong{display:block;margin-bottom:var(--s2)}
+.toc a{display:block;padding:6px 0;text-decoration:none}
+.toc a:hover{text-decoration:underline}
+.guide h2:first-child{margin-top:0}
+@media (min-width:900px){
+  .guide{grid-template-columns:230px minmax(0,1fr);align-items:start}
+  .toc{position:sticky;top:calc(var(--header-h) + var(--s4))}
+}
+table{border-collapse:collapse;width:100%;margin-bottom:var(--s4)}
+th,td{text-align:left;padding:var(--s3);border-bottom:1px solid var(--line)}
+th{background:var(--card)}
+details{border:1px solid var(--line);border-radius:var(--radius-sm);padding:0 var(--s4);margin:var(--s2) 0}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
+details[open]>summary{border-bottom:1px solid var(--line);margin-bottom:var(--s3)}
+details>:last-child{margin-bottom:var(--s4)}
+
+/* ---- 11. About (people cards) ------------------------------------------ */
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:var(--s4);margin:0;padding:0;list-style:none}
+.team .card h3{margin-bottom:var(--s1)}
+.role{margin:0 0 var(--s3);color:var(--muted);font-weight:600}
+.tags{display:flex;flex-wrap:wrap;gap:var(--s2);margin:0 0 var(--s3);padding:0;list-style:none}
+.tags li{padding:2px 10px;border:1px solid var(--line);border-radius:999px;background:var(--bg);font-size:.9rem}
+.person-mail{display:inline-flex;align-items:center;gap:var(--s2);overflow-wrap:anywhere}
+
+/* ---- 12. Footer --------------------------------------------------------- */
+.site-footer{margin-top:var(--s8);border-top:1px solid var(--line);padding:var(--s5) 0;color:var(--muted)}
+.footer-grid{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s3) var(--s5)}
+.footer-grid p{margin:0}
+.site-footer nav{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s4)}
+.site-footer nav a{display:inline-flex;align-items:center;min-height:44px}
+
+/* ---- 13. Accessibility + responsive ------------------------------------ */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (max-width:560px){
+  main>section.hero{padding-block:var(--s6) var(--s5)}
+  .btn-lg{width:100%}
+  .cta{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .btn,.btn.loading::before{transition:none;animation:none}
+}
+@media (forced-colors:active){
+  .btn.primary,.card.recommended::before{border:1px solid ButtonText}
+  .site-header nav a[aria-current]{text-decoration:underline}
+}
+
+/* Visually hidden text for screen readers. */
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* ---- Download page ------------------------------------------------------ */
+.dl-hero{margin-bottom:var(--s6)}
+.dl-hero h1{margin-bottom:var(--s2)}
+.dl-status{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3);margin:var(--s4) 0 0}
+.pill{display:inline-flex;gap:var(--s2);padding:4px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:.95rem}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:var(--s5);align-items:stretch;padding-top:var(--s3)}
+.dl-card{display:flex;flex-direction:column;gap:var(--s4);position:relative;transition:border-color .15s,transform .15s}
+.dl-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.dl-card>p{margin:0}
+.dl-card[hidden]{display:none}
+.dl-card.recommended{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 9%,var(--card)),var(--card))}
+.dl-head{display:flex;align-items:center;gap:var(--s3)}
+.dl-head h3{margin:0}
+.dl-head p{margin:0}
+.dl-icon{display:grid;place-items:center;flex:none;width:48px;height:48px;border-radius:12px;background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.dl-icon .icon{width:26px;height:26px;margin:0}
+.dl-actions{margin-top:auto!important}
+.dl-card .btn{width:100%;margin:0}
+.dl-variant{display:flex;flex-direction:column;gap:var(--s2);padding:var(--s4);border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--bg)}
+.dl-variant[hidden]{display:none}
+.dl-variant-title{margin:0 0 var(--s1);font-weight:700}
+.dl-variant-title .muted{font-weight:400}
+.cmd{margin:0;padding:var(--s3) var(--s4);border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--bg);overflow-x:auto;font-size:.88rem}
+.cmd code{background:none;padding:0}
+.dl-note{display:flex;align-items:flex-start;gap:var(--s2);margin:var(--s5) 0 0}
+.dl-note .icon{flex:none;width:18px;height:18px;margin-top:.15em}
+.dl-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:var(--s2);font-size:.95rem}
+.dl-list li{position:relative;padding-left:1.4em}
+.dl-list li::before{content:"";position:absolute;left:.2em;top:.45em;width:.5em;height:.28em;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+
+===============================================================================
+FILE: code/website/js/feedback-service.js
+LANGUAGE: JavaScript
+PURPOSE: Feedback service manager
+===============================================================================
+
+// Validates the feedback form and writes it to Cloud Firestore through the
+// public REST API. Shared by the browser and Node (tests). The same rules are
+// enforced a second time, server side, by firebase/firestore.rules.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory();
+  else root.FeedbackService = factory();
+})(typeof self !== "undefined" ? self : this, function () {
+  const TYPES = ["bug", "feature", "question", "other"];
+  const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  const VERSION = /^[0-9A-Za-z.+-]{1,32}$/;
+
+  // Returns { ok, errors: {field: message}, clean }. clean has only schema fields.
+  function validate(input) {
+    const d = input || {};
+    const errors = {};
+    const type = String(d.type || "").trim().toLowerCase();
+    const message = String(d.message || "").trim();
+    const email = String(d.email || "").trim();
+    const appVersion = String(d.version || d.appVersion || "").trim();
+    if (!TYPES.includes(type)) errors.type = "Choose a type.";
+    if (!message) errors.message = "Please write a message.";
+    else if (message.length > 2000) errors.message = "Message is longer than 2000 characters.";
+    if (email && (email.length > 254 || !EMAIL.test(email))) errors.email = "Email looks invalid.";
+    if (appVersion && !VERSION.test(appVersion)) errors.version = "Version looks invalid (example: 0.1.0).";
+    const clean = { type, message };
+    if (email) clean.email = email;
+    if (appVersion) clean.appVersion = appVersion;
+    return { ok: Object.keys(errors).length === 0, errors, clean };
+  }
+
+  function randomId(cryptoImpl) {
+    const c = cryptoImpl || (typeof crypto !== "undefined" ? crypto : null);
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const bytes = new Uint8Array(20);
+    if (c && c.getRandomValues) c.getRandomValues(bytes);
+    else for (let i = 0; i < 20; i++) bytes[i] = Math.floor(Math.random() * 256);
+    return Array.from(bytes, b => chars[b % chars.length]).join("");
+  }
+
+  // Firestore REST "commit" with a server-side timestamp, so createdAt is never
+  // chosen by the browser. currentDocument.exists=false makes it a create.
+  function buildCommit(clean, projectId, id) {
+    const fields = {
+      type: { stringValue: clean.type },
+      message: { stringValue: clean.message },
+      status: { stringValue: "new" }
+    };
+    if (clean.email) fields.email = { stringValue: clean.email };
+    if (clean.appVersion) fields.appVersion = { stringValue: clean.appVersion };
+    const name = `projects/${projectId}/databases/(default)/documents/feedback/${id}`;
+    return {
+      writes: [{
+        update: { name, fields },
+        updateMask: { fieldPaths: Object.keys(fields) },
+        updateTransforms: [{ fieldPath: "createdAt", setToServerValue: "REQUEST_TIME" }],
+        currentDocument: { exists: false }
+      }]
+    };
+  }
+
+  // cfg: { projectId, apiKey }. Resolves {ok:true} or {ok:false, reason}.
+  async function submit(input, cfg, fetchFn, idFn) {
+    const v = validate(input);
+    if (!v.ok) return { ok: false, reason: "invalid", errors: v.errors };
+    if (!cfg || !cfg.projectId || !cfg.apiKey) return { ok: false, reason: "not-configured" };
+    const f = fetchFn || (typeof fetch !== "undefined" ? fetch : null);
+    const url = `https://firestore.googleapis.com/v1/projects/${cfg.projectId}/databases/(default)/documents:commit?key=${encodeURIComponent(cfg.apiKey)}`;
+    try {
+      const r = await f(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildCommit(v.clean, cfg.projectId, (idFn || randomId)()))
+      });
+      return r.ok ? { ok: true } : { ok: false, reason: "http-" + r.status };
+    } catch (e) {
+      return { ok: false, reason: "network" };
+    }
+  }
+
+  return { TYPES, validate, buildCommit, submit, randomId };
+});
+
+===============================================================================
+FILE: code/website/js/main.js
+LANGUAGE: JavaScript
+PURPOSE: Main JS config
+===============================================================================
+
+// ---------------------------------------------------------------------------
+// Configuration
+// ---------------------------------------------------------------------------
+const REPO = "University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6";   // owner/name on GitHub
+const FIREBASE = { projectId: "quadmdatabase", apiKey: "AIzaSyBEJ8hqkAfUM4wEWumKLhwnccG6hhm0-Q4" };
+
+// ---------------------------------------------------------------------------
+// Shared helpers
+// ---------------------------------------------------------------------------
+const byId = id => document.getElementById(id);
+
+// Which operating system is the visitor on? Returns "win", "mac", "linux" or null.
+// Used to recommend the right download and open the matching install steps.
+function detectOS() {
+  const plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+  return /mac/i.test(plat) ? "mac" : /win/i.test(plat) ? "win" : /linux/i.test(plat) ? "linux" : null;
+}
+
+// Small inline icons for status messages (static markup, same style as the pages).
+const STATUS_ICONS = {
+  ok:   '<circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/>',
+  err:  '<circle cx="12" cy="12" r="10"/><path d="M9 9l6 6M15 9l-6 6"/>',
+  warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/>'
+};
+
+// Show a message in a status box: colored by meaning (ok/err/warn/info) and
+// always with an icon and text, so color is never the only signal.
+function setStatus(el, kind, text) {
+  el.className = "status " + kind;
+  el.innerHTML = `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24">${STATUS_ICONS[kind]}</svg>`;
+  const span = document.createElement("span");
+  span.textContent = text;                          // text only: never inject markup
+  el.appendChild(span);
+}
+function clearStatus(el) { el.className = "status"; el.textContent = ""; }
+
+// ---------------------------------------------------------------------------
+// Home page
+// Make the main button match the visitor's computer ("Download for macOS").
+// ---------------------------------------------------------------------------
+(function personalizeHomeButton() {
+  const cta = byId("cta-download");
+  if (!cta) return;
+  const label = { win: "Download for Windows", mac: "Download for macOS", linux: "Download for Linux" }[detectOS()];
+  if (label) cta.textContent = label;
+})();
+
+// ---------------------------------------------------------------------------
+// Download page
+// Fetches the latest release and renders its version/assets/metadata into the
+// page. Runs only when a #version element exists (i.e. on the download page),
+// so this script is safe to include site-wide.
+// It prefers data/latest.json (baked into the Docker image by CI on every
+// release) and falls back to asking GitHub's REST API directly; either way the
+// result has the shape ReleaseData.buildLatest returns, which showRelease expects.
+// ---------------------------------------------------------------------------
+async function loadLatest() {
+  try {
+    const r = await fetch("data/latest.json", { cache: "no-cache" });
+    if (r.ok) {
+      const d = await r.json();
+      if (d && d.tag) return d;
+    }
+  } catch (e) { /* not baked in (plain checkout): use the API below */ }
+  const r = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+    headers: { Accept: "application/vnd.github+json" }
+  });
+  if (!r.ok) throw new Error("release lookup failed");
+  return ReleaseData.buildLatest(await r.json(), REPO);
+}
+
+// Open the install steps for the visitor's system and fold the other away.
+function showMatchingInstallSteps() {
+  const os = detectOS();
+  const win = byId("steps-win"), mac = byId("steps-mac");
+  if (!win || !mac) return;
+  if (os === "mac") win.open = false;
+  if (os === "win") mac.open = false;
+}
+
+// Populate the download page UI (version badge, OS download links, and the
+// release metadata line) from the normalized release data `d`.
+function showRelease(d) {
+  // Version badge.
+  byId("version").textContent = d.tag;
+  const releasesUrl = d.htmlUrl || `https://github.com/${d.repo || REPO}/releases/latest`;
+
+  // Windows download: link directly to the asset, or fall back to the
+  // releases page if no Windows asset was published.
+  const win = byId("dl-win");
+  win.href = d.assets.windows ? d.assets.windows.url : releasesUrl;
+
+  // macOS has two builds (Apple Silicon, Intel), each with a graphical installer (.pkg) and a disk image (.dmg).
+  const macLinks = [
+    ["dl-mac-pkg", d.assets.macPkg], ["dl-mac-dmg", d.assets.macDmg],
+    ["dl-mac-intel-pkg", d.assets.macIntelPkg], ["dl-mac-intel-dmg", d.assets.macIntelDmg]
+  ];
+  for (const [id, asset] of macLinks) {
+    const el = byId(id);
+    if (!el) continue;
+    if (asset) el.href = asset.url; else el.hidden = true;
+  }
+  // Hide a whole architecture block (and its heading) when that build is not in the release.
+  for (const [blockId, a, b] of [["mac-arm", d.assets.macPkg, d.assets.macDmg], ["mac-intel", d.assets.macIntelPkg, d.assets.macIntelDmg]]) {
+    const block = byId(blockId);
+    if (block && !a && !b) block.hidden = true;
+  }
+  const macCard = byId("mac-arm") && byId("mac-arm").closest(".card");
+  if (macCard && !macLinks.some(([, asset]) => asset)) macCard.hidden = true;   // no Mac build in this release
+
+  // Linux download: link to the asset if present; the card stays hidden otherwise
+  // rather than show a broken/irrelevant link.
+  const linux = byId("dl-linux");
+  const linuxCard = byId("linux-row")  /* the whole Linux card */;
+  if (linux && d.assets.linux) { linux.href = d.assets.linux.url; if (linuxCard) linuxCard.hidden = false; }
+
+  // Highlight the download that matches the visitor's computer.
+  const mine = { mac: "dl-mac-pkg", win: "dl-win", linux: "dl-linux" }[detectOS()];
+  const mineEl = mine && byId(mine);
+  const mineCard = mineEl && mineEl.closest(".card");
+  if (mineCard && !mineCard.hidden) mineCard.classList.add("recommended");
+
+  // Optional metadata line: publish date, Windows asset size, and whether
+  // checksums are available. Only the pieces that exist are shown.
+  const meta = byId("release-meta");
+  if (meta) {
+    const bits = [];
+    if (d.publishedAt) bits.push("Released " + new Date(d.publishedAt).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }));
+    if (d.assets.windows && d.assets.windows.size) bits.push((d.assets.windows.size / 1048576).toFixed(0) + " MB");
+    if (d.assets.checksums) bits.push("checksums available on the release page");
+    meta.textContent = bits.join(" · ");
+  }
+}
+
+// Only run the release lookup on pages that actually have a #version element.
+// On failure (e.g. network issue, no releases yet), say so and keep the buttons
+// pointing at the GitHub releases page instead of leaving the badge blank.
+if (byId("version")) {
+  showMatchingInstallSteps();
+  loadLatest().then(showRelease).catch(() => {
+    byId("version").textContent = "see GitHub Releases";
+    const meta = byId("release-meta");
+    if (meta) meta.textContent = "We couldn't check for the latest version. The buttons below open the GitHub Releases page.";
+  });
+}
+
+
+// ---------------------------------------------------------------------------
+// Feedback form
+// Validates each field while the visitor types (using the same rules as the
+// server-side check in js/feedback-service.js), shows clear messages, and
+// stores the message in Cloud Firestore through FeedbackService. Runs only if
+// the form exists on the current page.
+// ---------------------------------------------------------------------------
+const form = byId("feedback-form");
+if (form) initFeedbackForm(form);
+
+function initFeedbackForm(form) {
+  const status = byId("form-status");
+  const submitBtn = form.querySelector("button[type=submit]");
+  const counter = byId("message-count");
+  const FIELDS = ["type", "email", "message", "version"];
+  const MAX = 2000;
+  const touched = new Set();      // fields the visitor has already left once
+  let sent = false;               // true right after a successful send
+
+  const values = () => Object.fromEntries(new FormData(form));
+
+  // Show or clear the inline error under one field.
+  function showFieldError(name, message) {
+    const input = form.elements[name], err = byId("err-" + name);
+    if (message) { err.textContent = message; err.hidden = false; input.setAttribute("aria-invalid", "true"); }
+    else { err.textContent = ""; err.hidden = true; input.removeAttribute("aria-invalid"); }
+  }
+  function validateField(name) {
+    const message = FeedbackService.validate(values()).errors[name];
+    showFieldError(name, message);
+    return !message;
+  }
+  function updateCounter() {
+    const n = form.elements.message.value.length;
+    counter.textContent = `${n} / ${MAX}`;
+    counter.classList.toggle("warn", n > MAX * 0.9);
+  }
+  function setBusy(busy) {
+    submitBtn.disabled = busy;
+    submitBtn.classList.toggle("loading", busy);
+    submitBtn.textContent = busy ? "Sending…" : "Send feedback";
+    form.setAttribute("aria-busy", String(busy));
+  }
+  const hasUnsentText = () => !sent && form.elements.message.value.trim().length > 0;
+
+  // Real-time validation: check a field when the visitor leaves it, then keep
+  // re-checking as they edit it (so the error disappears as soon as it is fixed).
+  for (const name of FIELDS) {
+    const el = form.elements[name];
+    el.addEventListener("blur", () => { touched.add(name); validateField(name); });
+    el.addEventListener("input", () => {
+      sent = false;
+      if (name === "message") updateCounter();
+      if (touched.has(name)) validateField(name);
+    });
+  }
+  updateCounter();
+
+  // Expert shortcut: Ctrl+Enter (or Cmd+Enter) in the message box sends the form.
+  form.elements.message.addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); form.requestSubmit(); }
+  });
+
+  // Warn before leaving the page with a message that was not sent.
+  window.addEventListener("beforeunload", e => {
+    if (hasUnsentText()) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();                              // handle the submit ourselves via fetch
+    const data = values();
+    if (data.website) return;                        // honeypot: bots fill this
+    clearStatus(status);
+
+    // Check every field first and point at the first problem.
+    const errors = FeedbackService.validate(data).errors;
+    FIELDS.forEach(name => { touched.add(name); showFieldError(name, errors[name]); });
+    const firstBad = FIELDS.find(name => errors[name]);
+    if (firstBad) {
+      setStatus(status, "err", "Please fix the highlighted field" + (Object.keys(errors).length > 1 ? "s" : "") + " and try again.");
+      form.elements[firstBad].focus();
+      return;
+    }
+
+    setBusy(true);
+    setStatus(status, "info", "Sending your feedback…");
+    const res = await FeedbackService.submit(data, FIREBASE);
+    setBusy(false);
+
+    if (res.ok) {
+      form.reset(); touched.clear(); sent = true; updateCounter();
+      FIELDS.forEach(name => showFieldError(name, ""));
+      setStatus(status, "ok", "Thanks! Your feedback was sent.");
+    } else if (res.reason === "invalid") {
+      setStatus(status, "err", Object.values(res.errors)[0]);
+    } else if (res.reason === "not-configured") {
+      setStatus(status, "warn", "Feedback isn't available right now. Please try again later, or contact a team member from the About page.");
+    } else if (res.reason === "network") {
+      setStatus(status, "err", "We couldn't reach the server. Check your internet connection and try again. Your message is still here.");
+    } else {
+      setStatus(status, "err", "Something went wrong on our side (" + res.reason + "). Your message is still here, so you can try again in a moment.");
+    }
+  });
+}
+
+===============================================================================
+FILE: code/website/js/release-data.js
+LANGUAGE: JavaScript
+PURPOSE: Installer data for website
+===============================================================================
+
+// Shared by the browser (download page) and Node (scripts/fetch-release.js).
+// Turns a GitHub "latest release" API response into the small object the
+// website needs. One source of truth, so the page and the CI step agree.
+//
+// Files it looks for in a release:
+//   .msi  Windows installer   (falls back to a Setup .exe until the pipeline builds an .msi)
+//   .deb  Ubuntu/Debian installer, amd64
+//   .pkg  macOS graphical installer      (Apple Silicon, and Intel if its name says x86_64 / intel)
+//   .dmg  macOS non-graphical installer  (same rule)
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory();
+  else root.ReleaseData = factory();
+})(typeof self !== "undefined" ? self : this, function () {
+  function asset(a) {
+    return a ? { name: a.name, url: a.browser_download_url, size: a.size || 0 } : null;
+  }
+  const ext = (a, e) => a.name.toLowerCase().endsWith(e);
+
+  function buildLatest(release, repo) {
+    if (!release || !release.tag_name) return null;
+    const assets = (release.assets || []).filter(a => a && a.name && a.browser_download_url);
+
+    const windows = assets.find(a => ext(a, ".msi"))
+      || (() => {
+        const exes = assets.filter(a => ext(a, ".exe"));
+        return exes.find(a => /setup|install/i.test(a.name)) || exes[0];
+      })()
+      || null;
+
+    // amd64 only: skip arm64 builds, and prefer a name that says amd64 / x86_64.
+    const debs = assets.filter(a => ext(a, ".deb") && !/arm64|aarch64/i.test(a.name));
+    const linux = debs.find(a => /amd64|x86[_-]64/i.test(a.name)) || debs[0] || null;
+
+    // Two Mac builds. A name with x86_64 / intel / amd64 is the Intel build; anything else
+    // (arm64, or no architecture in the name) is Apple Silicon.
+    const isIntel = a => /x86[_-]?64|intel|amd64/i.test(a.name);
+    const macPkgs = assets.filter(a => ext(a, ".pkg"));
+    const macDmgs = assets.filter(a => ext(a, ".dmg"));
+    const macPkg = macPkgs.find(a => !isIntel(a)) || null;
+    const macDmg = macDmgs.find(a => !isIntel(a)) || null;
+    const macIntelPkg = macPkgs.find(isIntel) || null;
+    const macIntelDmg = macDmgs.find(isIntel) || null;
+    const checksums = assets.find(a => /sha-?256/i.test(a.name)) || null;
+
+    return {
+      repo: repo || null,
+      tag: release.tag_name,
+      version: String(release.tag_name).replace(/^v/i, ""),
+      publishedAt: release.published_at || null,
+      htmlUrl: release.html_url || null,
+      assets: {
+        windows: asset(windows),
+        linux: asset(linux),
+        macPkg: asset(macPkg),
+        macDmg: asset(macDmg),
+        macIntelPkg: asset(macIntelPkg),
+        macIntelDmg: asset(macIntelDmg),
+        checksums: asset(checksums)
+      }
+    };
+  }
+
+  return { buildLatest };
+});
+
+===============================================================================
+FILE: code/website/scripts/fetch-release.js
+LANGUAGE: JavaScript
+PURPOSE: Installer for website
+===============================================================================
+
+#!/usr/bin/env node
+// Writes data/latest.json from the newest published GitHub Release.
+// CI runs this right before the Docker image is built, so every image ships
+// with the current download links baked in (no browser-side rate limits).
+//
+//   GITHUB_REPOSITORY=owner/repo GITHUB_TOKEN=... node scripts/fetch-release.js
+//
+// A missing release is not an error: the file is written with "tag": null and
+// the download page falls back to asking the GitHub API itself.
+const fs = require("node:fs");
+const path = require("node:path");
+const { buildLatest } = require("../js/release-data.js");
+
+async function run({ repo, token, fetchFn = fetch, outPath, fsImpl = fs, now = () => new Date() }) {
+  if (!repo) throw new Error("GITHUB_REPOSITORY is not set (expected owner/name)");
+  const headers = { Accept: "application/vnd.github+json", "User-Agent": "quadm-website-build" };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  let latest = null;
+  let note = "";
+  try {
+    const res = await fetchFn(`https://api.github.com/repos/${repo}/releases/latest`, { headers });
+    if (res.status === 404) note = "no published release yet";
+    else if (!res.ok) note = `GitHub answered ${res.status}`;
+    else latest = buildLatest(await res.json(), repo);
+  } catch (err) {
+    note = `lookup failed: ${err.message}`;
+  }
+
+  const out = latest || { repo, tag: null, version: null, assets: {} };
+  out.generatedAt = now().toISOString();
+  fsImpl.mkdirSync(path.dirname(outPath), { recursive: true });
+  fsImpl.writeFileSync(outPath, JSON.stringify(out, null, 2) + "\n");
+  return { latest, note, outPath };
+}
+
+module.exports = { run };
+
+if (require.main === module) {
+  run({
+    repo: process.env.GITHUB_REPOSITORY,
+    token: process.env.GITHUB_TOKEN,
+    outPath: process.env.OUT || path.join(__dirname, "..", "data", "latest.json")
+  }).then(({ latest, note, outPath }) => {
+    if (latest) console.log(`Wrote ${outPath}: ${latest.tag}`);
+    else console.log(`::warning::${note}; wrote ${outPath} without a release (page will ask GitHub directly)`);
+  }).catch(err => { console.error(err.message); process.exit(1); });
+}

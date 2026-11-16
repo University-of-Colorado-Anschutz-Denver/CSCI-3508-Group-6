@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MetadataEditor</class>
+ <widget class="QMainWindow" name="MetadataEditor">
+  <property name="windowTitle">
+   <string>QuadM - Metadata Editor</string>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>650</width>
+    <height>500</height>
+   </size>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="mainLayout">
+
+    <!-- File Information -->
+    <item>
+     <layout class="QHBoxLayout" name="fileInfoLayout">
+      <item>
+       <widget class="QLabel" name="fileNameLabel">
+        <property name="text">
+         <string>File: No file selected</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 16px; font-weight: bold;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="fileInfoSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="fileTypeLabel">
+        <property name="text">
+         <string>FILE TYPE</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+    <!-- Metadata Heading and Add Button -->
+    <item>
+     <layout class="QHBoxLayout" name="metadataHeadingLayout">
+      <item>
+       <widget class="QLabel" name="metadataHeadingLabel">
+        <property name="text">
+         <string>Metadata Properties</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 14px; font-weight: bold;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="headingSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="addMetadataButton">
+        <property name="text">
+         <string>+ Add Metadata</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+    <!-- Scrollable Metadata Properties -->
+    <item>
+     <widget class="QScrollArea" name="metadataScrollArea">
+        <property name="widgetResizable">
+            <bool>true</bool>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+      <widget class="QWidget" name="metadataScrollContents">
+       <layout class="QVBoxLayout" name="metadataLayout">
+        <item>
+         <widget class="QLabel" name="placeholderLabel">
+          <property name="text">
+           <string>Metadata will appear here.</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="metadataSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+
+    <!-- Bottom Buttons -->
+    <item>
+     <layout class="QHBoxLayout" name="buttonLayout">
+      <item>
+       <spacer name="buttonSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cancelButton">
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveMetadataButton">
+        <property name="text">
+         <string>Save Changes</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

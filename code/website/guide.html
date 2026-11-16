@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>User guide · MultiMedia Metadata Manager (QuadM)</title>
+<meta name="description" content="Step-by-step guide to QuadM: open a folder, edit metadata, tag files and search by tag.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to main content</a>
+<!-- Shared header: same brand and navigation on every page; the current page is marked. -->
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="assets/favicon.svg" alt="" width="28" height="28"><span>MultiMedia Metadata Manager (QuadM)</span></a>
+    <nav aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="download.html">Download</a>
+      <a href="guide.html" aria-current="page">User guide</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="wrap" id="content">
+  <h1>User guide</h1>
+  <p class="lead"><a href="download.html">Download QuadM</a>.</p>
+  <div class="guide">
+    <!-- Jump links stay visible beside the text on wide screens (recognition over recall). -->
+    <nav class="toc" aria-label="On this page">
+      <strong>On this page</strong>
+      <a href="#open">Find a file</a>
+      <a href="#view">View metadata</a>
+      <a href="#edit">Edit metadata</a>
+      <a href="#search">Search via metadata</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <article>
+      <!-- Explain how to select a folder for scanning. -->
+      <h2 id="open">Find a file</h2>
+      <h4>Option 1: Manually find the folder</h4>
+      <p>
+        <ol>
+          <li>Select the drive you want to navigate in the left-most panel through the top dropdown.</li>
+          <li>The middle panel will show files and folders contained in the drive. Double-click to open a folder.</li>
+          <li>Continue navigating through folders until you find your desired file.</li>
+        </ol>
+      </p>
+      <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>You can designate a default drive to open upon launching the app in the Settings menu.</span></p>
+      <h4>Option 2: Enter the file path</h4>
+      <p>
+        <ol>
+          <li>Find or copy the full file path for the file you want to find.</li>
+          <li>Enter it in the top search bar and hit Enter.</li>
+          <li>Entering a folder name will show all files in the folder. Entering a file name at the end will show only that file.</li>
+        </ol>
+      </p>
+
+      <!-- Describe viewing metadata info for supported files. -->
+      <h2 id="view">View metadata</h2>
+      <p>Single-click a file in the current directory in the center panel. The metadata information will be displayed in the right panel, organized into sections by metadata type.</p>
+
+      <!-- Describe adding and removing tags before saving. -->
+      <h2 id="edit">Edit metadata</h2>
+      <h4>Editing existing metadata fields</h4>
+      <p>
+        <ol>
+          <li>Once you've selected a file, press the <em>Edit Metadata</em> button at the top of the right panel.</li>
+          <li>A window will open displaying currently filled fields, as well as common fields for that file type.</li>
+          <li>Type in your new metadata information in the desired field, then press <em>Save Changes</em> in the bottom right corner. A notice will be displayed if changes were saved successfully or if an error was detected.</li>
+        </ol>
+      </p>
+      <h4>Adding custom tags</h4>
+      <p>
+        <ol>
+          <li>Once you've selected a file, press the <em>Edit Metadata</em> button at the top of the right panel.</li>
+          <li>A window will open displaying currently filled fields, as well as common fields for that file type.</li>
+          <li>Press the <em>+ Add Metadata</em> button in the top right corner.</li>
+          <li>In the first dialog box, type the name of the custom metadata field you would like to add.
+            <ul>
+              <li>Not all file types support editing all metadata types. A good rule of thumb is using <em>ID3</em> for audio files and <em>XMP</em> for other file types.</li>
+              <li>For example, to add a custom field named "Tag 1" with the value "good take", enter <em>XMP:Tag1</em>, press OK, then enter <em>good take</em> and press OK.</li>
+            </ul>
+          </li>
+          <li>Press <em>Save Changes</em> in the bottom right corner. A notice will be displayed if changes were saved successfully or if an error was detected.</li>
+        </ol>
+      </p>
+      <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>Custom field names can only contain letters and numbers with no spaces.</span></p>
+
+      <!-- Explain how to search tags within a chosen folder scope. -->
+      <h2 id="search">Search via metadata</h2>
+      <p>
+        <ol>
+          <li>Navigate to the folder you would like to search in.</li>
+          <li>In the top bar of the center panel, type in the value you would like to search for among all metadata fields.</li>
+          <li>When the search is complete, all files in the current folder that have the specified term in any metadata field will be displayed.</li>
+        </ol>
+      </p>
+      <p class="note info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5h.01"/></svg><span>Only files in the current folder, not sub-folders, will be displayed.</span></p>
+
+      <!-- Answer common questions about file changes, indexing, and support. -->
+      <h2 id="faq">FAQ</h2>
+      <details><summary>Does the app change my original files?</summary><p>Yes, but only when you press Save. The only data chnaged is metadata, so your file will still work the same in other applications.</p></details>
+      <details><summary>How is new metadata information stored?</summary><p>Metadata is embedded in all files, and your new tags are stored in the same data chunks as existing metadata.</p></details>
+      <details><summary>I've searched for a file in QuadM. How do I use it in another application?</summary><p>Right-click a file to copy its file path. Then, you can find it in your file explorer and use as normal.</p></details>
+      <details><summary>Something is wrong. Where do I report it?</summary><p>Use the <a href="feedback.html">feedback form</a>.</p></details>
+    </article>
+  </div>
+</section>
+</main>
+<!-- Shared footer: secondary links so nothing depends on remembering where it was. -->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <p>MultiMedia Metadata Manager (QuadM) &middot; course project</p>
+    <nav aria-label="Footer">
+      <a href="download.html">Download</a>
+      <a href="guide.html">User guide</a>
+      <a href="feedback.html">Send feedback</a>
+      <a href="https://github.com/University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6">Source on GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

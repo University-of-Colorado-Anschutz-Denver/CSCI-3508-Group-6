@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- WiX v5 source for the QuadM MSI. Built by build-windows-msi.ps1, which passes Version and StageDir. -->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="QuadM"
+           Manufacturer="CSCI-3508 Group 6"
+           Version="$(Version)"
+           UpgradeCode="B7C2E4A1-5D3F-4E8B-9A61-2F0C8D7E1A34"
+           Scope="perMachine">
+
+    <MediaTemplate EmbedCab="yes" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of QuadM is already installed." />
+
+    <!-- Everything in the stage folder (QuadM.exe, Qt DLLs, exiftool\) goes to Program Files\QuadM -->
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="QuadM">
+        <Files Include="$(StageDir)\**" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Component Id="StartMenuShortcut" Guid="*">
+        <Shortcut Id="QuadMShortcut" Name="QuadM" Target="[INSTALLFOLDER]QuadM.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\QuadM" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+
+    <!-- Only installed when the user leaves the "desktop shortcut" box checked (DESKTOP_SHORTCUT=1) -->
+    <StandardDirectory Id="DesktopFolder">
+      <Component Id="DesktopShortcutComponent" Guid="*" Condition="DESKTOP_SHORTCUT = 1">
+        <Shortcut Id="QuadMDesktopShortcut" Name="QuadM" Target="[INSTALLFOLDER]QuadM.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\QuadM" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+
+    <Property Id="DESKTOP_SHORTCUT" Value="1" />
+    <Property Id="ARPNOMODIFY" Value="1" />
+
+    <!-- Wizard: Welcome -> Options -> Ready to install -> Progress -> Finish. Needs WixToolset.UI.wixext. -->
+    <UI>
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+      <DialogRef Id="MaintenanceWelcomeDlg" />
+      <DialogRef Id="MaintenanceTypeDlg" />
+
+      <Dialog Id="OptionsDlg" Width="370" Height="270" Title="[ProductName] Setup">
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg" />
+        </Control>
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="WixUI_Bmp_Banner" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="340" Height="15" Transparent="yes" NoPrefix="yes" Text="{\WixUI_Font_Title}Options" />
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="320" Height="15" Transparent="yes" NoPrefix="yes" Text="Choose how QuadM is set up." />
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+        <Control Id="InstallInfo" Type="Text" X="25" Y="60" Width="320" Height="30" Transparent="yes" NoPrefix="yes" Text="QuadM will be installed to [ProgramFiles64Folder]QuadM and added to the Start menu." />
+        <Control Id="DesktopShortcutBox" Type="CheckBox" X="25" Y="100" Width="320" Height="18" Property="DESKTOP_SHORTCUT" CheckBoxValue="1" Text="Create a &amp;desktop shortcut" />
+      </Dialog>
+
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999" />
+
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="OptionsDlg" Condition="NOT Installed" />
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Condition="Installed AND PATCH" />
+
+      <Publish Dialog="OptionsDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" />
+      <Publish Dialog="OptionsDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" />
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="OptionsDlg" Order="1" Condition="NOT Installed" />
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2" Condition="Installed AND NOT PATCH" />
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2" Condition="Installed AND PATCH" />
+
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg" />
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg" />
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg" />
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg" />
+    </UI>
+
+    <UIRef Id="WixUI_Common" />
+  </Package>
+</Wix>
