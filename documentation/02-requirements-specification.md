@@ -78,26 +78,33 @@
 
 ## 6. Functional Requirements
 
-| ID | Requirement | Source | Priority | Acceptance measure |
-| --- | --- | --- | --- | --- |
-| FR-01 | The system shall display all supported files and sub-folders within a specified directory. | US-02 | Must | When opening a folder, verify that all sub-folders and files of supported extensions are visible in the content panel. |
-| FR-02 | The system shall include all necessary files in a single download package. | US-03, KF-01 | Should | Downloading the installer via the website should provide one executable that downloads all files. |
-| FR-03 | The system shall make all metadata information for a valid file viewable in a single window. | US-03, KF-01 | Must | The information displayed for a file in the metadata panel should match the fields returned by ExifTool as well as blank fields. |
-| FR-04 | The system shall allow users to edit valid metadata fields. | US-01 | Must | Upon saving a change to metadata in the editor window, both ExifTool and the QuadM metadata panel should display the updated information. |
-| FR-05 | The system shall add custom tags to valid files. | US-01, KF-03 | Must | When adding a metadata tag with a valid name in the edit window and hitting save, the new tag should be displayed in both ExifTool and QuadM. |
-| FR-06 | The system shall search for files via a single, one-to-one user text entry in all metadata fields. | US-01, US-02 | Must | When a user enters a term in the search bar, the system will display all files in the current directory with the input present in any metadata field. |
-| FR-07 | The system shall search for files via multiple separate user parameters, displaying all files with all matching parameters in any metadata field. | KF-03, US-01 | Could | When entering multiple search parameters, the system will parse each separately, then display all files in the current directory that have matches for all inputs in any metadata field. |
-| FR-08 | The system shall support the most common media file types (.wav, .mp3, .mp4, .mov, .png, .jpg). | US-01, US-02 | Must | Viewing and editing metadata is functional for the specified file types. |
-| FR-09 | The system shall support the all file types readable by ExifTool. | KF-02, US-01, US-02 | Could | Viewing and editing metadata is functional for the full list of files readable by Exiftool, available at https://exiftool.org. |
+| ID | Requirement | Priority |
+| :---- | :---- | :---- |
+| FR-01 | The system shall let the user choose a drive and browse its folders and files. | Must |
+| FR-02 | The system shall let the user open a folder or file by typing its path or URL. Invalid or unsupported paths shall be rejected without changing the current view. | Must |
+| FR-03 | The system shall list folders first and only list files of supported media types. | Must |
+| FR-04 | The system shall display the metadata of a selected file, grouped by category. | Must |
+| FR-05 | The system shall let the user edit, add and delete metadata fields of a file and save them to disk. | Must |
+| FR-06 | The system shall prevent editing of read-only and calculated fields. | Must |
+| FR-07 | The system shall let the user rename a file from the editor and reject a name that already exists. | Should |
+| FR-08 | The system shall let the user attach tags to a file and filter the files in a folder by a tag or metadata value. | Must |
+| FR-09 | The system shall provide dark and light themes and a default start drive, and remember them between runs. | Should |
+| FR-10 | The system shall let the user copy a file's path from the file list. | Could |
+| FR-11 | The system shall be installable on Windows, Linux and macOS. | Must |
+| FR-12 | The website shall offer the correct installer for the visitor's operating system. | Must |
+| FR-13 | The website shall provide a user guide and a feedback form. | Should |
 
 ## 7. Non-Functional Requirements
 
-| ID | Quality attribute | Requirement | Measurement or target |
-| --- | --- | --- | --- |
-| NFR-01 | Performance | The system shall search a folder less than 1gb in 5 seconds or less. | Manual testing |
-| NFR-02 | Usability | The system shall allow non-technical users to easily view metadata information. | User acceptance testing |
-| NFR-03 | Compatibility | The system shall store metadata within the file so users can access the tags on other devices. | Manual testing |
-| NFR-04 | Security | The system shall store metadata within the file and not save additional identifying information or require hidden files. | Manual testing |
+| ID | Category | Requirement |
+| :---- | :---- | :---- |
+| NFR-01 | Usability | The main workflows (browse, view, edit, save) shall be reachable from the three windows without using a command line. |
+| NFR-02 | Reliability | Errors while reading or writing metadata shall be shown to the user in a message box and shall not crash the application. |
+| NFR-03 | Data safety | Only the fields the user changed shall be written to a file, and the application shall not overwrite an existing file when renaming. |
+| NFR-04 | Portability | The same source code shall build on Windows, Linux and macOS. |
+| NFR-05 | Maintainability | The GUI, service layer and metadata backends shall be separate modules, so that a new file format can be added without changing the GUI. |
+| NFR-06 | Security (website) | Visitors shall only be able to create valid feedback records and never read, change or delete them. |
+| NFR-07 | Accessibility (website) | Website pages shall have skip links, alternative text for images and labels for all form controls. |
 
 ## 8. External Interface Requirements
 
