@@ -2,7 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert");
 const fs = require("node:fs");
 const path = require("node:path");
-const { validate, buildCommit, submit, randomId } = require("../js/feedback-service.js");
+const { validate, buildCommit, submit, randomId, newestFirstId } = require("../js/feedback-service.js");
 
 const good = { type: "bug", message: "  Crash on open  ", email: "a@b.co", version: "0.1.0" };
 
@@ -71,4 +71,16 @@ test("firestore.rules only allows create of the schema fields and denies everyth
   assert.match(rules, /d\.message\.size\(\) <= 2000/);
   for (const t of ["bug", "feature", "question", "other"]) assert.ok(rules.includes(`'${t}'`));
   assert.ok(!/allow (read|write)[^;]*: if true/.test(rules), "no open access");
+});
+
+test("newestFirstId sorts newer feedback before older feedback", () => {
+  const ids = [1000, 3000, 2000].map(ms => newestFirstId(ms));
+  const sorted = [...ids].sort();
+  assert.deepStrictEqual(sorted, [ids[1], ids[2], ids[0]]);   // 3000, 2000, 1000
+});
+
+test("newestFirstId is a valid Firestore document ID", () => {
+  const id = newestFirstId(Date.now());
+  assert.match(id, /^\d{13}-[A-Za-z0-9]{8}$/);
+  assert.notStrictEqual(newestFirstId(5), newestFirstId(5));
 });
