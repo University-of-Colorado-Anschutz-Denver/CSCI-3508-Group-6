@@ -2,7 +2,7 @@
 # Builds a Release QuadM and packages it, with ExifTool, into a .deb for Ubuntu/Debian (amd64).
 # Usage (from the code folder, on Ubuntu/Debian or WSL):  ./packaging/build-deb.sh [version]
 # Output: code/dist/quadm_<version>_<arch>.deb
-# Needs: sudo apt install build-essential cmake ninja-build git curl perl qt6-base-dev
+# Needs: sudo apt install build-essential cmake ninja-build git curl perl qt6-base-dev libqt6svg6-dev
 set -euo pipefail
 
 cd "$(dirname "$0")/.."   # the code folder
@@ -42,7 +42,7 @@ Version: $VERSION
 Section: utils
 Priority: optional
 Architecture: $ARCH
-Depends: perl, libqt6widgets6
+Depends: perl, libqt6widgets6, libqt6svg6
 Maintainer: CSCI-3508 Group 6 <noreply@example.com>
 Description: QuadM metadata viewer and editor
  Views and edits file metadata. Includes a bundled copy of ExifTool.

@@ -21,7 +21,7 @@ It installs to `C:\Program Files\QuadM\` (with `exiftool\` next to `QuadM.exe`) 
 Install the build tools once (also works in WSL):
 
 ```bash
-sudo apt install build-essential cmake ninja-build git curl perl qt6-base-dev
+sudo apt install build-essential cmake ninja-build git curl perl qt6-base-dev libqt6svg6-dev
 ```
 
 The script downloads the Linux ExifTool itself (or uses `third_party/exiftool` if it already has the Linux version). Install the result with:
