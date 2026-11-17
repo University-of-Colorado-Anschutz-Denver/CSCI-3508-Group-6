@@ -27,7 +27,7 @@ The download page reads `data/latest.json` first (baked into the image) and asks
 ## Run the website image
 
 ```
-docker run --rm -p 8080:8080 ghcr.io/<owner>/quadm-website:latest
+docker run --rm -p 8080:8080 ghcr.io/University-of-Colorado-Anschutz-Denver/quadm-website:latest
 ```
 Open http://localhost:8080. The container listens on 8080 and runs as a non-root user.
 
