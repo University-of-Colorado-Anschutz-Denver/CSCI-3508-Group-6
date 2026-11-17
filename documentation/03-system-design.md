@@ -153,7 +153,7 @@ We are using a layered architecture where components in a layer only depend on t
 
 ### User Interface
 
-**See [web-mockup-1.jpg](design-assets/), [web-mockup-2.jpg](design-assets/web-mockup-1.jpg)**
+**See [gui-mockup-1.jpg](design-assets/gui-mockup-1.jpg), [gui-mockup-2.png](design-assets/gui-mockup-2.png)**
 
 **Explanation:** The user interface is presented in three panels: the far-left holds the user's root directory, the center panel shows the contents of the current directory, and the far-right displays metadata information for the selected file, if any. Later in development, the team added an Edit Metadata button to the top of the view panel, which opens a separate window for editing metadata fields and adding custom tags to reduce clutter in the GUI. The settings are also self-contained in a separate window, accessible through the top toolbar.
 
