@@ -113,6 +113,6 @@ Complete this section before submission.
 | Em Kronquist | Metadata general info/project idea, stakeholder interviews, ExifTool research | Use case diagram | Web user guide, initial ExifTool strategy | User acceptance testing | Checkpoint video editing, progress presentation design | Research and Documentation, User Outreach |
 | Yannick Kuete | Website requirements | Web UML diagrams | Full web implementation | GitHub Actions pipeline | Web demo for video | DevOps Management, WebDev |
 
-*All team members meaningfully contributed to all reports and presentations, through writing, design, and actively presenting. Contributions listed here under the Report/Presentation section are tasks that went above the general performed provided by all team members.*
+*All team members meaningfully contributed to all reports and presentations, through writing, design, and actively presenting. Contributions listed here under the Report/Presentation section are tasks that went above the general tasks performed by all team members.*
 
 **Team confirmation:** All team members reviewed and approved this document on 11/15/2026.
