@@ -1,11 +1,11 @@
 #include "metadataeditor.h"
 #include "ui_metadataeditor.h"
-#include "exiftool.h"
 
 #include "api/metadataservice.h"
 #include "backend/metadata.h"
 #include "backend/metadatafilter.h" 
 
+#include <QFile>
 #include <QFileInfo>
 #include <QLabel>
 #include <QPushButton>
@@ -13,6 +13,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QLayout>
+#include <QTemporaryDir>
 
 #include <QJsonObject>
 #include <QJsonValue>
@@ -204,30 +205,23 @@ void MetadataEditor::addMetadata()
         return;
     }
 
-    // Create a temporary copy
-    QFileInfo info(path);
-    QString tempPath = info.dir().filePath(
-        info.completeBaseName() + "_temp." + info.suffix()
-    );
+    {
+        QTemporaryDir validationDir;
+        const QString tempPath = validationDir.filePath(QFileInfo(path).fileName());
+        if (!validationDir.isValid() || !QFile::copy(path, tempPath)) {
+            QMessageBox::critical(this, "Validation Error",
+                                  "Could not create a temporary file for validation.");
+            return;
+        }
 
-    if (!QFile::copy(path, tempPath)) {
-        QMessageBox::critical(this, "Validation Error","Could not create a temporary file for validation.");
-        return;
-    }
-
-    // Attempt a dummy write
-    QMap<QString, QString> testTags;
-    testTags.insert(key, "QuadM_Test");
-
-    QString error;
-    bool valid = ExifTool::writeTags(tempPath, testTags, error);
-
-    // Delete temporary copy
-    QFile::remove(tempPath);
-
-    if (!valid) {
-        QMessageBox::warning(this, "Invalid Metadata",error);
-        return;
+        // Validate through the same format-specific writer that Save Changes uses.
+        Metadata testMetadata;
+        testMetadata.set(key, "QuadM_Test");
+        QString error;
+        if (!service.writeMetadata(tempPath, testMetadata, error)) {
+            QMessageBox::warning(this, "Invalid Metadata", error);
+            return;
+        }
     }
 
     // Collect actual value

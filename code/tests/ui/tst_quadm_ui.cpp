@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QFile>
 #include <QImage>
+#include <QInputDialog>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
@@ -520,6 +521,93 @@ private slots:
         QCOMPARE(saved.count(), 0);
         QVERIFY(QFile::exists(imagePath));
         QVERIFY(QFile::exists(other));
+    }
+
+    void addMetadata_roundTrips_data()
+    {
+        QTest::addColumn<QString>("extension");
+        QTest::addColumn<QString>("key");
+        QTest::newRow("mp3-id3v2") << QString("mp3") << QString("ID3v2:TakeNotes");
+        QTest::newRow("wav-id3v2") << QString("wav") << QString("ID3v2:TakeNotes");
+        QTest::newRow("png-xmp") << QString("png") << QString("XMP:Headline");
+    }
+
+    void addMetadata_roundTrips()
+    {
+        if (!exifToolAvailable())
+            QSKIP("ExifTool is not next to the test executable");
+        QFETCH(QString, extension);
+        QFETCH(QString, key);
+
+        const QString path = extension == "png" ? imagePath : data.filePath("editor_test." + extension);
+        if (extension != "png") {
+            QByteArray audio;
+            if (extension == "mp3") {
+                // Ten silent MPEG-1 Layer III frames at 128 kbps / 44.1 kHz.
+                const QByteArray frame = QByteArray::fromHex("fffb9064") + QByteArray(413, '\0');
+                audio = frame.repeated(10);
+            } else {
+                // RIFF/WAVE with four silent 8-bit mono samples at 8 kHz.
+                audio = QByteArray::fromHex(
+                    "524946462800000057415645666d74201000000001000100401f0000401f000001000800"
+                    "646174610400000080808080");
+            }
+            QFile file(path);
+            QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Truncate));
+            QCOMPARE(file.write(audio), audio.size());
+        }
+
+        MetadataEditor editor(path);
+        editor.show();
+        QVERIFY(QTest::qWaitForWindowExposed(&editor));
+        auto *addButton = editor.findChild<QPushButton *>("addMetadataButton");
+        auto *saveButton = editor.findChild<QPushButton *>("saveMetadataButton");
+        QVERIFY(addButton);
+        QVERIFY(saveButton);
+
+        const QString value = "First take";
+        int prompts = 0;
+        QTimer input;
+        connect(&input, &QTimer::timeout, &editor, [&]() {
+            if (auto *dialog = qobject_cast<QInputDialog *>(QApplication::activeModalWidget())) {
+                dialog->setTextValue(prompts++ == 0 ? key : value);
+                dialog->accept();
+            }
+        });
+        DialogCatcher addError;
+        input.start(30);
+        QTest::mouseClick(addButton, Qt::LeftButton);
+        input.stop();
+        addError.timer.stop();
+        QVERIFY2(!addError.seen, qPrintable(addError.text));
+        QCOMPARE(prompts, 2);
+        QVERIFY(fieldWithText(&editor, value));
+
+        MetadataEditor beforeSave(path);
+        QVERIFY(!fieldWithText(&beforeSave, value));
+
+        QSignalSpy saved(&editor, &MetadataEditor::metadataSaved);
+        DialogCatcher saveResult;
+        QTest::mouseClick(saveButton, Qt::LeftButton);
+        QVERIFY2(saveResult.text.contains("saved successfully"), qPrintable(saveResult.text));
+        QCOMPARE(saved.count(), 1);
+
+        MetadataEditor reopened(path);
+        auto *field = fieldWithText(&reopened, value);
+        QVERIFY(field);
+        QVERIFY(!field->isReadOnly());
+
+        reopened.show();
+        QVERIFY(QTest::qWaitForWindowExposed(&reopened));
+        const QString updated = "Second take";
+        field->setText(updated);
+        DialogCatcher editResult;
+        QTest::mouseClick(reopened.findChild<QPushButton *>("saveMetadataButton"), Qt::LeftButton);
+        QVERIFY2(editResult.text.contains("saved successfully"), qPrintable(editResult.text));
+
+        MetadataEditor afterEdit(path);
+        QVERIFY(fieldWithText(&afterEdit, updated));
+        QVERIFY(!fieldWithText(&afterEdit, value));
     }
 };
 
