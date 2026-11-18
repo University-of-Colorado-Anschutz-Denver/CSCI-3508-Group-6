@@ -7,7 +7,7 @@ name: Website checks
 #   run manually, or by release.yml after a new app release -> rebuild the
 #   image so its download page carries the new installer links
 #
-# Image: ghcr.io/<owner>/quadm-website   (tags: branch name, short commit hash, latest on main)
+# Image: ghcr.io/University-of-Colorado-Anschutz-Denver/quadm-website   (tags: branch name, short commit hash, latest on main)
 
 # Events that trigger this workflow.
 on:

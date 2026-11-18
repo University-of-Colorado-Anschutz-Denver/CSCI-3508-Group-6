@@ -8,18 +8,24 @@
 //   .pkg  macOS graphical installer      (Apple Silicon, and Intel if its name says x86_64 / intel)
 //   .dmg  macOS non-graphical installer  (same rule)
 (function (root, factory) {
+  // Export for Node.js, or attach to the browser's global scope.
   if (typeof module === "object" && module.exports) module.exports = factory();
   else root.ReleaseData = factory();
 })(typeof self !== "undefined" ? self : this, function () {
+  // Convert a GitHub asset to the fields used by the website.
   function asset(a) {
     return a ? { name: a.name, url: a.browser_download_url, size: a.size || 0 } : null;
   }
+
+  // Match file extensions without regard to letter case.
   const ext = (a, e) => a.name.toLowerCase().endsWith(e);
 
+  // Validate the API response and select the supported release assets.
   function buildLatest(release, repo) {
     if (!release || !release.tag_name) return null;
     const assets = (release.assets || []).filter(a => a && a.name && a.browser_download_url);
 
+    // Prefer the Windows MSI; use a setup installer or first EXE as fallback.
     const windows = assets.find(a => ext(a, ".msi"))
       || (() => {
         const exes = assets.filter(a => ext(a, ".exe"));
@@ -42,6 +48,7 @@
     const macIntelDmg = macDmgs.find(isIntel) || null;
     const checksums = assets.find(a => /sha-?256/i.test(a.name)) || null;
 
+    // Return normalized release metadata and nullable entries for each download.
     return {
       repo: repo || null,
       tag: release.tag_name,
