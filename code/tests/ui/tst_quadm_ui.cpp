@@ -1,6 +1,16 @@
 // UI tests for QuadM. They create the real windows and drive them like a user would
 // (typing, clicking, double-clicking), then check what is on screen.
 // Build and run: see tests/README.md.
+//
+// How to run (from the `code` folder):
+//   make test            (macOS / Linux)
+//   mingw32-make test    (Windows, from a terminal with Qt's MinGW on PATH)
+// or:
+//   cmake --build --preset default --target QuadMUiTests   (build only; `macos` preset on a Mac)
+//   ctest --test-dir build --output-on-failure             (run via CTest)
+//
+// On Windows, don't click or type while the tests run. Tests that need ExifTool are skipped
+// if it isn't in third_party/exiftool. Results are written to build/ui-test-results/.
 #include "QuadMGUI/mainwindow.h"
 #include "QuadMGUI/metadataeditor.h"
 #include "QuadMGUI/settings.h"
@@ -153,7 +163,8 @@ private slots:
         window = nullptr;
     }
 
-    // UI-01
+    // UI-01: On launch the drive list is filled, the file list and back button are hidden,
+    // and the animated placeholder is shown in the metadata panel.
     void startup_showsDrivesAndPlaceholder()
     {
         auto *drives = window->findChild<QComboBox *>("driveComboBox");
@@ -164,7 +175,7 @@ private slots:
         QVERIFY(pathBar()->isVisible());
     }
 
-    // UI-02
+    // UI-02: Typing a folder path in the address bar shows the file list and updates the path label.
     void addressBar_folderPath_listsFolder()
     {
         goTo(dataPath);
@@ -172,7 +183,7 @@ private slots:
         QCOMPARE(clean(pathLabel()->text()), clean(dataPath));
     }
 
-    // UI-03
+    // UI-03: The list shows folders before files and omits non-media files (notes.txt).
     void fileList_foldersFirst_unsupportedFilesHidden()
     {
         goTo(dataPath);
@@ -181,7 +192,7 @@ private slots:
         QVERIFY(!shown.contains("notes.txt"));
     }
 
-    // UI-04
+    // UI-04: Double-clicking a folder opens it (and shows the Back button); Back returns to the parent.
     void doubleClickFolder_opensIt_backReturns()
     {
         goTo(dataPath);
@@ -197,7 +208,8 @@ private slots:
         QVERIFY(!backButton()->isVisible());
     }
 
-    // UI-05
+    // UI-05: Clicking a file shows its File Information (name, type) in the metadata panel
+    // and stops the placeholder animation.
     void clickFile_showsMetadataPanel()
     {
         goTo(dataPath);
@@ -210,7 +222,7 @@ private slots:
         QVERIFY(metadataLabel()->movie() == nullptr);  // placeholder animation stopped
     }
 
-    // UI-06
+    // UI-06: With ExifTool available, clicking a file also shows Media Metadata (e.g. Image Width).
     void clickFile_withExifTool_showsMediaMetadata()
     {
         if (!exifToolAvailable())
@@ -222,7 +234,7 @@ private slots:
         QVERIFY(text.contains("Image Width"));
     }
 
-    // UI-07
+    // UI-07: Entering a path that doesn't exist leaves the current folder and list unchanged.
     void addressBar_invalidPath_changesNothing()
     {
         goTo(dataPath);
@@ -231,7 +243,7 @@ private slots:
         QCOMPARE(itemTexts(contents()).size(), 3);
     }
 
-    // UI-08
+    // UI-08: Entering the path of an unsupported file (notes.txt) leaves the view unchanged.
     void addressBar_unsupportedFile_changesNothing()
     {
         goTo(dataPath);
@@ -240,7 +252,7 @@ private slots:
         QCOMPARE(itemTexts(contents()).size(), 3);
     }
 
-    // UI-09
+    // UI-09: Entering a media file's path lists only that file and shows its metadata.
     void addressBar_filePath_showsOnlyThatFileAndItsMetadata()
     {
         goTo(dataPath + "/photo_beta.png");
@@ -248,7 +260,7 @@ private slots:
         QVERIFY(metadataLabel()->text().contains("photo_beta.png"));
     }
 
-    // UI-10
+    // UI-10: Submitting whitespace-only text in the address bar changes nothing.
     void addressBar_emptyText_changesNothing()
     {
         goTo(dataPath);
@@ -256,7 +268,8 @@ private slots:
         QCOMPARE(clean(pathLabel()->text()), clean(dataPath));
     }
 
-    // UI-11
+    // UI-11: Typing a tag filter ("alpha") hides non-matching files but keeps folders;
+    // clearing the filter shows everything again. Needs ExifTool.
     void tagFilter_hidesNonMatchingFiles_keepsFolders_andClears()
     {
         if (!exifToolAvailable())
@@ -271,7 +284,7 @@ private slots:
         QTRY_COMPARE_WITH_TIMEOUT(itemTexts(contents(), true).size(), 3, 15000);
     }
 
-    // UI-12
+    // UI-12: A tag filter that matches nothing hides every file, leaving only folders. Needs ExifTool.
     void tagFilter_noMatch_hidesAllFiles()
     {
         if (!exifToolAvailable())
@@ -282,14 +295,14 @@ private slots:
         QTRY_COMPARE_WITH_TIMEOUT(itemTexts(contents(), true), QStringList{"subfolder"}, 15000);
     }
 
-    // UI-13
+    // UI-13: Clicking the edit button with no file selected does not open a metadata editor.
     void editButton_withoutSelectedFile_doesNothing()
     {
         QTest::mouseClick(expandButton(), Qt::LeftButton);
         QVERIFY(window->findChildren<MetadataEditor *>().isEmpty());
     }
 
-    // UI-14
+    // UI-14: With a file selected, the edit button opens one visible editor titled and labelled for that file.
     void editButton_withSelectedFile_opensEditor()
     {
         goTo(dataPath);
@@ -304,7 +317,7 @@ private slots:
                  QString("photo_alpha.png"));
     }
 
-    // UI-15
+    // UI-15: The Settings > Open Window menu entry opens the Settings window.
     void settingsMenu_opensSettingsWindow()
     {
         QAction *open = nullptr;
@@ -329,7 +342,7 @@ private slots:
         dialog->close();
     }
 
-    // UI-16
+    // UI-16: Clicking the first folder in the root folder list loads that folder.
     void rootFolderList_clickLoadsFolder()
     {
         if (roots()->count() == 0)
@@ -377,7 +390,7 @@ private slots:
 
     void init() { imagePath = newImage("editor_test.png"); }
 
-    // UI-20
+    // UI-20: The editor opens showing the file's name, type (PNG) and the window title.
     void opens_showsFileNameAndType()
     {
         MetadataEditor editor(imagePath);
@@ -388,14 +401,14 @@ private slots:
         QCOMPARE(editor.windowTitle(), QString("QuadM - Metadata Editor"));
     }
 
-    // UI-21
+    // UI-21: Opening the editor for a missing file shows "File not found."
     void missingFile_showsNotFound()
     {
         MetadataEditor editor(data.filePath("missing.png"));
         QCOMPARE(editor.findChild<QLabel *>("fileNameLabel")->text(), QString("File not found."));
     }
 
-    // UI-22
+    // UI-22: The Cancel button closes the editor window.
     void cancelButton_closesWindow()
     {
         MetadataEditor editor(imagePath);
@@ -405,7 +418,7 @@ private slots:
         QVERIFY(!editor.isVisible());
     }
 
-    // UI-23
+    // UI-23: Metadata fields are listed and the file name field is editable. Needs ExifTool.
     void fields_listed_withEditableFileName()
     {
         if (!exifToolAvailable())
@@ -417,7 +430,7 @@ private slots:
         QVERIFY(editor.findChildren<QLineEdit *>().size() > 1);
     }
 
-    // UI-24
+    // UI-24: Every read-only field has a disabled Delete button. Needs ExifTool.
     void readOnlyFields_haveDisabledDeleteButton()
     {
         if (!exifToolAvailable())
@@ -435,7 +448,7 @@ private slots:
         QVERIFY2(foundReadOnly, "Expected at least one read-only field (e.g. image size)");
     }
 
-    // UI-25
+    // UI-25: Clicking an enabled Delete button removes that field's row from the editor. Needs ExifTool.
     void deleteButton_removesRowFromEditor()
     {
         if (!exifToolAvailable())
@@ -458,7 +471,7 @@ private slots:
         Q_UNUSED(row);
     }
 
-    // UI-26
+    // UI-26: Saving without edits shows "No changes to save." and emits no metadataSaved signal.
     void save_withoutChanges_saysNoChanges()
     {
         if (!exifToolAvailable())
@@ -475,7 +488,7 @@ private slots:
         QCOMPARE(saved.count(), 0);
     }
 
-    // UI-27
+    // UI-27: Changing the file name field and saving renames the file on disk and emits metadataSaved.
     void save_renamedFile_renamesOnDisk()
     {
         if (!exifToolAvailable())
@@ -498,7 +511,8 @@ private slots:
         QVERIFY(!QFile::exists(imagePath));
     }
 
-    // UI-28
+    // UI-28: Renaming to a name that already exists is rejected with an "already exists" message;
+    // both files stay untouched and no signal is emitted.
     void save_renameToExistingName_isRejected()
     {
         if (!exifToolAvailable())
@@ -531,7 +545,7 @@ class SettingsTests : public QObject
     Q_OBJECT
 
 private slots:
-    // UI-30
+    // UI-30: The Settings window offers Dark and Light themes and at least one default drive.
     void themeAndDriveChoices_available()
     {
         Settings settings;
@@ -544,7 +558,7 @@ private slots:
         QVERIFY(settings.findChild<QComboBox *>("defaultDriveComboBox")->count() > 0);
     }
 
-    // UI-31
+    // UI-31: Clicking Save persists the chosen theme, emits settingsSave once and closes the window.
     void save_storesChoices_emitsSignal_andCloses()
     {
         QSettings("QUADM", "QUADM").clear();
@@ -563,7 +577,7 @@ private slots:
         QCOMPARE(QSettings("QUADM", "QUADM").value("theme").toString(), QString("Light"));
     }
 
-    // UI-32
+    // UI-32: A newly created Settings window preselects the previously saved theme.
     void reopen_showsSavedTheme()
     {
         QSettings("QUADM", "QUADM").setValue("theme", "Light");
