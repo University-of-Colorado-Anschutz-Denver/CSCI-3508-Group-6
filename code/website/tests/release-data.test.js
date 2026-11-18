@@ -84,11 +84,15 @@ test("buildLatest handles a release with no assets, and no release at all", () =
 });
 
 function fakeFs() {
+  // Keep generated files in memory so fetch-release can be tested without disk I/O.
   const files = {};
   return { files, mkdirSync() {}, writeFileSync(p, c) { files[p] = c; } };
 }
+
+// Fix the timestamp so generated output is deterministic.
 const fixedNow = () => new Date("2026-10-26T00:00:00Z");
 
+// Verify the fetch script's success, fallback, and configuration-error paths.
 test("fetch-release writes latest.json for a published release", async () => {
   const fsImpl = fakeFs();
   let url;
@@ -122,6 +126,7 @@ test("fetch-release refuses to run without a repository", async () => {
   await assert.rejects(run({ outPath: "x", fsImpl: fakeFs() }), /GITHUB_REPOSITORY/);
 });
 
+// Intel artifacts must populate separate slots from Apple Silicon artifacts.
 test("buildLatest tells the Intel Mac build from the Apple Silicon one", () => {
   const d = buildLatest({ tag_name: "v1", assets: [
     asset("QuadM-1-arm64.pkg"), asset("QuadM-1-arm64.dmg"),

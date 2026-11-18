@@ -3,7 +3,7 @@
 // CI runs this right before the Docker image is built, so every image ships
 // with the current download links baked in (no browser-side rate limits).
 //
-//   GITHUB_REPOSITORY=owner/repo GITHUB_TOKEN=... node scripts/fetch-release.js
+//   GITHUB_REPOSITORY=University-of-Colorado-Anschutz-Denver/CSCI-3508-Group-6 GITHUB_TOKEN=... node scripts/fetch-release.js
 //
 // A missing release is not an error: the file is written with "tag": null and
 // the download page falls back to asking the GitHub API itself.
@@ -11,11 +11,16 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { buildLatest } = require("../js/release-data.js");
 
+// Fetch the latest release and write the website's release-data snapshot.
 async function run({ repo, token, fetchFn = fetch, outPath, fsImpl = fs, now = () => new Date() }) {
+  // Require a repository to construct the API request.
   if (!repo) throw new Error("GITHUB_REPOSITORY is not set (expected owner/name)");
+
+  // Set API headers and authenticate when a token is available.
   const headers = { Accept: "application/vnd.github+json", "User-Agent": "quadm-website-build" };
   if (token) headers.Authorization = `Bearer ${token}`;
 
+  // Retrieve and normalize the release; record lookup failures for logging.
   let latest = null;
   let note = "";
   try {
@@ -27,6 +32,7 @@ async function run({ repo, token, fetchFn = fetch, outPath, fsImpl = fs, now = (
     note = `lookup failed: ${err.message}`;
   }
 
+  // Write release data or an empty fallback, including its generation time.
   const out = latest || { repo, tag: null, version: null, assets: {} };
   out.generatedAt = now().toISOString();
   fsImpl.mkdirSync(path.dirname(outPath), { recursive: true });
@@ -34,8 +40,10 @@ async function run({ repo, token, fetchFn = fetch, outPath, fsImpl = fs, now = (
   return { latest, note, outPath };
 }
 
+// Export the function for use by tests and other modules.
 module.exports = { run };
 
+// Run from environment settings when invoked directly; report the result to CI.
 if (require.main === module) {
   run({
     repo: process.env.GITHUB_REPOSITORY,
